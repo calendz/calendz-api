@@ -1,9 +1,11 @@
 const config = require('./config')
 const logger = require('./winston')
 const mailgun = require('mailgun-js')
-const mg = mailgun({ apiKey: config.mailer.api_key, domain: 'mg.calendz.app', host: 'api.eu.mailgun.net' })
+const mg = mailgun({ apiKey: config.mailer.api_key, domain: config.mailer.domain, host: config.mailer.host })
 
 exports.sendVerificationEmail = async (to, link) => {
+  if (!config.mailer.enabled) return logger.warn(`Mail not send (link: ${link}`)
+
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
     to: to,

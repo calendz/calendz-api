@@ -9,6 +9,13 @@ const config = convict({
     arg: 'node_env',
     env: 'NODE_ENV'
   },
+  front_url: {
+    doc: `Calendz's front url`,
+    format: String,
+    default: 'http://localhost:8080/#/',
+    arg: 'front_url',
+    env: 'FRONT_URL'
+  },
   app_port: {
     doc: 'The API port',
     format: Number,
@@ -68,12 +75,33 @@ const config = convict({
     }
   },
   mailer: {
+    enabled: {
+      doc: `Should mailer send emails`,
+      format: String,
+      default: true,
+      arg: 'mailer_enabled',
+      env: 'MAILER_ENABLED'
+    },
     api_key: {
       doc: `Mailgun's API key`,
       format: String,
       default: null,
       arg: 'mailer_api_key',
       env: 'MAILER_API_KEY'
+    },
+    domain: {
+      doc: `Mailgun domain`,
+      format: String,
+      default: null,
+      arg: 'mailer_domain',
+      env: 'MAILER_DOMAIN'
+    },
+    host: {
+      doc: `Mailgun host`,
+      format: ['api.eu.mailgun.net', 'api.mailgun.net'],
+      default: null,
+      arg: 'mailer_host',
+      env: 'MAILER_HOST'
     }
   },
   jwt: {

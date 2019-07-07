@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs')
 const uuidv4 = require('uuid/v4')
+const config = require('../config/config')
+const mailer = require('../config/mailgun')
 const User = require('../models/user.model')
 const Token = require('../models/token.model')
-const mailer = require('../config/mailgun')
 
 // creates a new user (register)
 exports.create = async (req, res) => {
@@ -35,7 +36,7 @@ exports.create = async (req, res) => {
   await token.save()
 
   // envoie du mail de confirmation
-  await mailer.sendVerificationEmail(user.email, `http://localhost:8080/#/emailVerification/${token.value}`)
+  await mailer.sendVerificationEmail(user.email, `${config.front_url}emailVerification/${token.value}`)
 
   return res.status(201).json({
     message: 'Votre compte a bien été créé',
