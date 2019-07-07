@@ -41,7 +41,7 @@ module.exports.seedData = async function seedData () {
     const user1 = new User({
       firstname: 'Arthur',
       lastname: 'Dufour',
-      email: 'arthur.dufour@epsi.fr',
+      email: 'arthur.dufour1@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3 G1',
@@ -51,7 +51,7 @@ module.exports.seedData = async function seedData () {
     const user2 = new User({
       firstname: 'Alexandre',
       lastname: 'Tuet',
-      email: 'alexandre.tuet@epsi.fr',
+      email: 'alexandre.tuet1@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'B3 G1',
