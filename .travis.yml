@@ -1,0 +1,29 @@
+language: node_js
+
+notifications:
+  email: false
+
+node_js:
+  - "10.15.3"
+
+services:
+  - mongodb
+
+before_script:
+  - sleep 10
+  - mongo calendz --eval 'db.createUser({user:"username",pwd:"password",roles:["readWrite"]});'
+
+install: npm install
+
+jobs:
+  include:
+    - stage: Tests
+      script: 
+        - npm run lint
+        - npm run test:mock
+        - npm run test:coverage
+        - npm run test:coveralls
+
+cache:
+  directories:
+    - node_modules

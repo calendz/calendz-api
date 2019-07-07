@@ -1,0 +1,65 @@
+{
+  "name": "calendz-api",
+  "version": "1.0.0",
+  "description": "calendz's backend api",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "./node_modules/.bin/nodemon ./src/app.js",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha ./src/tests --recursive --exit",
+    "test:mock": "NODE_ENV=mock node ./src/mock/seedData.js",
+    "test:coverage": "NODE_ENV=test nyc --reporter=html --reporter=text ./node_modules/.bin/mocha ./src/tests --recursive --exit",
+    "test:coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "./node_modules/.bin/eslint ./",
+    "lint:fix": "./node_modules/.bin/eslint ./ --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calendz/calendz-api.git"
+  },
+  "keywords": [],
+  "author": "calendz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/calendz/calendz-api/issues"
+  },
+  "homepage": "https://github.com/calendz/calendz-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "convict": "^4.4.1",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-async-handler": "^1.1.4",
+    "helmet": "^3.15.1",
+    "jsonwebtoken": "^8.5.0",
+    "mailgun-js": "^0.22.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.6.1",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1",
+    "nodemailer": "^6.2.1",
+    "nodemailer-mailgun-transport": "^1.4.0",
+    "util": "^0.11.1",
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.4",
+    "eslint": "^5.15.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-mocha": "^5.3.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.18.10",
+    "nyc": "^14.1.1",
+    "supertest": "^4.0.2"
+  }
+}
