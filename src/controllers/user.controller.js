@@ -36,7 +36,7 @@ exports.create = async (req, res) => {
   await token.save()
 
   // envoie du mail de confirmation
-  await mailer.sendVerificationEmail(user.email, `${config.front_url}emailVerification/${token.value}`)
+  await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}emailVerification/${token.value}`)
 
   return res.status(201).json({
     message: 'Votre compte a bien été créé',
