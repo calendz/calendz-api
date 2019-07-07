@@ -68,12 +68,12 @@ const config = convict({
     }
   },
   mailer: {
-    password: {
-      doc: `"no-reply@calendz.app"'s password`,
+    api_key: {
+      doc: `Mailgun's API key`,
       format: String,
       default: null,
-      arg: 'mailer_password',
-      env: 'MAILER_PASSWORD'
+      arg: 'mailer_api_key',
+      env: 'MAILER_API_KEY'
     }
   },
   jwt: {
