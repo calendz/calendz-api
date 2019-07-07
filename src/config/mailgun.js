@@ -12,7 +12,7 @@ exports.sendVerificationEmail = async (to, link) => {
   }
 
   mg.messages().send(data, (error, body) => {
-    logger.error(error)
+    if (error) logger.error(error)
     logger.debug(body)
   })
 }
