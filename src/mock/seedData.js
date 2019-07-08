@@ -1,9 +1,11 @@
-const config = require('../config/config')
-const initMongo = require('../config/mongoose')
+/* istanbul ignore file */
 const bcrypt = require('bcryptjs')
+const config = require('../config/config')
 const logger = require('../config/winston')
+const initMongo = require('../config/mongoose')
 
 const User = require('../models/user.model')
+const Token = require('../models/token.model')
 
 if (config.node_env === 'mock') {
   initMongo(async () => {
@@ -26,6 +28,7 @@ if (config.node_env === 'mock') {
 module.exports.removeAllData = async function removeAllData () {
   try {
     await User.deleteMany({})
+    await Token.deleteMany({})
     logger.info('=> Successfully removed all existent data')
   } catch (err) {
     logger.error(err)
@@ -69,12 +72,21 @@ module.exports.seedData = async function seedData () {
       isActive: false
     })
 
+    const token1 = new Token({
+      user: user3._id,
+      value: 'aValidToken',
+      type: 'EMAIL_VERIFICATION'
+    })
+
     await user1.save()
     logger.info(`=> user1 (${user1.firstname} ${user1.lastname}) saved (${user1._id})`)
     await user2.save()
     logger.info(`=> user2 (${user2.firstname} ${user2.lastname}) saved (${user2._id})`)
     await user3.save()
     logger.info(`=> user3 (${user3.firstname} ${user3.lastname}) saved (${user3._id})`)
+
+    await token1.save()
+    logger.info(`=> token1 (${token1.type}) saved (${token1.user})`)
   } catch (err) {
     logger.error(err)
   }

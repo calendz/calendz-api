@@ -65,6 +65,17 @@ describe('./routes/auth.route', () => {
         })
     })
 
+    it('should fail (403) : veuillez confirmer votre adresse mail', (done) => {
+      request(app).post('/api/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ email: 'thomas.zimmermann@epsi.fr', password: 'password' })
+        .expect(403)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Veuillez confirmer votre email afin de pouvoir vous connecter')
+          done()
+        })
+    })
+
     it('should success (201) : connexion réussie', (done) => {
       request(app).post('/api/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ email: 'arthur.dufour1@epsi.fr', password: 'password' })
@@ -128,6 +139,43 @@ describe('./routes/auth.route', () => {
           assert.property(res.body, 'user')
           assert.isDefined(res.body.user)
           helper.hasBodyMessage(res.body, 'Connexion réussie')
+          done()
+        })
+    })
+  })
+
+  // ==================================================
+  // == POST /api/v1/verify/email - vérification email
+  // ==================================================
+  describe('POST /api/v1/auth/verify/email - vérification adresse email', () => {
+    it('should fail (412) : aucun token transmit', (done) => {
+      request(app).post('/api/v1/auth/verify/email').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucun token transmit')
+          done()
+        })
+    })
+
+    it('should fail (404) : ce token est invalide', (done) => {
+      request(app).post('/api/v1/auth/verify/email').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'notAValidToken' })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Ce token est invalide')
+          done()
+        })
+    })
+
+    it('should success (200) : adresse mail bien validée', (done) => {
+      request(app).post('/api/v1/auth/verify/email').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken' })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Votre adresse mail a bien été validée')
           done()
         })
     })
