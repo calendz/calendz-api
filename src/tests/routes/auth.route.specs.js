@@ -56,7 +56,7 @@ describe('./routes/auth.route', () => {
 
     it('should fail (401) : mot de passe invalide', (done) => {
       request(app).post('/api/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ email: 'arthur.dufour@epsi.fr', password: 'azeaze' })
+        .send({ email: 'arthur.dufour1@epsi.fr', password: 'azeaze' })
         .expect(401)
         .end((err, res) => {
           if (err) return done(err)
@@ -67,7 +67,7 @@ describe('./routes/auth.route', () => {
 
     it('should success (201) : connexion réussie', (done) => {
       request(app).post('/api/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ email: 'arthur.dufour@epsi.fr', password: 'password' })
+        .send({ email: 'arthur.dufour1@epsi.fr', password: 'password' })
         .expect(201)
         .end((err, res) => {
           if (err) return done(err)
