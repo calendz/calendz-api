@@ -77,7 +77,7 @@ const config = convict({
   mailer: {
     enabled: {
       doc: `Should mailer send emails`,
-      format: String,
+      format: Boolean,
       default: true,
       arg: 'mailer_enabled',
       env: 'MAILER_ENABLED'
@@ -85,21 +85,21 @@ const config = convict({
     api_key: {
       doc: `Mailgun's API key`,
       format: String,
-      default: null,
+      default: 'notAnApiKey',
       arg: 'mailer_api_key',
       env: 'MAILER_API_KEY'
     },
     domain: {
       doc: `Mailgun domain`,
       format: String,
-      default: null,
+      default: 'notADomain',
       arg: 'mailer_domain',
       env: 'MAILER_DOMAIN'
     },
     host: {
       doc: `Mailgun host`,
       format: ['api.eu.mailgun.net', 'api.mailgun.net'],
-      default: null,
+      default: 'api.eu.mailgun.net',
       arg: 'mailer_host',
       env: 'MAILER_HOST'
     }
