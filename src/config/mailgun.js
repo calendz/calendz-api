@@ -4,6 +4,7 @@ const mailgun = require('mailgun-js')
 const mg = mailgun({ apiKey: config.mailer.api_key, domain: config.mailer.domain, host: config.mailer.host })
 
 exports.sendVerificationEmail = async (to, firstname, lastname, link) => {
+  /* istanbul ignore if */
   if (!config.mailer.enabled) return logger.warn(`Mail not send (link: ${link}`)
 
   const data = {

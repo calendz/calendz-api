@@ -11,6 +11,7 @@ if (config.node_env === 'test') {
 
 // 1st: establish mongodb connection
 initMongo(async () => {
+  /* istanbul ignore if */
   // 2nd: if needed: populate db w/ fake dataset
   if (config.populate && config.node_env !== 'test') {
     logger.info('===== Started dataset =====')
