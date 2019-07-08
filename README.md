@@ -41,7 +41,11 @@ L'API de calendz est développée avec les frameworks et outils suivants* :
 * Créer un fichier `.env` à la source de ce repository contenant les valeurs suivantes (modifiables selon vos besoins)
 
       NODE_ENV=development
+
+      FRONT_URL=http://localhost:8080/#/
+
       APP_PORT=3001
+      APP_PORT_TEST=3002
 
       POPULATE=true
 
@@ -50,14 +54,23 @@ L'API de calendz est développée avec les frameworks et outils suivants* :
       DB_NAME=calendz
       DB_USER=username
       DB_PASSWORD=password
+
       JWT_SECRET=imasecret
       JWT_EXPIRATION=3600
       JWT_RAW_TOKEN=imasecret
+
+      MAILER_ENABLED=true
+      MAILER_API_KEY=aValidKey
+      MAILER_DOMAIN=aValidDomain
+      MAILER_HOST=api.mailgun.net
 
 ### Lancement
 
 * Lint : `npm run lint` (corrige la syntaxe du code grâce à [ESLint](https://github.com/eslint/eslint))
 * Tests : `npm run test` (lance les tests effectués lors de l'intégration continue)
+* Tests : `npm run test:mock` (insert un jeu de données dans la base afin d'effectuer les tests)
+* Tests : `npm run test:coverage` (lance l'analyse de la couverture du code)
+* Tests : `npm run test:coveralls` (upload les résultats du coverage sur coveralls.io)
 * Production : `npm run start` (lance via node, aucun process manager n'est inclus par défaut)
 * Développement : `npm run dev` (lance avec [nodemon](https://nodemon.io/))
 

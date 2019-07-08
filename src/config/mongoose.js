@@ -24,6 +24,7 @@ module.exports = async function initConnection (callback) {
     logger.error('MongoDB connection failed: ', err)
   })
 
+  /* istanbul ignore if */
   // print mongoose logs in dev env
   if (config.node_env === 'development') {
     mongoose.set('debug', (collectionName, method, query, doc) => {

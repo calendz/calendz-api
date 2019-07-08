@@ -2,6 +2,7 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 const User = require('../models/user.model')
+const Token = require('../models/token.model')
 
 exports.login = async (req, res) => {
   const _userId = req.body.userId
@@ -54,5 +55,21 @@ exports.refreshToken = async (req, res) => {
         message: 'Connexion réussie'
       })
     }
+  })
+}
+
+exports.confirmEmail = async (req, res) => {
+  const _token = req.body.token
+
+  const token = await Token.findOne({ value: _token })
+  const user = await User.findById(token.user)
+
+  user.isActive = true
+
+  await user.save()
+  await token.remove()
+
+  return res.status(200).json({
+    message: 'Votre adresse mail a bien été validée'
   })
 }

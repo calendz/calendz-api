@@ -2,10 +2,7 @@ const logger = require('./config/winston')
 const config = require('./config/config')
 const app = require('./config/express')
 const initMongo = require('./config/mongoose')
-const mailer = require('./config/nodemailer')
 const seedData = require('./mock/seedData')
-
-// mailer.sendVerificationEmail(['dufourarthur.perso@gmail.com', 'tuet.alex@gmail.com'], 'https://google.com/')
 
 // if running unit tests, disable logs
 if (config.node_env === 'test') {
@@ -14,6 +11,7 @@ if (config.node_env === 'test') {
 
 // 1st: establish mongodb connection
 initMongo(async () => {
+  /* istanbul ignore if */
   // 2nd: if needed: populate db w/ fake dataset
   if (config.populate && config.node_env !== 'test') {
     logger.info('===== Started dataset =====')

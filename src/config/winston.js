@@ -11,6 +11,7 @@ const logger = createLogger({
   exitOnError: false
 })
 
+/* istanbul ignore if */
 if (config.node_env !== 'test') {
   logger.info('Loaded logger.')
 }
