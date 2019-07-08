@@ -14,6 +14,8 @@
 
 ---
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/19f8483b197e4d22abff8039711f9d46)](https://app.codacy.com/app/calendz/calendz-api?utm_source=github.com&utm_medium=referral&utm_content=calendz/calendz-api&utm_campaign=Badge_Grade_Dashboard)
+
 ## Introduction
 
 Ce repository représente l'API utilisée pour faire le lien entre le front (Vue.js) et la base de données (MongoDB) de calendz.
