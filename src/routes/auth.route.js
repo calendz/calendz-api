@@ -4,6 +4,7 @@ const VerifyAuthenticationMiddleware = require('../middlewares/auth.validation.m
 const AuthPermissionMiddleware = require('../middlewares/auth.permission.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const AuthController = require('../controllers/auth.controller')
+const UserController = require('../controllers/user.controller')
 
 const router = express.Router()
 
@@ -23,8 +24,14 @@ router.post('/refresh', [
 
 // Validation adresse mail de l'utilisatuer
 router.post('/verify/email', [
-  TokenValidationMiddleware.hasValidToken,
+  TokenValidationMiddleware.hasValidToken('EMAIL_VERIFICATION'),
   AuthController.confirmEmail
+])
+
+// Envoie d'un mail pour réinitialiser le mot de passe
+router.post('/password-reset/send-mail', [
+  VerifyUserMiddleware.hasExistingEmail,
+  UserController.sendResetPasswordEmail
 ])
 
 module.exports = router

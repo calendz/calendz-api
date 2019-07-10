@@ -93,6 +93,39 @@ exports.hasValidRegisterFields = (req, res, next) => {
   return next()
 }
 
+// has password w/ password confirmation
+exports.hasValidPasswordAndPasswordConfirmation = (req, res, next) => {
+  const _password = req.body.password
+  const _password2 = req.body.password2
+
+  let errors = []
+  if (!_password) errors.push('Veuillez indiquer un mot de passe')
+  if (!_password2) errors.push('Veuillez confirmer votre mot de passe')
+
+  if (errors.length) {
+    return res.status(412).json({
+      message: 'Certains champs requis sont manquant',
+      errors: errors
+    })
+  }
+
+  errors = []
+  if (_password.length < 6) errors.push('Le mot de passe indiqué est trop court')
+  if (_password.length > 64) errors.push('Le mot de passe indiqué est trop long')
+  if (!/[a-zA-Z]/.test(_password)) errors.push('Votre mot de passe doit contenir au moins une lettre')
+  if (!/\d/.test(_password)) errors.push('Votre mot de passe doit contenir au moins un chiffre')
+  if (_password !== _password2) errors.push('Les deux mots de passe ne correspondent pas')
+
+  if (errors.length) {
+    return res.status(412).json({
+      message: 'Certains champs requis sont invalides',
+      errors: errors
+    })
+  }
+
+  return next()
+}
+
 // ============================================
 // == database operations
 // ============================================
@@ -138,5 +171,25 @@ exports.isPasswordAndUserMatch = async (req, res, next) => {
     firstname: user.firstname,
     lastname: user.lastname
   }
+  return next()
+}
+
+// check if the provided email address is valid user
+exports.hasExistingEmail = async (req, res, next) => {
+  const _email = req.body.email
+
+  if (!_email) {
+    return res.status(412).json({
+      message: 'Veuillez indiquer votre adresse mail'
+    })
+  }
+
+  const user = await User.findOne({ email: _email })
+  if (!user) {
+    return res.status(404).json({
+      message: 'L\'adresse mail indiquée ne correspond à aucun utilisateur'
+    })
+  }
+
   return next()
 }
