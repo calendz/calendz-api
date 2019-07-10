@@ -78,6 +78,18 @@ module.exports.seedData = async function seedData () {
       type: 'EMAIL_VERIFICATION'
     })
 
+    const token2 = new Token({
+      user: user2._id,
+      value: 'aValidToken2',
+      type: 'PASSWORD_RESET'
+    })
+
+    const token3 = new Token({
+      user: user2._id,
+      value: 'aValidToken3',
+      type: 'EMAIL_VERIFICATION'
+    })
+
     await user1.save()
     logger.info(`=> user1 (${user1.firstname} ${user1.lastname}) saved (${user1._id})`)
     await user2.save()
@@ -87,6 +99,10 @@ module.exports.seedData = async function seedData () {
 
     await token1.save()
     logger.info(`=> token1 (${token1.type}) saved (${token1.user})`)
+    await token2.save()
+    logger.info(`=> token2 (${token2.type}) saved (${token2.user})`)
+    await token3.save()
+    logger.info(`=> token3 (${token3.type}) saved (${token3.user})`)
   } catch (err) {
     logger.error(err)
   }
