@@ -87,7 +87,7 @@ module.exports = {
 
     it('should fail (412) : le mot de passe indiqué est trop court', (done) => {
       request(app).post(route).set(this.defaultSets).expect('Content-Type', /json/)
-        .send({ token: 'aValidToken2', password: 'aze', password2: 'aze' })
+        .send({ token: 'aValidToken2', password: 'azez', password2: 'azez' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
