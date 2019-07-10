@@ -38,7 +38,7 @@ exports.refreshToken = async (req, res) => {
       switch (err.name) {
         case 'TokenExpiredError':
           return res.status(412).json({
-            message: 'Votre jeton a expiré, veuillez vous reconnecter'
+            message: 'Votre session a expirée, veuillez vous reconnecter'
           })
         default:
           return res.status(412).json({

@@ -108,13 +108,13 @@ describe('./routes/auth.route', () => {
         })
     })
 
-    it('should fail (412) : votre jeton a expiré, veuillez vous reconnecter', (done) => {
+    it('should fail (412) : votre session a expirée, veuillez vous reconnecter', (done) => {
       request(app).post('/api/v1/auth/refresh').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMGU2MDIyYWVjOTA4OWUwY2FlNmQiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwiaWF0IjoxNTYyMTg1MzE2LCJleHAiOjE1NjIxODUzMTh9.zUgg1QLVEd5KUTu6r31I-uXtjLODXkkY3FMJtZmf5GE' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre jeton a expiré, veuillez vous reconnecter')
+          helper.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
           done()
         })
     })
