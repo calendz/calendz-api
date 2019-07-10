@@ -38,7 +38,7 @@ exports.refreshToken = async (req, res) => {
       switch (err.name) {
         case 'TokenExpiredError':
           return res.status(412).json({
-            message: 'Votre jeton a expiré, veuillez vous reconnecter'
+            message: 'Votre session a expirée, veuillez vous reconnecter'
           })
         default:
           return res.status(412).json({
@@ -61,13 +61,11 @@ exports.refreshToken = async (req, res) => {
 exports.confirmEmail = async (req, res) => {
   const _token = req.body.token
 
-  const token = await Token.findOne({ value: _token })
+  const token = await Token.findOneAndDelete({ value: _token })
+
   const user = await User.findById(token.user)
-
   user.isActive = true
-
   await user.save()
-  await token.remove()
 
   return res.status(200).json({
     message: 'Votre adresse mail a bien été validée'

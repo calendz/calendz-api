@@ -118,7 +118,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : le mot de passe indiqué est trop court', (done) => {
       request(app).post('/api/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'johndoe.@epsi.fr', password: '123AZ', password2: '123AZ', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZ', password2: '123AZ', grade: 'B1 G1' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -237,7 +237,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : les deux mots de passe ne correspondent pas', (done) => {
       request(app).post('/api/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE1234', grade: 'B1 G4' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE1234', grade: 'B1 G1' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)

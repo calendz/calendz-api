@@ -9,6 +9,7 @@ const router = express.Router()
 router.post('/', [
   UserVerificationMiddleware.hasRegisterFields,
   UserVerificationMiddleware.hasValidRegisterFields,
+  UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
   UserVerificationMiddleware.isEmailNotUsed,
   UserController.create
 ])
