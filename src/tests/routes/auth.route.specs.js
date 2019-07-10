@@ -158,13 +158,24 @@ describe('./routes/auth.route', () => {
         })
     })
 
-    it('should fail (404) : ce token est invalide', (done) => {
+    it('should fail (404) : le lien actuel est invalide', (done) => {
       request(app).post('/api/v1/auth/verify/email').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ token: 'notAValidToken' })
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Ce token est invalide')
+          helper.hasBodyMessage(res.body, 'Le lien actuel est invalide')
+          done()
+        })
+    })
+
+    it('should fail (412) : le type du token est invalide', (done) => {
+      request(app).post('/api/v1/auth/verify/email').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Le type du token est invalide')
           done()
         })
     })
@@ -176,6 +187,43 @@ describe('./routes/auth.route', () => {
         .end((err, res) => {
           if (err) return done(err)
           helper.hasBodyMessage(res.body, 'Votre adresse mail a bien été validée')
+          done()
+        })
+    })
+  })
+
+  // =================================================================================
+  // == POST /api/v1/auth/password-reset/send-mail - envoie mail réinitialisation mdp
+  // =================================================================================
+  describe('POST /api/v1/auth/password-reset/send-mail - envoie mail réinitialisation mdp', () => {
+    it('should fail (412) : veuillez indiquer votre adresse mail', (done) => {
+      request(app).post('/api/v1/auth/password-reset/send-mail').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Veuillez indiquer votre adresse mail')
+          done()
+        })
+    })
+
+    it('should fail (404) : l\'adresse mail indiquée ne correspond à aucun utilisateur', (done) => {
+      request(app).post('/api/v1/auth/password-reset/send-mail').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ email: 'notAValidEmail' })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'L\'adresse mail indiquée ne correspond à aucun utilisateur')
+          done()
+        })
+    })
+
+    it('should success (200) : l\'email a bien été envoyé', (done) => {
+      request(app).post('/api/v1/auth/password-reset/send-mail').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ email: 'alexandre.tuet1@epsi.fr' })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'L\'email a bien été envoyé')
           done()
         })
     })

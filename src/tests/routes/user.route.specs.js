@@ -273,6 +273,45 @@ describe('./routes/user.route', () => {
     })
   })
 
+  // ====================================================================
+  // == POST /api/v1/user/password-reset - réinitialisation mot de passe
+  // ====================================================================
+  describe('POST /api/v1/user/password-reset - réinitialisation mot de passe', () => {
+    it('should fail (412) : aucun token transmit', (done) => {
+      request(app).post('/api/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucun token transmit')
+          done()
+        })
+    })
+
+    it('should fail (404) : le lien actuel est invalide', (done) => {
+      request(app).post('/api/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'notAValidToken' })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Le lien actuel est invalide')
+          done()
+        })
+    })
+
+    it('should fail (412) : le type du token est invalide', (done) => {
+      request(app).post('/api/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken3' })
+        // .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Le type du token est invalide')
+          done()
+        })
+    })
+
+    helper.testPasswordWithConfirmation('/api/v1/user/password-reset')
+  })
+
   // ===============================================
   // == GET /api/v1/user/:id - get user
   // ===============================================
