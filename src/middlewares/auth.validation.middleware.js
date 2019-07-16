@@ -49,7 +49,7 @@ exports.validJWTNeeded = (req, res, next) => {
 // ============================================
 
 exports.hasAccessToken = (req, res, next) => {
-  if (!req.body || !req.body.accessToken) {
+  if (!req.headers['authorization'] || req.headers['authorization'].split(' ')[0] !== 'Bearer') {
     return res.status(412).json({
       message: 'Aucun accessToken transmit'
     })

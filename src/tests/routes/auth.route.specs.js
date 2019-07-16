@@ -109,8 +109,7 @@ describe('./routes/auth.route', () => {
     })
 
     it('should fail (412) : votre session a expirée, veuillez vous reconnecter', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMGU2MDIyYWVjOTA4OWUwY2FlNmQiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwiaWF0IjoxNTYyMTg1MzE2LCJleHAiOjE1NjIxODUzMTh9.zUgg1QLVEd5KUTu6r31I-uXtjLODXkkY3FMJtZmf5GE' })
+      request(app).post('/api/v1/auth/refresh').set(helper.defaultSetsWithExpiredAuth).expect('Content-Type', /json/)
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -120,8 +119,7 @@ describe('./routes/auth.route', () => {
     })
 
     it('should fail (412) : votre jeton est invalide, veuillez vous reconnecter', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ accessToken: 'eyJhbGaiOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMGM5ZjAxNWFiNDA3YzExY2EyMjciLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwicmVmcmVzaEtleSI6IjBua1haOVJjVHVsd0d6SEg5QTdJY2c9PSIsImlhdCI6MTU2MjE4NDg2NH0.ZrWP0jpTtSiDxpr_oPXxGhXS65UEIrH1HOWEELMEO' })
+      request(app).post('/api/v1/auth/refresh').set(helper.defaultSetsWithInvalidAuth).expect('Content-Type', /json/)
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -131,8 +129,7 @@ describe('./routes/auth.route', () => {
     })
 
     it('should success (200) : connexion réussie', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMTE5NTZmNmJmYjBhNGMzNDIxNDkiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwiaWF0IjoxNTYyMTg2MTU3LCJleHAiOjFlKzUyfQ.V5kApXVUW4rtehBqnm6HyEOejnsy9x_sP7Dgpn1zeZc' })
+      request(app).post('/api/v1/auth/refresh').set(helper.defaultSetsWithAuth).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)

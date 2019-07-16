@@ -33,7 +33,8 @@ exports.login = async (req, res) => {
 }
 
 exports.refreshToken = async (req, res) => {
-  jwt.verify(req.body.accessToken, config.jwt.secret, async (err, decoded) => {
+  const token = req.headers['authorization'].split(' ')[1]
+  jwt.verify(token, config.jwt.secret, async (err, decoded) => {
     if (err) {
       switch (err.name) {
         case 'TokenExpiredError':
