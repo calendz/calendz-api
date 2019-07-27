@@ -4,8 +4,11 @@ const config = require('../config/config')
 const logger = require('../config/winston')
 const initMongo = require('../config/mongoose')
 
-const User = require('../models/user.model')
-const Token = require('../models/token.model')
+const UserModel = require('../models/user.model')
+const TokenModel = require('../models/token.model')
+
+const User = require('../mock/factories/user.factory')
+const Token = require('../mock/factories/token.factory')
 
 if (config.node_env === 'mock') {
   initMongo(async () => {
@@ -27,8 +30,8 @@ if (config.node_env === 'mock') {
 // ===================================
 module.exports.removeAllData = async function removeAllData () {
   try {
-    await User.deleteMany({})
-    await Token.deleteMany({})
+    await UserModel.deleteMany({})
+    await TokenModel.deleteMany({})
     logger.info('=> Successfully removed all existent data')
   } catch (err) {
     logger.error(err)
@@ -41,7 +44,7 @@ module.exports.removeAllData = async function removeAllData () {
 module.exports.seedData = async function seedData () {
   try {
     // users
-    const user1 = new User({
+    const user1 = new UserModel({
       firstname: 'Arthur',
       lastname: 'Dufour',
       email: 'arthur.dufour1@epsi.fr',
@@ -51,7 +54,7 @@ module.exports.seedData = async function seedData () {
       bts: false,
       isActive: true
     })
-    const user2 = new User({
+    const user2 = new UserModel({
       firstname: 'Alexandre',
       lastname: 'Tuet',
       email: 'alexandre.tuet1@epsi.fr',
@@ -61,7 +64,7 @@ module.exports.seedData = async function seedData () {
       bts: false,
       isActive: true
     })
-    const user3 = new User({
+    const user3 = new UserModel({
       firstname: 'Thomas',
       lastname: 'Zimmermann',
       email: 'thomas.zimmermann@epsi.fr',
@@ -72,22 +75,29 @@ module.exports.seedData = async function seedData () {
       isActive: false
     })
 
-    const token1 = new Token({
+    const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
       type: 'EMAIL_VERIFICATION'
     })
 
-    const token2 = new Token({
+    const token2 = new TokenModel({
       user: user2._id,
       value: 'aValidToken2',
       type: 'PASSWORD_RESET'
     })
 
-    const token3 = new Token({
+    const token3 = new TokenModel({
       user: user2._id,
       value: 'aValidToken3',
       type: 'EMAIL_VERIFICATION'
+    })
+
+    await UserModel.insertMany(generateUsers(1000)).then(() => {
+      logger.info(`=> inserted 1000 random generated users`)
+    })
+    await TokenModel.insertMany(generateTokens(1000)).then(() => {
+      logger.info(`=> inserted 1000 random generated tokens`)
     })
 
     await user1.save()
@@ -106,4 +116,20 @@ module.exports.seedData = async function seedData () {
   } catch (err) {
     logger.error(err)
   }
+}
+
+function generateUsers (amount) {
+  const array = []
+  for (let i = 0; i < amount; i++) {
+    array.push(new User({}))
+  }
+  return array
+}
+
+function generateTokens (amount) {
+  const array = []
+  for (let i = 0; i < amount; i++) {
+    array.push(new Token({}))
+  }
+  return array
 }
