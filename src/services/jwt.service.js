@@ -1,7 +1,6 @@
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
-const Token = require('../models/token.model')
 
 // ================================================
 //  == Methods
@@ -21,9 +20,4 @@ exports.createRefresh = async (userId) => {
   const hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
   const b = Buffer.from(hash)
   return b.toString('base64')
-}
-
-exports.deleteByValue = async (value) => {
-  const token = await Token.findOneAndDelete({ value })
-  return token
 }

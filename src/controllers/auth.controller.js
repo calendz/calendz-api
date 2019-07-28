@@ -3,6 +3,7 @@ const config = require('../config/config')
 
 const JwtService = require('../services/jwt.service')
 const UserService = require('../services/user.service')
+const TokenService = require('../services/token.service')
 
 exports.login = async (req, res) => {
   const _userId = req.body.userId
@@ -47,7 +48,7 @@ exports.refreshToken = async (req, res) => {
 exports.confirmEmail = async (req, res) => {
   const _token = req.body.token
 
-  const token = await JwtService.deleteByValue(_token)
+  const token = await TokenService.deleteByValue(_token)
   await UserService.setActive(token.user, true)
 
   return res.status(200).json({
