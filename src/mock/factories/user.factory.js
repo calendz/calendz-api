@@ -1,7 +1,7 @@
 const faker = require('faker')
 
 module.exports = class User {
-  constructor({
+  constructor ({
     firstname = faker.name.firstName(),
     lastname = faker.name.lastName(),
     email = faker.internet.email(),
