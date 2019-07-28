@@ -1,4 +1,3 @@
-const assert = require('chai').assert
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const config = require('../../config/config')
