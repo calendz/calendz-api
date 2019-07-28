@@ -17,7 +17,7 @@ exports.sendVerificationEmail = async (to, firstname, lastname, link) => {
     'v:link': link
   }
 
-  mg.messages().send(data, (error, body) => {
+  mg.messages().send(data, /* istanbul ignore next */ (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
@@ -37,7 +37,7 @@ exports.sendPasswordResetEmail = async (to, firstname, lastname, link) => {
     'v:link': link
   }
 
-  mg.messages().send(data, (error, body) => {
+  mg.messages().send(data, /* istanbul ignore next */ (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
