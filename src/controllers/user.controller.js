@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs')
 const uuidv4 = require('uuid/v4')
 const config = require('../config/config')
 const mailer = require('../config/mailgun')
@@ -11,7 +10,7 @@ exports.create = async (req, res) => {
   const _firstname = req.body.firstname
   const _lastname = req.body.lastname
   const _email = req.body.email
-  const _password = bcrypt.hashSync(req.body.password, 10)
+  const _password = req.body.password
   const _grade = req.body.grade
 
   // création utilisateur et création token confirmation mail

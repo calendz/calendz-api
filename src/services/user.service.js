@@ -10,7 +10,7 @@ exports.create = async (firstname, lastname, email, password, grade) => {
     firstname,
     lastname,
     email,
-    password,
+    password: bcrypt.hashSync(password, 10),
     grade
   })
 
