@@ -42,7 +42,7 @@ exports.getByEmail = async (email) => {
 
 exports.setActive = async (userId, value) => {
   const user = await User.findById(userId)
-  user.isActive = true
+  user.isActive = value
   await user.save()
 }
 
