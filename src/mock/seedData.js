@@ -93,10 +93,10 @@ module.exports.seedData = async function seedData () {
       type: 'EMAIL_VERIFICATION'
     })
 
-    await UserModel.insertMany(generateUsers(1000)).then(() => {
+    await UserModel.insertMany(generateUsers(200)).then(() => {
       logger.info(`=> inserted 1000 random generated users`)
     })
-    await TokenModel.insertMany(generateTokens(1000)).then(() => {
+    await TokenModel.insertMany(generateTokens(200)).then(() => {
       logger.info(`=> inserted 1000 random generated tokens`)
     })
 
