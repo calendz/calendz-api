@@ -135,6 +135,7 @@ exports.isEmailNotUsed = async (req, res, next) => {
 exports.isPasswordAndUserMatch = async (req, res, next) => {
   const _email = req.body.email
   const _password = req.body.password
+  const _rememberMe = req.body.rememberMe
 
   const user = await User.findOne({ email: _email })
   if (!user) {
@@ -155,7 +156,8 @@ exports.isPasswordAndUserMatch = async (req, res, next) => {
     email: user.email,
     permissionLevel: user.permissionLevel,
     firstname: user.firstname,
-    lastname: user.lastname
+    lastname: user.lastname,
+    rememberMe: _rememberMe
   }
   return next()
 }
