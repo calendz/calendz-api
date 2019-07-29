@@ -17,17 +17,23 @@ describe('./services/jwt.service', () => {
   // ===============================================
   describe('#create', () => {
     it('should create a token with rememberMe', (done) => {
-      JwtService.create(user, true).then((token) => {
+      const token = JwtService.create(user, true)
+      try {
         jwt.verify(token, config.jwt.secret)
         done()
-      })
+      } catch (err) {
+        done(err)
+      }
     })
 
     it('should create a token without rememberMe', (done) => {
-      JwtService.create(user, false).then((token) => {
+      const token = JwtService.create(user, false)
+      try {
         jwt.verify(token, config.jwt.secret)
         done()
-      })
+      } catch (err) {
+        done(err)
+      }
     })
   })
 })
