@@ -6,7 +6,7 @@ const config = require('../config/config')
 //  == Methods
 // ================================================
 
-exports.create = async (body, rememberMe) => {
+exports.create = (body, rememberMe) => {
   if (rememberMe) {
     return jwt.sign(body, config.jwt.secret, { expiresIn: config.jwt.expiration * 3600 * 24 })
   }
@@ -14,7 +14,7 @@ exports.create = async (body, rememberMe) => {
   return jwt.sign(body, config.jwt.secret, { expiresIn: 15 })
 }
 
-exports.createRefresh = async (userId) => {
+exports.createRefresh = (userId) => {
   const refreshId = userId + config.jwt.secret
   const salt = crypto.randomBytes(16).toString('base64')
   const hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
