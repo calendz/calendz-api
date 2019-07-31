@@ -13,6 +13,11 @@
     "lint": "./node_modules/.bin/eslint ./",
     "lint:fix": "./node_modules/.bin/eslint ./ --fix"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run lint"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/calendz/calendz-api.git"
