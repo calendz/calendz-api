@@ -18,6 +18,11 @@
       "pre-commit": "npm test && npm run lint"
     }
   },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/calendz/calendz-api.git"
