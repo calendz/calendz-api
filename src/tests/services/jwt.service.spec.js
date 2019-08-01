@@ -16,7 +16,7 @@ describe('./services/jwt.service', () => {
   // == Methods
   // ===============================================
   describe('#create', () => {
-    it('should create a token with rememberMe', (done) => {
+    it.skip('should create a token with rememberMe', (done) => {
       const token = JwtService.create(user, true)
       try {
         jwt.verify(token, config.jwt.secret)
@@ -26,7 +26,7 @@ describe('./services/jwt.service', () => {
       }
     })
 
-    it('should create a token without rememberMe', (done) => {
+    it.skip('should create a token without rememberMe', (done) => {
       const token = JwtService.create(user, false)
       try {
         jwt.verify(token, config.jwt.secret)

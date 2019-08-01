@@ -1,6 +1,6 @@
 const express = require('express')
 const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
-const VerifyAuthenticationMiddleware = require('../middlewares/auth.validation.middleware')
+const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
 const AuthPermissionMiddleware = require('../middlewares/auth.permission.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const AuthController = require('../controllers/auth.controller')
@@ -18,7 +18,7 @@ router.post('/', [
 
 // Vérification connexion de l'utilisateur
 router.post('/refresh', [
-  VerifyAuthenticationMiddleware.hasAccessToken,
+  JwtVerificationMiddleware.hasValidRefreshToken,
   AuthController.refreshToken
 ])
 

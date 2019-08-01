@@ -1,6 +1,4 @@
-const jwt = require('jsonwebtoken')
-const config = require('../config/config')
-
+const cookieConfig = require('../config/cookie')
 const JwtService = require('../services/jwt.service')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
@@ -10,39 +8,31 @@ exports.login = async (req, res) => {
   const _rememberMe = req.body.rememberMe
 
   const user = await UserService.getById(_userId)
-  const accessToken = JwtService.create(req.body, _rememberMe)
-  const refreshToken = JwtService.createRefresh(_userId)
+
+  // delete all previous refresh tokens
+  await JwtService.deleteAllRefresh(_userId)
+
+  // access token
+  const accessToken = JwtService.createAccess(req.body)
+  res.cookie('accessToken', accessToken, cookieConfig)
+
+  // if rememberMe, refreshToken
+  if (_rememberMe) {
+    const refreshToken = await JwtService.createRefresh(req.body)
+    res.cookie('refreshToken', refreshToken, cookieConfig)
+  }
 
   return res.status(201).json({
     user,
-    accessToken,
-    refreshToken,
     message: 'Connexion réussie'
   })
 }
 
 exports.refreshToken = async (req, res) => {
-  const token = req.headers['authorization'].split(' ')[1]
-  jwt.verify(token, config.jwt.secret, async (err, decoded) => {
-    if (err) {
-      switch (err.name) {
-        case 'TokenExpiredError':
-          return res.status(412).json({
-            message: 'Votre session a expirée, veuillez vous reconnecter'
-          })
-        default:
-          return res.status(412).json({
-            message: 'Votre jeton est invalide, veuillez vous reconnecter'
-          })
-      }
-    }
-
-    const user = await UserService.getById(decoded.userId)
-    return res.status(200).json({
-      user,
-      message: 'Connexion réussie'
-    })
-  })
+  // creates a new access token
+  const accessToken = JwtService.createAccess(req.body)
+  res.cookie('accessToken', accessToken, cookieConfig)
+  return res.status(201).json({})
 }
 
 exports.confirmEmail = async (req, res) => {
