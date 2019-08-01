@@ -1,7 +1,15 @@
+const jwt = require('jsonwebtoken')
+const config = require('../config/config')
 const cookieConfig = require('../config/cookie')
+
 const JwtService = require('../services/jwt.service')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
+
+exports.test = async (req, res) => {
+  res.cookie('mdr', 'mdr')
+  res.status(200).json({})
+}
 
 exports.login = async (req, res) => {
   const _userId = req.body.userId
@@ -35,6 +43,36 @@ exports.refreshToken = async (req, res) => {
   return res.status(201).json({})
 }
 
+// checks if there's a valid access token
+exports.hasValidAccessToken = async (req, res, next) => {
+  const _accessToken = req.signedCookies.accesstoken
+
+  // if cookie doesn't exist
+  if (!_accessToken) {
+    return res.status(401).json({
+      message: 'Votre session a expirée, veuillez vous reconnecter.'
+    })
+  }
+
+  jwt.verify(_accessToken, config.jwt.secret, async (err, decoded) => {
+    if (err) {
+      switch (err.name) {
+        case 'TokenExpiredError':
+          return res.status(401).json({
+            message: 'Votre session a expirée, veuillez vous reconnecter'
+          })
+        default:
+          return res.status(401).json({
+            message: 'Votre jeton est invalide, veuillez vous reconnecter'
+          })
+      }
+    }
+
+    return res.status(200).json({})
+  })
+}
+
+// confirms user's email address
 exports.confirmEmail = async (req, res) => {
   const _token = req.body.token
 

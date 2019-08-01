@@ -8,7 +8,11 @@ const UserController = require('../controllers/user.controller')
 
 const router = express.Router()
 
-// Connexion d'un utilisateur
+// =======================================================
+// == Pure authentication routes
+// =======================================================
+
+// User login
 router.post('/', [
   UserVerificationMiddleware.hasAuthValidFields,
   UserVerificationMiddleware.isPasswordAndUserMatch,
@@ -16,11 +20,24 @@ router.post('/', [
   AuthController.login
 ])
 
-// Vérification connexion de l'utilisateur
+// Refresh user's accessToken
 router.post('/refresh', [
   JwtVerificationMiddleware.hasValidRefreshToken,
   AuthController.refreshToken
 ])
+
+// Checks if user auth state is valid
+router.post('/verify', [
+  AuthController.hasValidAccessToken
+])
+
+router.get('/test', [
+  AuthController.test
+])
+
+// =======================================================
+// == Other things related to authentication
+// =======================================================
 
 // Validation adresse mail de l'utilisatuer
 router.post('/verify/email', [

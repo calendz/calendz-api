@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 const Refresh = require('../models/refresh.model')
 
+// checks if there's a valid refresh token
 exports.hasValidRefreshToken = async (req, res, next) => {
   const _refreshToken = req.signedCookies.refreshToken
 
