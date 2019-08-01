@@ -113,11 +113,18 @@ const config = convict({
       env: 'JWT_SECRET'
     },
     expiration: {
-      doc: `JWT's secret token expiration time (in seconds)`,
+      doc: `JWT access token expiration time (in seconds)`,
       format: Number,
-      default: '3600',
+      default: '900',
       arg: 'jwt_expiration',
       env: 'JWT_EXPIRATION'
+    },
+    expiration_refresh: {
+      doc: `JWT refresh token expiration time (in days)`,
+      format: Number,
+      default: '30',
+      arg: 'jwt_expiration_refresh',
+      env: 'JWT_EXPIRATION_REFRESH'
     },
     raw_token: {
       doc: `Clear jwt token (ONLY USED IN DEV)`,
