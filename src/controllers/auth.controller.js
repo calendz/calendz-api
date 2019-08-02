@@ -1,15 +1,10 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
-const cookieConfig = require('../config/cookie')
+const cookie = require('../config/cookie')
 
 const JwtService = require('../services/jwt.service')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
-
-exports.test = async (req, res) => {
-  res.cookie('mdr', 'mdr')
-  res.status(200).json({})
-}
 
 exports.login = async (req, res) => {
   const _userId = req.body.userId
@@ -22,12 +17,12 @@ exports.login = async (req, res) => {
 
   // access token
   const accessToken = JwtService.createAccess(req.body)
-  res.cookie('accessToken', accessToken, cookieConfig)
+  res.cookie('accessToken', accessToken, cookie.accessTokenConfig)
 
   // if rememberMe, refreshToken
   if (_rememberMe) {
     const refreshToken = await JwtService.createRefresh(req.body)
-    res.cookie('refreshToken', refreshToken, cookieConfig)
+    res.cookie('refreshToken', refreshToken, cookie.refreshTokenConfig)
   }
 
   return res.status(201).json({
@@ -39,13 +34,13 @@ exports.login = async (req, res) => {
 exports.refreshToken = async (req, res) => {
   // creates a new access token
   const accessToken = JwtService.createAccess(req.body)
-  res.cookie('accessToken', accessToken, cookieConfig)
+  res.cookie('accessToken', accessToken, cookie.accessTokenConfig)
   return res.status(201).json({})
 }
 
 // checks if there's a valid access token
 exports.hasValidAccessToken = async (req, res, next) => {
-  const _accessToken = req.signedCookies.accesstoken
+  const _accessToken = req.signedCookies.accessToken
 
   // if cookie doesn't exist
   if (!_accessToken) {
@@ -68,7 +63,7 @@ exports.hasValidAccessToken = async (req, res, next) => {
       }
     }
 
-    return res.status(200).json({})
+    return res.status(200).json()
   })
 }
 

@@ -31,10 +31,6 @@ router.post('/verify', [
   AuthController.hasValidAccessToken
 ])
 
-router.get('/test', [
-  AuthController.test
-])
-
 // =======================================================
 // == Other things related to authentication
 // =======================================================

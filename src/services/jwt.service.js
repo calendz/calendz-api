@@ -1,4 +1,3 @@
-// const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 
 const config = require('../config/config')
@@ -10,7 +9,7 @@ const Refresh = require('../models/refresh.model')
 
 // create a jwt accessToken
 exports.createAccess = (body) => {
-  return jwt.sign(body, config.jwt.secret, { expiresIn: config.jwt.expiration * 60 })
+  return jwt.sign(body, config.jwt.secret, { expiresIn: config.jwt.expiration * 1000 })
 }
 
 // create a refresh token and store it in mongo
