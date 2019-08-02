@@ -29,7 +29,7 @@ exports.hasValidRefreshToken = async (req, res, next) => {
     }
 
     // si le token n'est pas présent en base
-    const refresh = await Refresh.find({ user: decoded.userId })
+    const refresh = await Refresh.findOne({ user: decoded.userId })
     if (!refresh) {
       return res.status(401).json({
         message: 'Votre session a expirée, veuillez vous reconnecter.'
