@@ -15,9 +15,9 @@ describe('./services/jwt.service', () => {
   // ===============================================
   // == Methods
   // ===============================================
-  describe('#create', () => {
-    it.skip('should create a token with rememberMe', (done) => {
-      const token = JwtService.create(user, true)
+  describe('#createAccess', () => {
+    it('should create an access token', (done) => {
+      const token = JwtService.createAccess(user, true)
       try {
         jwt.verify(token, config.jwt.secret)
         done()
@@ -25,15 +25,18 @@ describe('./services/jwt.service', () => {
         done(err)
       }
     })
+  })
 
-    it.skip('should create a token without rememberMe', (done) => {
-      const token = JwtService.create(user, false)
-      try {
-        jwt.verify(token, config.jwt.secret)
-        done()
-      } catch (err) {
-        done(err)
-      }
+  describe('#createRefresh', () => {
+    it('should create a refresh token', (done) => {
+      JwtService.createRefresh(user, false).then((token) => {
+        try {
+          jwt.verify(token, config.jwt.secret)
+          done()
+        } catch (err) {
+          done(err)
+        }
+      })
     })
   })
 })

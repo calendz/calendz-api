@@ -4,12 +4,12 @@ const Refresh = require('../models/refresh.model')
 
 // checks if there's a valid refresh token
 exports.hasValidRefreshToken = async (req, res, next) => {
-  const _refreshToken = req.signedCookies.refreshToken
+  const _refreshToken = req.cookies.refreshToken
 
   // si le cookie n'existe pas
   if (!_refreshToken) {
     return res.status(401).json({
-      message: 'Votre session a expirée, veuillez vous reconnecter.'
+      message: 'Votre session a expirée, veuillez vous reconnecter'
     })
   }
 
@@ -32,7 +32,7 @@ exports.hasValidRefreshToken = async (req, res, next) => {
     const refresh = await Refresh.findOne({ user: decoded.userId })
     if (!refresh) {
       return res.status(401).json({
-        message: 'Votre session a expirée, veuillez vous reconnecter.'
+        message: 'Votre session a expirée, veuillez vous reconnecter'
       })
     }
 

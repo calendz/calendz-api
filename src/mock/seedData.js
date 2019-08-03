@@ -6,6 +6,7 @@ const initMongo = require('../config/mongoose')
 
 const UserModel = require('../models/user.model')
 const TokenModel = require('../models/token.model')
+const RefreshModel = require('../models/refresh.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
@@ -32,6 +33,7 @@ module.exports.removeAllData = async function removeAllData () {
   try {
     await UserModel.deleteMany({})
     await TokenModel.deleteMany({})
+    await RefreshModel.deleteMany({})
     logger.info('=> Successfully removed all existent data')
   } catch (err) {
     logger.error(err)
@@ -45,6 +47,7 @@ module.exports.seedData = async function seedData () {
   try {
     // users
     const user1 = new UserModel({
+      _id: '5d45c90b0a7827069971e116',
       firstname: 'Arthur',
       lastname: 'Dufour',
       email: 'arthur.dufour1@epsi.fr',
@@ -93,6 +96,11 @@ module.exports.seedData = async function seedData () {
       type: 'EMAIL_VERIFICATION'
     })
 
+    const refreshToken = new RefreshModel({
+      user: '5d45c90b0a7827069971e116',
+      value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDQ1YzkwYjBhNzgyNzA2OTk3MWUxMTYiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXIxQGVwc2kuZnIiLCJwZXJtaXNzaW9uTGV2ZWwiOiJNRU1CRVIiLCJmaXJzdG5hbWUiOiJBcnRodXIiLCJsYXN0bmFtZSI6IkR1Zm91ciIsInJlbWVtYmVyTWUiOnRydWUsImlhdCI6MTU2NDg1NzA4NywiZXhwIjo0MzM1NjQ4NTcwODd9.hywC8xJI1WNF-J7Cle1_VaGshbWj3_EBGZV5HQ-nV34'
+    })
+
     await UserModel.insertMany(generateUsers(200)).then(() => {
       logger.info(`=> inserted 1000 random generated users`)
     })
@@ -113,6 +121,9 @@ module.exports.seedData = async function seedData () {
     logger.info(`=> token2 (${token2.type}) saved (${token2.user})`)
     await token3.save()
     logger.info(`=> token3 (${token3.type}) saved (${token3.user})`)
+
+    await refreshToken.save()
+    logger.info(`=> refreshToken (${refreshToken.value})`)
   } catch (err) {
     logger.error(err)
   }

@@ -40,12 +40,12 @@ exports.refreshToken = async (req, res) => {
 
 // checks if there's a valid access token
 exports.hasValidAccessToken = async (req, res, next) => {
-  const _accessToken = req.signedCookies.accessToken
+  const _accessToken = req.cookies.accessToken
 
   // if cookie doesn't exist
   if (!_accessToken) {
     return res.status(401).json({
-      message: 'Votre session a expirée, veuillez vous reconnecter.'
+      message: 'Votre session a expirée, veuillez vous reconnecter'
     })
   }
 
