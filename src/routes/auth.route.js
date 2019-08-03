@@ -1,6 +1,6 @@
 const express = require('express')
-const VerifyUserMiddleware = require('../middlewares/verify.user.middleware')
-const VerifyAuthenticationMiddleware = require('../middlewares/auth.validation.middleware')
+const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
+const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
 const AuthPermissionMiddleware = require('../middlewares/auth.permission.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const AuthController = require('../controllers/auth.controller')
@@ -8,19 +8,32 @@ const UserController = require('../controllers/user.controller')
 
 const router = express.Router()
 
-// Connexion d'un utilisateur
+// =======================================================
+// == Pure authentication routes
+// =======================================================
+
+// User login
 router.post('/', [
-  VerifyUserMiddleware.hasAuthValidFields,
-  VerifyUserMiddleware.isPasswordAndUserMatch,
+  UserVerificationMiddleware.hasAuthValidFields,
+  UserVerificationMiddleware.isPasswordAndUserMatch,
   AuthPermissionMiddleware.isUserActive,
   AuthController.login
 ])
 
-// Vérification connexion de l'utilisateur
+// Refresh user's accessToken
 router.post('/refresh', [
-  VerifyAuthenticationMiddleware.hasAccessToken,
+  JwtVerificationMiddleware.hasValidRefreshToken,
   AuthController.refreshToken
 ])
+
+// Checks if user auth state is valid
+router.post('/verify', [
+  AuthController.hasValidAccessToken
+])
+
+// =======================================================
+// == Other things related to authentication
+// =======================================================
 
 // Validation adresse mail de l'utilisatuer
 router.post('/verify/email', [
@@ -30,7 +43,7 @@ router.post('/verify/email', [
 
 // Envoie d'un mail pour réinitialiser le mot de passe
 router.post('/password-reset/send-mail', [
-  VerifyUserMiddleware.hasExistingEmail,
+  UserVerificationMiddleware.hasExistingEmail,
   UserController.sendResetPasswordEmail
 ])
 

@@ -31,47 +31,12 @@ module.exports = {
   defaultSetsWithAuth: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMTE5NTZmNmJmYjBhNGMzNDIxNDkiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwiaWF0IjoxNTYyMTg2MTU3LCJleHAiOjFlKzUyfQ.V5kApXVUW4rtehBqnm6HyEOejnsy9x_sP7Dgpn1zeZc'
-  },
-
-  defaultSetsWithExpiredAuth: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMGU2MDIyYWVjOTA4OWUwY2FlNmQiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwiaWF0IjoxNTYyMTg1MzE2LCJleHAiOjE1NjIxODUzMTh9.zUgg1QLVEd5KUTu6r31I-uXtjLODXkkY3FMJtZmf5GE'
-  },
-
-  defaultSetsWithInvalidAuth: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer notAValidToken'
+    'Cookie': 'refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDQ1YzkwYjBhNzgyNzA2OTk3MWUxMTYiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXIxQGVwc2kuZnIiLCJwZXJtaXNzaW9uTGV2ZWwiOiJNRU1CRVIiLCJmaXJzdG5hbWUiOiJBcnRodXIiLCJsYXN0bmFtZSI6IkR1Zm91ciIsInJlbWVtYmVyTWUiOnRydWUsImlhdCI6MTU2NDg1NzA4NywiZXhwIjo0MzM1NjQ4NTcwODd9.hywC8xJI1WNF-J7Cle1_VaGshbWj3_EBGZV5HQ-nV34;accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDQ1YzkwYjBhNzgyNzA2OTk3MWUxMTYiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXIxQGVwc2kuZnIiLCJwZXJtaXNzaW9uTGV2ZWwiOiJNRU1CRVIiLCJmaXJzdG5hbWUiOiJBcnRodXIiLCJsYXN0bmFtZSI6IkR1Zm91ciIsInJlbWVtYmVyTWUiOmZhbHNlLCJpYXQiOjE1NjQ4NTg1NTIsImV4cCI6MTAwMTU2NDg1NzU1Mn0.tAY7j_oGz80fW4cZJZ-zAMFawRLkTx0OyDGccild0LM'
   },
 
   // ===========================================
   // == whole feature functions
   // ===========================================
-  testAuthentication (route) {
-    it.skip('should fail (401) : authentication required', (done) => {
-      request(app).get(route).set(this.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          this.hasBodyMessage(res.body, 'Authentication required')
-          done()
-        })
-    })
-
-    it.skip('should fail (400) : invalid token', (done) => {
-      request(app).get(route).set(this.defaultSets).expect('Content-Type', /json/)
-        .set('Authorization', 'Bearer notAToken')
-        .expect(400)
-        .end((err, res) => {
-          if (err) return done(err)
-          this.hasBodyMessage(res.body, 'Invalid token')
-          done()
-        })
-    })
-  },
-
   testPasswordWithConfirmation (route) {
     it('should fail (412) : veuillez indiquer un mot de passe', (done) => {
       request(app).post(route).set(this.defaultSets).expect('Content-Type', /json/)

@@ -1,23 +1,33 @@
-const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
+
 const config = require('../config/config')
+const Refresh = require('../models/refresh.model')
 
 // ================================================
 //  == Methods
 // ================================================
 
-exports.create = (body, rememberMe) => {
-  if (rememberMe) {
-    return jwt.sign(body, config.jwt.secret, { expiresIn: config.jwt.expiration * 3600 * 24 })
-  }
-
-  return jwt.sign(body, config.jwt.secret, { expiresIn: 15 })
+// create a jwt accessToken
+exports.createAccess = (body) => {
+  return jwt.sign(body, config.jwt.secret, { expiresIn: config.jwt.expiration * 1000 })
 }
 
-exports.createRefresh = (userId) => {
-  const refreshId = userId + config.jwt.secret
-  const salt = crypto.randomBytes(16).toString('base64')
-  const hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
-  const b = Buffer.from(hash)
-  return b.toString('base64')
+// create a refresh token and store it in mongo
+exports.createRefresh = async (body) => {
+  // create the token
+  const refreshToken = jwt.sign(body, config.jwt.secret, { expiresIn: config.jwt.expiration_refresh * 1000 * 3600 * 24 })
+
+  // store it in the database
+  const refresh = new Refresh({
+    user: body.userId,
+    value: refreshToken
+  })
+  await refresh.save()
+
+  return refreshToken
+}
+
+// delete all user's refresh tokens
+exports.deleteAllRefresh = async (userId) => {
+  await Refresh.deleteMany({ user: userId })
 }

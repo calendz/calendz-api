@@ -311,42 +311,4 @@ describe('./routes/user.route', () => {
 
     helper.testPasswordWithConfirmation('/api/v1/user/password-reset')
   })
-
-  // ===============================================
-  // == GET /api/v1/user/:id - get user
-  // ===============================================
-  describe('GET /api/v1/user/:id - get user', () => {
-    // make sure this route requires auth
-    helper.testAuthentication('/api/v1/user/1234')
-
-    it.skip('should fail (4??) : not a valid userId', (done) => {
-      request(app).get('/api/v1/user/1234').set(helper.defaultSetsWithAuth).expect('Content-Type', /json/)
-        .expect(400)
-        .end((err, res) => {
-          if (err) return done(err)
-          // TODO:
-          done()
-        })
-    })
-
-    it.skip('should fail (4??) : user not found', (done) => {
-      request(app).get('/api/v1/user/????').set(helper.defaultSetsWithAuth).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          // TODO:
-          done()
-        })
-    })
-
-    it.skip('should success (200) : valid user data', (done) => {
-      request(app).get('/api/v1/user/????').set(helper.defaultSetsWithAuth).expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          // TODO:
-          done()
-        })
-    })
-  })
 })

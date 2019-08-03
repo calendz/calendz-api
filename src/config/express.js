@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const compress = require('compression')
 const methodOverride = require('method-override')
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const helmet = require('helmet')
 const routes = require('../routes/router')
@@ -27,7 +28,7 @@ if (config.node_env === 'development') {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// app.use(cookieParser())
+app.use(cookieParser()) // config.cookie.secret
 app.use(compress())
 app.use(methodOverride())
 
@@ -39,7 +40,11 @@ app.use(methodOverride())
 app.use(helmet())
 
 // enable CORS (Cross Origin Resource Sharing)
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:8080',
+  credentials: true
+}))
 
 // ============================================
 // == configure router & error handler
