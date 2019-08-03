@@ -104,15 +104,6 @@ const config = convict({
       env: 'MAILER_HOST'
     }
   },
-  cookie: {
-    secret: {
-      doc: `cookie-parser signature key`,
-      format: String,
-      default: 'imasecret',
-      arg: 'cookie_secret',
-      env: 'COOKIE_SECRET'
-    }
-  },
   jwt: {
     secret: {
       doc: `JWT's secret token`,
