@@ -1,12 +1,10 @@
-const User = require('../models/user.model')
+const UserService = require('../services/user.service')
 
+// checks if user account is active
 exports.isUserActive = async (req, res, next) => {
-  // vérifier si il est actif
   const _email = req.body.email
 
-  const user = await User.findOne({ email: _email })
-    .select('isActive')
-    .lean()
+  const user = await UserService.findOne({ email: _email })
 
   if (!user.isActive) {
     return res.status(403).json({

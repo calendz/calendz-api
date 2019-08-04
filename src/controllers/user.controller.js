@@ -45,7 +45,7 @@ exports.sendResetPasswordEmail = async (req, res) => {
   const _email = req.body.email
 
   // création token page de réinitialisation du mot de passe
-  const user = await UserService.getByEmail(_email)
+  const user = await UserService.findOne({ email: _email })
   const token = await TokenService.create(user._id, uuidv4(), 'PASSWORD_RESET')
 
   // envoie mail reset

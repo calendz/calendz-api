@@ -31,23 +31,9 @@ describe('./services/user.service', () => {
     })
   })
 
-  describe('#getById', () => {
+  describe('#findOne', () => {
     it('should get user by its id', (done) => {
-      UserService.getById(userId).then((user) => {
-        assert.isDefined(user._id)
-        assert.isUndefined(user.password)
-        assert.strictEqual(user.firstname, firstname)
-        assert.strictEqual(user.lastname, lastname)
-        assert.strictEqual(user.email, email)
-        assert.strictEqual(user.grade, grade)
-        done()
-      })
-    })
-  })
-
-  describe('#getByEmail', () => {
-    it('should get user by its id', (done) => {
-      UserService.getByEmail(email).then((user) => {
+      UserService.findOne({ _id: userId }).then((user) => {
         assert.isDefined(user._id)
         assert.isUndefined(user.password)
         assert.strictEqual(user.firstname, firstname)

@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
   const _userId = req.body.userId
   const _rememberMe = req.body.rememberMe
 
-  const user = await UserService.getById(_userId)
+  const user = await UserService.findOne({ _id: _userId })
 
   // delete all previous refresh tokens
   await JwtService.deleteAllRefresh(_userId)
