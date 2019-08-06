@@ -57,6 +57,7 @@ L'API de calendz est développée avec les frameworks et outils suivants* :
       DB_PASSWORD=password
 
       COOKIE_SECRET=imasecret
+      COOKIE_SECURE=false
 
       JWT_SECRET=imasecret
       JWT_EXPIRATION=900
