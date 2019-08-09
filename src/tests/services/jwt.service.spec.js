@@ -5,7 +5,7 @@ const JwtService = require('../../services/jwt.service')
 
 describe('./services/jwt.service', () => {
   const user = {
-    userId: mongoose.Types.ObjectId(),
+    _id: mongoose.Types.ObjectId(),
     firstname: 'John',
     lastname: 'Doe',
     email: 'john.doe@epsi.fr',

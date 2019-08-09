@@ -23,12 +23,13 @@ router.post('/', [
 // Refresh user's accessToken
 router.post('/refresh', [
   JwtVerificationMiddleware.hasValidRefreshToken,
-  AuthController.refreshToken
+  AuthController.refreshTokenAndUser
 ])
 
 // Checks if user auth state is valid
 router.post('/verify', [
-  AuthController.hasValidAccessToken
+  JwtVerificationMiddleware.hasValidAccessToken,
+  AuthController.refreshUser
 ])
 
 // =======================================================
