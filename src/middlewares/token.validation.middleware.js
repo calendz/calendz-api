@@ -1,4 +1,4 @@
-const Token = require('../models/token.model')
+const TokenService = require('../services/token.service')
 
 exports.hasValidToken = (type) => {
   return async (req, res, next) => {
@@ -10,7 +10,7 @@ exports.hasValidToken = (type) => {
       })
     }
 
-    const token = await Token.findOne({ value: _token })
+    const token = await TokenService.findOne({ value: _token })
 
     if (!token) {
       return res.status(404).json({
