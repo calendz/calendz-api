@@ -15,10 +15,10 @@ if (config.node_env === 'mock') {
   initMongo(async () => {
     // 2nd: if needed: populate db w/ fake dataset
     if (config.populate) {
-      logger.info('===== Started dataset =====')
+      logger.warn('POPULATE: started dataset')
       await this.removeAllData().then(async () => {
         await this.seedData().then(() => {
-          logger.info('===== Dataset completed =====')
+          logger.warn('POPULATE: dataset completed')
           process.exit(0)
         })
       })
@@ -34,7 +34,7 @@ module.exports.removeAllData = async function removeAllData () {
     await UserModel.deleteMany({})
     await TokenModel.deleteMany({})
     await RefreshModel.deleteMany({})
-    logger.info('=> Successfully removed all existent data')
+    logger.warn('POPULATE: successfully removed all data')
   } catch (err) {
     logger.error(err)
   }
@@ -45,7 +45,6 @@ module.exports.removeAllData = async function removeAllData () {
 // ===================================
 module.exports.seedData = async function seedData () {
   try {
-    // users
     const user1 = new UserModel({
       _id: '5d45c90b0a7827069971e116',
       firstname: 'Arthur',
@@ -57,6 +56,8 @@ module.exports.seedData = async function seedData () {
       bts: false,
       isActive: true
     })
+    await user1.save()
+
     const user2 = new UserModel({
       firstname: 'Alexandre',
       lastname: 'Tuet',
@@ -67,6 +68,8 @@ module.exports.seedData = async function seedData () {
       bts: false,
       isActive: true
     })
+    await user2.save()
+
     const user3 = new UserModel({
       firstname: 'Thomas',
       lastname: 'Zimmermann',
@@ -77,53 +80,37 @@ module.exports.seedData = async function seedData () {
       bts: false,
       isActive: false
     })
+    await user3.save()
 
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
       type: 'EMAIL_VERIFICATION'
     })
+    await token1.save()
 
     const token2 = new TokenModel({
       user: user2._id,
       value: 'aValidToken2',
       type: 'PASSWORD_RESET'
     })
+    await token2.save()
 
     const token3 = new TokenModel({
       user: user2._id,
       value: 'aValidToken3',
       type: 'EMAIL_VERIFICATION'
     })
+    await token3.save()
 
     const refreshToken = new RefreshModel({
       user: '5d45c90b0a7827069971e116',
       value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQ1YzkwYjBhNzgyNzA2OTk3MWUxMTYiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXIxQGVwc2kuZnIiLCJwZXJtaXNzaW9uTGV2ZWwiOiJNRU1CRVIiLCJmaXJzdG5hbWUiOiJBcnRodXIiLCJsYXN0bmFtZSI6IkR1Zm91ciIsInJlbWVtYmVyTWUiOnRydWUsImlhdCI6MTU2NTM2NjMxMCwiZXhwIjoyNjA3NjUzNjYzMTB9.5yb5fhF3jfTXwudWMbBjXNCW8CWnzAUsNG_i14IJdDU'
     })
-
-    await UserModel.insertMany(generateUsers(200)).then(() => {
-      logger.info(`=> inserted 1000 random generated users`)
-    })
-    await TokenModel.insertMany(generateTokens(200)).then(() => {
-      logger.info(`=> inserted 1000 random generated tokens`)
-    })
-
-    await user1.save()
-    logger.info(`=> user1 (${user1.firstname} ${user1.lastname}) saved (${user1._id})`)
-    await user2.save()
-    logger.info(`=> user2 (${user2.firstname} ${user2.lastname}) saved (${user2._id})`)
-    await user3.save()
-    logger.info(`=> user3 (${user3.firstname} ${user3.lastname}) saved (${user3._id})`)
-
-    await token1.save()
-    logger.info(`=> token1 (${token1.type}) saved (${token1.user})`)
-    await token2.save()
-    logger.info(`=> token2 (${token2.type}) saved (${token2.user})`)
-    await token3.save()
-    logger.info(`=> token3 (${token3.type}) saved (${token3.user})`)
-
     await refreshToken.save()
-    logger.info(`=> refreshToken (${refreshToken.value})`)
+
+    await UserModel.insertMany(generateUsers(200))
+    await TokenModel.insertMany(generateTokens(200))
   } catch (err) {
     logger.error(err)
   }
