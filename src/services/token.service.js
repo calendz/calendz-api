@@ -19,3 +19,13 @@ exports.deleteByValue = async (value) => {
   const token = await Token.findOneAndDelete({ value })
   return token
 }
+
+// ================================================
+//  == Getters
+// ================================================
+
+exports.findOne = async (search) => {
+  const token = await Token.findOne(search)
+    .lean()
+  return token
+}

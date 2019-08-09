@@ -3,7 +3,6 @@ const UserService = require('../services/user.service')
 // checks if user account is active
 exports.isUserActive = async (req, res, next) => {
   const _email = req.body.email
-
   const user = await UserService.findOne({ email: _email })
 
   if (!user.isActive) {
@@ -12,5 +11,6 @@ exports.isUserActive = async (req, res, next) => {
     })
   }
 
+  req.user = user
   return next()
 }

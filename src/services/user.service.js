@@ -22,11 +22,16 @@ exports.create = async (firstname, lastname, email, password, grade) => {
 //  == Getters
 // ================================================
 
-exports.findOne = async (search) => {
-  const user = await User.findOne(search)
-    .select('firstname lastname email permissionLevel grade bts isActive')
-    .lean()
-  return user
+exports.findOne = async (search, includePassword) => {
+  if (includePassword) {
+    const user = await User.findOne(search).lean()
+    return user
+  } else {
+    const user = await User.findOne(search)
+      .select('firstname lastname email permissionLevel grade bts isActive')
+      .lean()
+    return user
+  }
 }
 
 // ================================================

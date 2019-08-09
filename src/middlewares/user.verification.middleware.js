@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs')
-const User = require('../models/user.model')
-// const User = require('mongoose').model('User')
+const UserService = require('../services/user.service')
 
 // ============================================
 // == check if body contains required infos
@@ -119,8 +118,7 @@ exports.hasValidPasswordAndPasswordConfirmation = (req, res, next) => {
 // check if email && username aren't already used
 exports.isEmailNotUsed = async (req, res, next) => {
   const _email = req.body.email
-
-  const user = await User.findOne({ email: _email })
+  const user = await UserService.findOne({ email: _email })
 
   if (user) {
     return res.status(412).json({
@@ -128,6 +126,7 @@ exports.isEmailNotUsed = async (req, res, next) => {
     })
   }
 
+  req.user = user
   return next()
 }
 
@@ -135,9 +134,8 @@ exports.isEmailNotUsed = async (req, res, next) => {
 exports.isPasswordAndUserMatch = async (req, res, next) => {
   const _email = req.body.email
   const _password = req.body.password
-  const _rememberMe = req.body.rememberMe
 
-  const user = await User.findOne({ email: _email })
+  const user = await UserService.findOne({ email: _email }, true)
   if (!user) {
     return res.status(404).json({
       message: 'L\'adresse mail indiquée ne correspond à aucun utilisateur'
@@ -151,33 +149,26 @@ exports.isPasswordAndUserMatch = async (req, res, next) => {
   }
 
   // rebuild user data
-  req.body = {
-    _id: user._id,
-    email: user.email,
-    permissionLevel: user.permissionLevel,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    rememberMe: _rememberMe
-  }
+  req.user = user
   return next()
 }
 
 // check if the provided email address is valid user
 exports.hasExistingEmail = async (req, res, next) => {
   const _email = req.body.email
-
   if (!_email) {
     return res.status(412).json({
       message: 'Veuillez indiquer votre adresse mail'
     })
   }
 
-  const user = await User.findOne({ email: _email })
+  const user = await UserService.findOne({ email: _email })
   if (!user) {
     return res.status(404).json({
       message: 'L\'adresse mail indiquée ne correspond à aucun utilisateur'
     })
   }
 
+  req.user = user
   return next()
 }

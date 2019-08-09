@@ -4,26 +4,24 @@ const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
 
 exports.login = async (req, res) => {
-  const _userId = req.body._id
+  const _user = req.user
   const _rememberMe = req.body.rememberMe
 
-  const user = await UserService.findOne({ _id: _userId })
-
   // delete all previous refresh tokens
-  await JwtService.deleteAllRefresh(_userId)
+  await JwtService.deleteAllRefresh(_user.id)
 
   // access token
-  const accessToken = JwtService.createAccess(req.body)
+  const accessToken = JwtService.createAccess(_user)
   res.cookie('accessToken', accessToken, cookie.accessTokenConfig)
 
   // if rememberMe, refreshToken
   if (_rememberMe) {
-    const refreshToken = await JwtService.createRefresh(req.body)
+    const refreshToken = await JwtService.createRefresh(_user)
     res.cookie('refreshToken', refreshToken, cookie.refreshTokenConfig)
   }
 
   return res.status(201).json({
-    user,
+    user: _user,
     message: 'Connexion réussie'
   })
 }

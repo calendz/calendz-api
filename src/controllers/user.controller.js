@@ -42,14 +42,13 @@ exports.changePassword = async (req, res) => {
 
 // envoie un mail pour réinitialiser le mot de passe
 exports.sendResetPasswordEmail = async (req, res) => {
-  const _email = req.body.email
+  const _user = req.user
 
   // création token page de réinitialisation du mot de passe
-  const user = await UserService.findOne({ email: _email })
-  const token = await TokenService.create(user._id, uuidv4(), 'PASSWORD_RESET')
+  const token = await TokenService.create(_user._id, uuidv4(), 'PASSWORD_RESET')
 
   // envoie mail reset
-  await mailer.sendPasswordResetEmail(user.email, user.firstname, user.lastname, `${config.front_url}password-reset/${token.value}`)
+  await mailer.sendPasswordResetEmail(_user.email, _user.firstname, _user.lastname, `${config.front_url}password-reset/${token.value}`)
 
   return res.status(200).json({
     message: 'L\'email a bien été envoyé'
