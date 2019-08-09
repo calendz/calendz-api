@@ -19,7 +19,7 @@ exports.createRefresh = async (body) => {
 
   // store it in the database
   const refresh = new Refresh({
-    user: body.userId,
+    user: body._id,
     value: refreshToken
   })
   await refresh.save()

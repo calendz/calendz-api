@@ -1,13 +1,10 @@
-const jwt = require('jsonwebtoken')
-const config = require('../config/config')
 const cookie = require('../config/cookie')
-
 const JwtService = require('../services/jwt.service')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
 
 exports.login = async (req, res) => {
-  const _userId = req.body.userId
+  const _userId = req.body._id
   const _rememberMe = req.body.rememberMe
 
   const user = await UserService.findOne({ _id: _userId })
@@ -31,40 +28,19 @@ exports.login = async (req, res) => {
   })
 }
 
-exports.refreshToken = async (req, res) => {
-  // creates a new access token
-  const accessToken = JwtService.createAccess(req.body)
-  res.cookie('accessToken', accessToken, cookie.accessTokenConfig)
-  return res.status(201).json({})
+exports.refreshUser = async (req, res) => {
+  const user = await UserService.findOne({ _id: req.userId })
+  return res.status(200).json({ user })
 }
 
-// checks if there's a valid access token
-exports.hasValidAccessToken = async (req, res, next) => {
-  const _accessToken = req.cookies.accessToken
+exports.refreshTokenAndUser = async (req, res) => {
+  const user = await UserService.findOne({ _id: req.userId })
 
-  // if cookie doesn't exist
-  if (!_accessToken) {
-    return res.status(401).json({
-      message: 'Votre session a expirée, veuillez vous reconnecter'
-    })
-  }
+  // creates a new access token
+  const accessToken = JwtService.createAccess(user)
+  res.cookie('accessToken', accessToken, cookie.accessTokenConfig)
 
-  jwt.verify(_accessToken, config.jwt.secret, async (err, decoded) => {
-    if (err) {
-      switch (err.name) {
-        case 'TokenExpiredError':
-          return res.status(401).json({
-            message: 'Votre session a expirée, veuillez vous reconnecter'
-          })
-        default:
-          return res.status(401).json({
-            message: 'Votre jeton est invalide, veuillez vous reconnecter'
-          })
-      }
-    }
-
-    return res.status(200).json()
-  })
+  return res.status(201).json({ user })
 }
 
 // confirms user's email address

@@ -152,7 +152,7 @@ exports.isPasswordAndUserMatch = async (req, res, next) => {
 
   // rebuild user data
   req.body = {
-    userId: user._id,
+    _id: user._id,
     email: user.email,
     permissionLevel: user.permissionLevel,
     firstname: user.firstname,
