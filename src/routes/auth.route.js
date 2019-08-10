@@ -1,7 +1,6 @@
 const express = require('express')
 const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
 const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
-const AuthPermissionMiddleware = require('../middlewares/auth.permission.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const AuthController = require('../controllers/auth.controller')
 const UserController = require('../controllers/user.controller')
@@ -16,7 +15,7 @@ const router = express.Router()
 router.post('/', [
   UserVerificationMiddleware.hasAuthValidFields,
   UserVerificationMiddleware.isPasswordAndUserMatch,
-  AuthPermissionMiddleware.isUserActive,
+  UserVerificationMiddleware.isActive,
   AuthController.login
 ])
 
