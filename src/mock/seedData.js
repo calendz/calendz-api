@@ -61,6 +61,7 @@ module.exports.seedData = async function seedData () {
     await user1.save()
 
     const user2 = new UserModel({
+      _id: '5d4f26aa046ad506f9583bd3',
       firstname: 'Alexandre',
       lastname: 'Tuet',
       email: 'alexandre.tuet1@epsi.fr',
