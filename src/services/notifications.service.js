@@ -12,5 +12,5 @@ exports.findOne = async (search) => {
 
 exports.getAllFrom = async (userId) => {
   const notifications = await Notification.find({ user: userId })
-  return notifications || []
+  return notifications || []
 }
