@@ -10,7 +10,7 @@ const router = express.Router()
 
 // Récupération des notifications d'un utilisateur
 router.get('/:userId', [
-  JwtVerificationMiddleware.hasValidAccessToken,
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.sameUserOrAdmin,
   UserVerificationMiddleware.hasValidId,
   NotificationsController.getAll
@@ -18,7 +18,7 @@ router.get('/:userId', [
 
 // Marque une notification comme "lue"
 router.patch('/:userId/read/:notificationId', [
-  JwtVerificationMiddleware.hasValidAccessToken,
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.sameUserOrAdmin,
   UserVerificationMiddleware.hasValidId,
   NotificationVerificationMiddleware.hasValidId,

@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
   const _rememberMe = req.body.rememberMe
 
   // delete all previous refresh tokens
-  await JwtService.deleteAllRefresh(_user.id)
+  await JwtService.deleteAllRefresh(_user._id)
 
   // access token
   const accessToken = JwtService.createAccess(_user)
