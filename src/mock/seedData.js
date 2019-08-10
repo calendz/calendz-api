@@ -7,6 +7,7 @@ const initMongo = require('../config/mongoose')
 const UserModel = require('../models/user.model')
 const TokenModel = require('../models/token.model')
 const RefreshModel = require('../models/refresh.model')
+const NotificationModel = require('../models/notification.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
@@ -34,6 +35,7 @@ module.exports.removeAllData = async function removeAllData () {
     await UserModel.deleteMany({})
     await TokenModel.deleteMany({})
     await RefreshModel.deleteMany({})
+    await NotificationModel.deleteMany({})
     logger.warn('POPULATE: successfully removed all data')
   } catch (err) {
     logger.error(err)
@@ -108,6 +110,27 @@ module.exports.seedData = async function seedData () {
       value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQ1YzkwYjBhNzgyNzA2OTk3MWUxMTYiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXIxQGVwc2kuZnIiLCJwZXJtaXNzaW9uTGV2ZWwiOiJNRU1CRVIiLCJmaXJzdG5hbWUiOiJBcnRodXIiLCJsYXN0bmFtZSI6IkR1Zm91ciIsInJlbWVtYmVyTWUiOnRydWUsImlhdCI6MTU2NTM2NjMxMCwiZXhwIjoyNjA3NjUzNjYzMTB9.5yb5fhF3jfTXwudWMbBjXNCW8CWnzAUsNG_i14IJdDU'
     })
     await refreshToken.save()
+
+    const notification1 = new NotificationModel({
+      user: user1._id,
+      title: 'Test',
+      message: 'Ceci est une notification de test !'
+    })
+    await notification1.save()
+
+    const notification2 = new NotificationModel({
+      user: user2._id,
+      title: 'Encore un test',
+      message: 'Une notre notification automatiquement générée à des fins de tests.'
+    })
+    await notification2.save()
+
+    const notification3 = new NotificationModel({
+      user: user2._id,
+      title: 'Hello ' + user2._id,
+      message: 'Do fugiat occaecat irure sunt labore qui nulla laborum in culpa adipisicing labore consectetur fugiat.'
+    })
+    await notification3.save()
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
