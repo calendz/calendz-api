@@ -27,7 +27,7 @@ exports.hasValidAccessToken = async (req, res, next) => {
       }
     }
 
-    req.userId = decoded._id
+    req.decodedUserId = decoded._id
     return next()
   })
 }
@@ -66,7 +66,7 @@ exports.hasValidRefreshToken = async (req, res, next) => {
       })
     }
 
-    req.userId = decoded._id
+    req.decodedUserId = decoded._id
     return next()
   })
 }
