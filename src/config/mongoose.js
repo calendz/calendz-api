@@ -16,7 +16,10 @@ module.exports = async function initConnection (callback) {
     useNewUrlParser: true
   }
 
+  // fix some depreciations issues
   mongoose.set('useCreateIndex', true)
+  mongoose.set('useFindAndModify', false)
+
   await mongoose.connect(mongoUri, mongooseOpt).then(() => {
     logger.info('Connected to MongoDB.')
     callback()
