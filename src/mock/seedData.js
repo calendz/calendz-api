@@ -139,6 +139,7 @@ module.exports.seedData = async function seedData () {
     await notification1.save()
 
     const notification2 = new NotificationModel({
+      _id: '5d4f26aa246ad506f9583bd1',
       user: user2._id,
       title: 'Encore un test',
       message: 'Une notre notification automatiquement générée à des fins de tests.'

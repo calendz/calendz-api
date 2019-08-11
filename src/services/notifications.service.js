@@ -1,7 +1,25 @@
 const Notification = require('../models/notification.model')
 
 // ================================================
-//  == Getters
+// == Methods
+// ================================================
+
+exports.create = async (user, title, message, icon, timestamp, isRead) => {
+  const notification = new Notification({
+    user,
+    title,
+    message,
+    icon,
+    timestamp,
+    isRead
+  })
+
+  await notification.save()
+  return notification
+}
+
+// ================================================
+// == Getters
 // ================================================
 
 exports.findOne = async (search) => {
