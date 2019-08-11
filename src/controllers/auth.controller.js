@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
   const _rememberMe = req.body.rememberMe
 
   // delete all previous refresh tokens
-  await JwtService.deleteAllRefresh(_user.id)
+  await JwtService.deleteAllRefresh(_user._id)
 
   // access token
   const accessToken = JwtService.createAccess(_user)
@@ -27,12 +27,12 @@ exports.login = async (req, res) => {
 }
 
 exports.refreshUser = async (req, res) => {
-  const user = await UserService.findOne({ _id: req.userId })
+  const user = await UserService.findOne({ _id: req.decodedUserId })
   return res.status(200).json({ user })
 }
 
 exports.refreshTokenAndUser = async (req, res) => {
-  const user = await UserService.findOne({ _id: req.userId })
+  const user = await UserService.findOne({ _id: req.decodedUserId })
 
   // creates a new access token
   const accessToken = JwtService.createAccess(user)

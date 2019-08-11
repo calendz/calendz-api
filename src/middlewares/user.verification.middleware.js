@@ -115,6 +115,34 @@ exports.hasValidPasswordAndPasswordConfirmation = (req, res, next) => {
 // == database operations
 // ============================================
 
+exports.hasValidId = async (req, res, next) => {
+  const _userId = req.params.userId
+  const user = await UserService.findOne({ _id: _userId })
+  if (!user) {
+    return res.status(404).json({
+      message: 'Aucun utilisateur correspondant'
+    })
+  }
+
+  req.user = user
+  return next()
+}
+
+// checks if the user is active
+exports.isActive = async (req, res, next) => {
+  const _email = req.body.email
+  const user = await UserService.findOne({ email: _email })
+
+  if (!user.isActive) {
+    return res.status(403).json({
+      message: 'Veuillez confirmer votre email afin de pouvoir vous connecter'
+    })
+  }
+
+  req.user = user
+  return next()
+}
+
 // check if email && username aren't already used
 exports.isEmailNotUsed = async (req, res, next) => {
   const _email = req.body.email
