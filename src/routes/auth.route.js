@@ -1,6 +1,5 @@
 const express = require('express')
 const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
-const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const AuthController = require('../controllers/auth.controller')
 const UserController = require('../controllers/user.controller')
@@ -19,16 +18,8 @@ router.post('/', [
   AuthController.login
 ])
 
-// Refresh user's accessToken
-router.post('/refresh', [
-  JwtVerificationMiddleware.hasValidRefreshToken,
-  AuthController.refreshTokenAndUser
-])
-
-// Checks if user auth state is valid
-router.post('/verify', [
-  JwtVerificationMiddleware.hasValidAccessToken,
-  AuthController.refreshUser
+router.post('/logout', [
+  AuthController.logout
 ])
 
 // =======================================================

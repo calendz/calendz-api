@@ -167,7 +167,7 @@ module.exports = {
             .end((err, res) => {
               if (err) return done(err)
               this.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-              assert.isUndefined(res.body.logout)
+              assert.isTrue(res.body.logout)
               done()
             })
         })
@@ -254,7 +254,7 @@ module.exports = {
             .end((err, res) => {
               if (err) return done(err)
               this.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-              assert.isUndefined(res.body.logout)
+              assert.isTrue(res.body.logout)
               done()
             })
         })
@@ -341,7 +341,7 @@ module.exports = {
             .end((err, res) => {
               if (err) return done(err)
               this.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-              assert.isUndefined(res.body.logout)
+              assert.isTrue(res.body.logout)
               done()
             })
         })

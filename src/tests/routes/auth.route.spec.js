@@ -111,105 +111,15 @@ describe('./routes/auth.route', () => {
   })
 
   // ===============================================
-  // == POST /api/v1/auth/refresh - login refresh
+  // == POST /api/v1/auth/logout - user logout
   // ===============================================
-  describe('POST /api/v1/auth/refresh - login refresh', () => {
-    it('should fail (401) : aucun refresh token transmit', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-          done()
-        })
-    })
-
-    it('should fail (401) : votre session a expirée, veuillez vous reconnecter', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSets)
-        .set('Cookie', 'refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMGU2MDIyYWVjOTA4OWUwY2FlNmQiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwiaWF0IjoxNTYyMTg1MzE2LCJleHAiOjE1NjIxODUzMTh9.zUgg1QLVEd5KUTu6r31I-uXtjLODXkkY3FMJtZmf5GE')
-        .expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-          done()
-        })
-    })
-
-    it('should fail (401) : votre jeton est invalide, veuillez vous reconnecter', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSets).expect('Content-Type', /json/)
-        .set('Cookie', 'refreshToken=notAValidToken')
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre jeton est invalide, veuillez vous reconnecter')
-          done()
-        })
-    })
-
-    it('should fail (401) : jeton pas présent en base', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSets).expect('Content-Type', /json/)
-        .set('Cookie', 'refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDQ1YmE5NDQwZDUzMzAzOTgxN2U2ZTIiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXIxQGVwc2kuZnIiLCJwZXJtaXNzaW9uTGV2ZWwiOiJNRU1CRVIiLCJmaXJzdG5hbWUiOiJBcnRodXIiLCJsYXN0bmFtZSI6IkR1Zm91ciIsInJlbWVtYmVyTWUiOnRydWUsImlhdCI6MTU2NDg1MDg1MCwiZXhwIjo4NjM5OTk5NTUxNjg1MDg1MH0.w_O98JSgskkM099zl5bnW9KRLby2lfXJvOkh4svrdlg')
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-          done()
-        })
-    })
-
-    it('should success (201) : refresh réussi', (done) => {
-      request(app).post('/api/v1/auth/refresh').set(helper.defaultSetsWithAuth).expect('Content-Type', /json/)
-        .expect(201)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-  })
-
-  // =======================================================
-  // == POST /api/v1/auth/verify - vérification accessToken
-  // =======================================================
-  describe('POST /api/v1/auth/verify - vérification accessToken', () => {
-    it('should fail (401) : aucun access token transmit', (done) => {
-      request(app).post('/api/v1/auth/verify').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-          done()
-        })
-    })
-
-    it('should fail (401) : votre session a expirée, veuillez vous reconnecter', (done) => {
-      request(app).post('/api/v1/auth/verify').set(helper.defaultSets)
-        .set('Cookie', 'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFkMGU2MDIyYWVjOTA4OWUwY2FlNmQiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXJAZXBzaS5mciIsInBlcm1pc3Npb25MZXZlbCI6Ik1FTUJFUiIsImZpcnN0bmFtZSI6IkFydGh1ciIsImxhc3RuYW1lIjoiRHVmb3VyIiwiaWF0IjoxNTYyMTg1MzE2LCJleHAiOjE1NjIxODUzMTh9.zUgg1QLVEd5KUTu6r31I-uXtjLODXkkY3FMJtZmf5GE')
-        .expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre session a expirée, veuillez vous reconnecter')
-          done()
-        })
-    })
-
-    it('should fail (401) : votre jeton est invalide, veuillez vous reconnecter', (done) => {
-      request(app).post('/api/v1/auth/verify').set(helper.defaultSets).expect('Content-Type', /json/)
-        .set('Cookie', 'accessToken=notAValidToken')
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Votre jeton est invalide, veuillez vous reconnecter')
-          done()
-        })
-    })
-
-    it('should success (200) : verify réussi', (done) => {
-      request(app).post('/api/v1/auth/verify').set(helper.defaultSetsWithAuth).expect('Content-Type', /json/)
+  describe('POST /api/v1/auth/logout - user logout', () => {
+    it('should success (200) : ...', (done) => {
+      request(app).post('/api/v1/auth/logout').set(helper.defaultSets).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
+          // test useless since we can't access cookies from js but anyway
           done()
         })
     })

@@ -26,19 +26,10 @@ exports.login = async (req, res) => {
   })
 }
 
-exports.refreshUser = async (req, res) => {
-  const user = await UserService.findOne({ _id: req.decodedUserId })
-  return res.status(200).json({ user })
-}
-
-exports.refreshTokenAndUser = async (req, res) => {
-  const user = await UserService.findOne({ _id: req.decodedUserId })
-
-  // creates a new access token
-  const accessToken = JwtService.createAccess(user)
-  res.cookie('accessToken', accessToken, cookie.accessTokenConfig)
-
-  return res.status(201).json({ user })
+exports.logout = async (req, res) => {
+  res.clearCookie('accessToken')
+  res.clearCookie('refreshToken')
+  return res.status(200).json({})
 }
 
 // confirms user's email address
