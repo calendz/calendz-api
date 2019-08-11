@@ -53,7 +53,7 @@ module.exports.seedData = async function seedData () {
       lastname: 'Dufour',
       email: 'arthur.dufour1@epsi.fr',
       password: bcrypt.hashSync('password', 10),
-      permissionLevel: 'MEMBER',
+      permissionLevel: 'ADMIN',
       grade: 'B3 G1',
       bts: false,
       isActive: true
@@ -85,6 +85,19 @@ module.exports.seedData = async function seedData () {
     })
     await user3.save()
 
+    const user4 = new UserModel({
+      _id: '5d4f26aa046ad506f9583bd1',
+      firstname: 'Test',
+      lastname: 'test',
+      email: 'test.test@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      grade: 'B3 G1',
+      bts: false,
+      isActive: true
+    })
+    await user4.save()
+
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
@@ -106,11 +119,17 @@ module.exports.seedData = async function seedData () {
     })
     await token3.save()
 
-    const refreshToken = new RefreshModel({
+    const refreshToken1 = new RefreshModel({
       user: '5d45c90b0a7827069971e116',
       value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQ1YzkwYjBhNzgyNzA2OTk3MWUxMTYiLCJlbWFpbCI6ImFydGh1ci5kdWZvdXIxQGVwc2kuZnIiLCJwZXJtaXNzaW9uTGV2ZWwiOiJNRU1CRVIiLCJmaXJzdG5hbWUiOiJBcnRodXIiLCJsYXN0bmFtZSI6IkR1Zm91ciIsInJlbWVtYmVyTWUiOnRydWUsImlhdCI6MTU2NTM2NjMxMCwiZXhwIjoyNjA3NjUzNjYzMTB9.5yb5fhF3jfTXwudWMbBjXNCW8CWnzAUsNG_i14IJdDU'
     })
-    await refreshToken.save()
+    await refreshToken1.save()
+
+    const refreshToken2 = new RefreshModel({
+      user: user2._id,
+      value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDRmMjZhYTA0NmFkNTA2Zjk1ODNiZDMiLCJwZXJtaXNzaW9uTGV2ZWwiOiJBRE1JTiIsImJ0cyI6ZmFsc2UsImlzQWN0aXZlIjp0cnVlLCJmaXJzdG5hbWUiOiJBbGV4YW5kcmUiLCJsYXN0bmFtZSI6IlR1ZXQiLCJlbWFpbCI6ImFsZXhhbmRyZS50dWV0MUBlcHNpLmZyIiwiZ3JhZGUiOiJCMyBHMSIsImlhdCI6MTU2NTUxNzExMCwiZXhwIjoyNTkzNTY1NTE3MTEwfQ.6JOUIrTFoAqO46qp-k-JNnk2atqa5OfnI6fJrgTLedo'
+    })
+    await refreshToken2.save()
 
     const notification1 = new NotificationModel({
       user: user1._id,

@@ -205,7 +205,7 @@ describe('./routes/auth.route', () => {
         })
     })
 
-    it('should success (200) : refresh réussi', (done) => {
+    it('should success (200) : verify réussi', (done) => {
       request(app).post('/api/v1/auth/verify').set(helper.defaultSetsWithAuth).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
