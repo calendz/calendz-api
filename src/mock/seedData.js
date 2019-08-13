@@ -11,6 +11,7 @@ const NotificationModel = require('../models/notification.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
+const Notification = require('../mock/factories/notification.factory')
 
 if (config.node_env === 'mock') {
   initMongo(async () => {
@@ -155,6 +156,7 @@ module.exports.seedData = async function seedData () {
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
+    await NotificationModel.insertMany(generateNotifications(10, user2._id))
   } catch (err) {
     logger.error(err)
   }
@@ -172,6 +174,14 @@ function generateTokens (amount) {
   const array = []
   for (let i = 0; i < amount; i++) {
     array.push(new Token({}))
+  }
+  return array
+}
+
+function generateNotifications (amount, userId) {
+  const array = []
+  for (let i = 0; i < amount; i++) {
+    array.push(new Notification({ user: userId }))
   }
   return array
 }

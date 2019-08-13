@@ -1,0 +1,20 @@
+const faker = require('faker')
+const mongoose = require('mongoose')
+
+module.exports = class Token {
+  constructor ({
+    user = mongoose.Types.ObjectId(),
+    title = faker.lorem.lines(1),
+    message = faker.lorem.lines(2),
+    icon = 'fas fa-bell',
+    timestamp = new Date(faker.date.recent(7)).getTime(),
+    isRead = faker.random.boolean()
+  }) {
+    this.user = user
+    this.title = title
+    this.message = message
+    this.icon = icon
+    this.timestamp = timestamp
+    this.isRead = isRead
+  }
+}
