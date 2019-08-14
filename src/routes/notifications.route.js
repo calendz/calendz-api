@@ -16,6 +16,14 @@ router.get('/:userId', [
   NotificationsController.getAll
 ])
 
+// Marque toutes les notifications comme "lues"
+router.patch('/:userId/read/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.sameUserOrAdmin,
+  UserVerificationMiddleware.hasValidId,
+  NotificationsController.readAll
+])
+
 // Marque une notification comme "lue"
 router.patch('/:userId/read/:notificationId', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,

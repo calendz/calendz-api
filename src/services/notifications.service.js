@@ -32,6 +32,10 @@ exports.findOneAndUpdate = async (search, update) => {
   await Notification.findOneAndUpdate(search, update)
 }
 
+exports.findAllAndUpdate = async (search, update) => {
+  await Notification.updateMany(search, update)
+}
+
 exports.getAllFrom = async (userId) => {
   const notifications = await Notification.find({ user: userId })
   return notifications || []

@@ -15,3 +15,10 @@ exports.read = async (req, res) => {
   await NotificationsService.findOneAndUpdate({ _id: _notificationId }, { isRead: true })
   return res.status(200).json({})
 }
+
+// mark a notification as "read"
+exports.readAll = async (req, res) => {
+  const _userId = req.params.userId
+  await NotificationsService.findAllAndUpdate({ user: _userId }, { isRead: true })
+  return res.status(200).json({})
+}
