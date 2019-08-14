@@ -34,8 +34,35 @@ describe('./routes/notifications.route', () => {
   })
 
   // ========================================================================================
-  // == PATCH /api/v1/notifications/:userId/read/:notificationId - get user's notifications
+  // == PATCH /api/v1/notifications/:userId/read/all - read all user's notifications
   // ========================================================================================
+  describe(`PATCH /api/v1/notifications/:userId/read/all - read all notifications`, () => {
+    helper.requireAuth('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
+    helper.requireAdminOrSameUser('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
+
+    it('should fail (404) : user not found', (done) => {
+      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bc9/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
+          done()
+        })
+    })
+
+    it('should success (200) : notifications lues', (done) => {
+      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
+  // ==========================================================================================
+  // == PATCH /api/v1/notifications/:userId/read/:notificationId - mark a notification as read
+  // ==========================================================================================
   describe(`PATCH /api/v1/notifications/:userId/read/:notificationId - read a notification`, () => {
     helper.requireAuth('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
     helper.requireAdminOrSameUser('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
