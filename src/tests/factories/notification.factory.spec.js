@@ -27,6 +27,10 @@ describe('./mock/factories/notification.factory', () => {
         assert.isDefined(notification.icon)
       })
 
+      it('should have a type', () => {
+        assert.isDefined(notification.type)
+      })
+
       it('should have a timestamp', () => {
         assert.isDefined(notification.timestamp)
       })
@@ -43,6 +47,7 @@ describe('./mock/factories/notification.factory', () => {
         title: 'TEST123',
         message: 'TESTMESSAGE123',
         icon: 'an-icon',
+        type: 'warning',
         timestamp: '1565791447',
         isRead: true
       })
@@ -62,6 +67,10 @@ describe('./mock/factories/notification.factory', () => {
 
       it('should have an icon', () => {
         assert.strictEqual(notification.icon, 'an-icon')
+      })
+
+      it('should have a type', () => {
+        assert.strictEqual(notification.type, 'warning')
       })
 
       it('should have a timestamp', () => {
