@@ -33,4 +33,13 @@ router.patch('/:userId/read/:notificationId', [
   NotificationsController.read
 ])
 
+// Marque une notification comme "non-lue"
+router.patch('/:userId/unread/:notificationId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.sameUserOrAdmin,
+  UserVerificationMiddleware.hasValidId,
+  NotificationVerificationMiddleware.hasValidId,
+  NotificationsController.unread
+])
+
 module.exports = router
