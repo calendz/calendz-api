@@ -96,4 +96,41 @@ describe('./routes/notifications.route', () => {
         })
     })
   })
+
+  // ===============================================================================================
+  // == PATCH /api/v1/notifications/:userId/read/:notificationId - mark a notification as not read
+  // ===============================================================================================
+  describe(`PATCH /api/v1/notifications/:userId/read/:notificationId - unread a notification`, () => {
+    helper.requireAuth('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
+    helper.requireAdminOrSameUser('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
+
+    it('should fail (404) : user not found', (done) => {
+      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bc9/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
+          done()
+        })
+    })
+
+    it('should fail (404) : notification not found', (done) => {
+      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583cd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Cette notification n'existe pas`)
+          done()
+        })
+    })
+
+    it('should success (200) : notification non-lue', (done) => {
+      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
 })
