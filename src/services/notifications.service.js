@@ -1,3 +1,4 @@
+const UserService = require('./user.service')
 const Notification = require('../models/notification.model')
 
 // ================================================
@@ -16,6 +17,21 @@ exports.create = async (user, title, message, icon, timestamp, isRead) => {
 
   await notification.save()
   return notification
+}
+
+exports.createForAll = async (title, target, message, icon, type) => {
+  const notifications = []
+  const users = await UserService.findAll()
+  users.forEach(user => {
+    notifications.push(new Notification({
+      user: user._id,
+      title,
+      message,
+      icon,
+      type
+    }))
+  })
+  await Notification.insertMany(notifications)
 }
 
 // ================================================

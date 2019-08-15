@@ -42,4 +42,12 @@ router.patch('/:userId/unread/:notificationId', [
   NotificationsController.unread
 ])
 
+// Création d'une notification
+router.post('/', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  NotificationVerificationMiddleware.hasCreateFields,
+  NotificationsController.create
+])
+
 module.exports = router
