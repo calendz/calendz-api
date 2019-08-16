@@ -133,4 +133,99 @@ describe('./routes/notifications.route', () => {
         })
     })
   })
+
+  // ==========================================================
+  // == POST /api/v1/notifications - create some notifications
+  // ==========================================================
+  describe(`POST /api/v1/notifications - create some notifications`, () => {
+    const title = 'Un titre'
+    const target = ['all']
+    const message = 'Un message'
+    const icon = 'fas fa-fire'
+    const type = 'gradient-danger'
+
+    it('should fail (401) : not authenticated', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ title, target, message, icon, type })
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (403) : not admin', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+        .send({ title, target, message, icon, type })
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
+          done()
+        })
+    })
+
+    it('should fail (412) : missing title', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ target, message, icon, type })
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un titre')
+          done()
+        })
+    })
+
+    it('should fail (412) : missing target', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, message, icon, type })
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une cible')
+          done()
+        })
+    })
+
+    it('should fail (412) : missing message', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, target, icon, type })
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un message')
+          done()
+        })
+    })
+
+    it('should fail (412) : missing icon', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, target, message, type })
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un icône')
+          done()
+        })
+    })
+
+    it('should fail (412) : missing type', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, target, message, icon })
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un type')
+          done()
+        })
+    })
+
+    it('should success (201) : notifications created', (done) => {
+      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, target, message, icon, type })
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
 })

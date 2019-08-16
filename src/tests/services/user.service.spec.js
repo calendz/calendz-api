@@ -45,6 +45,16 @@ describe('./services/user.service', () => {
     })
   })
 
+  describe('#findAll', () => {
+    it('should get all users', (done) => {
+      UserService.findAll().then((users) => {
+        assert.isDefined(users)
+        assert.isArray(users)
+        done()
+      })
+    })
+  })
+
   describe('#setActive', () => {
     it('should set user.active to true', (done) => {
       UserService.setActive(userId, true).then(() => {

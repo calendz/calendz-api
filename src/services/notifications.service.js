@@ -5,12 +5,13 @@ const Notification = require('../models/notification.model')
 // == Methods
 // ================================================
 
-exports.create = async (user, title, message, icon, timestamp, isRead) => {
+exports.create = async (user, title, message, icon, type, timestamp, isRead) => {
   const notification = new Notification({
     user,
     title,
     message,
     icon,
+    type,
     timestamp,
     isRead
   })
