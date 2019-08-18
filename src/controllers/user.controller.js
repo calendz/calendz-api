@@ -54,3 +54,16 @@ exports.sendResetPasswordEmail = async (req, res) => {
     message: 'L\'email a bien été envoyé'
   })
 }
+
+// change le mot de passe de l'utilisateur
+exports.changePasswordUser = async (req, res) => {
+  const _password = req.body.password
+  const _id = req.decodedUserId
+
+  // update le mdp
+  await UserService.setPassword(_id, _password)
+
+  return res.status(200).json({
+    message: 'Votre mot de passe a bien été modifié'
+  })
+}
