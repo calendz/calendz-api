@@ -16,6 +16,14 @@ router.get('/:userId', [
   NotificationsController.getAll
 ])
 
+// Marque toutes les notifications comme "lues"
+router.patch('/:userId/read/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.sameUserOrAdmin,
+  UserVerificationMiddleware.hasValidId,
+  NotificationsController.readAll
+])
+
 // Marque une notification comme "lue"
 router.patch('/:userId/read/:notificationId', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
@@ -23,6 +31,23 @@ router.patch('/:userId/read/:notificationId', [
   UserVerificationMiddleware.hasValidId,
   NotificationVerificationMiddleware.hasValidId,
   NotificationsController.read
+])
+
+// Marque une notification comme "non-lue"
+router.patch('/:userId/unread/:notificationId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.sameUserOrAdmin,
+  UserVerificationMiddleware.hasValidId,
+  NotificationVerificationMiddleware.hasValidId,
+  NotificationsController.unread
+])
+
+// Création d'une notification
+router.post('/', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  NotificationVerificationMiddleware.hasCreateFields,
+  NotificationsController.create
 ])
 
 module.exports = router
