@@ -7,7 +7,7 @@ const notificationSchema = new Schema({
   message: { type: String, required: true },
   icon: { type: String, required: true, default: 'fas fa-bell' },
   type: { type: String, required: true, default: 'grey' },
-  timestamp: { type: String, required: true, default: Date.now() },
+  timestamp: { type: String, required: true, default: () => Date.now() },
   isRead: { type: Boolean, required: true, default: false }
 })
 
