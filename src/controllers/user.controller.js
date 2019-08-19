@@ -58,10 +58,14 @@ exports.sendResetPasswordEmail = async (req, res) => {
 // change le mot de passe de l'utilisateur
 exports.changePasswordUser = async (req, res) => {
   const _password = req.body.password
-  const _id = req.decodedUserId
+  const _userId = req.decodedUserId
 
   // update le mdp
-  await UserService.setPassword(_id, _password)
+  await UserService.setPassword(_userId, _password)
+
+  // envoie mail d'informations
+  const _user = await UserService.findOne({ _id: _userId })
+  await mailer.sendPasswordChangedEmail(_user.email, _user.firstname, _user.lastname)
 
   return res.status(200).json({
     message: 'Votre mot de passe a bien été modifié'
