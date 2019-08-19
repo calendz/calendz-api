@@ -311,4 +311,114 @@ describe('./routes/user.route', () => {
 
     helper.testPasswordWithConfirmation('/api/v1/user/password-reset')
   })
+
+  // ============================================================
+  // == PATCH /api/v1/user/password - changement de mot de passe
+  // ============================================================
+  describe('PATCH /api/v1/user/password - changement mot de passe', () => {
+    it('should fail (401) : authentification requise', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ password: 'password2', password2: 'password2' })
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (412) : veuillez indiquer un mot de passe', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({})
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un mot de passe')
+          done()
+        })
+    })
+
+    it('should fail (412) : veuillez confirmer votre mot de passe', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ password: 'password123' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez confirmer votre mot de passe')
+          done()
+        })
+    })
+
+    it('should fail (412) : le mot de passe indiqué est trop court', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ password: 'azez', password2: 'azez' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Le mot de passe indiqué est trop court')
+          done()
+        })
+    })
+
+    it('should fail (412) : le mot de passe indiqué est trop long', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ password: 'azeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaze', password2: 'aazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeze' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Le mot de passe indiqué est trop long')
+          done()
+        })
+    })
+
+    it('should fail (412) : votre mot de passe doit contenir au moins un chiffre', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ password: 'azeaze', password2: 'azeaze' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Votre mot de passe doit contenir au moins un chiffre')
+          done()
+        })
+    })
+
+    it('should fail (412) : votre mot de passe doit contenir au moins une lettre', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ password: '123123', password2: '123123' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Votre mot de passe doit contenir au moins une lettre')
+          done()
+        })
+    })
+
+    it('should fail (412) : les deux mots de passe ne correspondent pas', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ password: 'azeaze1', password2: 'azeaze123' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Les deux mots de passe ne correspondent pas')
+          done()
+        })
+    })
+
+    it('should success (200) : mot de passe a bien été modifié', (done) => {
+      request(app).patch('/api/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ password: 'password2', password2: 'password2' })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Votre mot de passe a bien été modifié')
+          done()
+        })
+    })
+  })
 })

@@ -1,7 +1,9 @@
 const express = require('express')
+
 const UserController = require('../controllers/user.controller')
 const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
+const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
 
 const router = express.Router()
 
@@ -19,6 +21,13 @@ router.post('/password-reset', [
   TokenValidationMiddleware.hasValidToken('PASSWORD_RESET'),
   UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
   UserController.changePassword
+])
+
+// Changement du mot de passe utilisateur
+router.patch('/password', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
+  UserController.changePasswordUser
 ])
 
 module.exports = router

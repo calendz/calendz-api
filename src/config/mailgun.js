@@ -42,3 +42,22 @@ exports.sendPasswordResetEmail = async (to, firstname, lastname, link) => {
     logger.debug(body)
   })
 }
+
+exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
+  /* istanbul ignore if */
+  if (!config.mailer.enabled) return logger.warn(`Mail not send (to: ${to}`)
+
+  const data = {
+    from: 'Calendz <no-reply@calendz.app>',
+    to: to,
+    subject: 'Calendz - Modification de votre mot de passe',
+    template: 'password-changed',
+    'v:firstname': firstname,
+    'v:lastname': lastname
+  }
+
+  mg.messages().send(data, /* istanbul ignore next */ (error, body) => {
+    if (error) logger.error(error)
+    logger.debug(body)
+  })
+}
