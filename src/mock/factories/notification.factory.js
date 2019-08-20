@@ -8,7 +8,7 @@ module.exports = class Token {
     message = faker.lorem.lines(2),
     icon = 'fas fa-bell',
     type = faker.random.arrayElement(['success', 'primary', 'default', 'warning', 'danger', 'info', 'pink', 'purple', 'grey', 'yellow']),
-    timestamp = new Date(faker.date.recent(7)).getTime(),
+    timestamp = new Date(faker.date.recent(31 * 12)).getTime(),
     isRead = faker.random.boolean()
   }) {
     this.user = user
