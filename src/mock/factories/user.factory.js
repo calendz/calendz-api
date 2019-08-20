@@ -9,7 +9,8 @@ module.exports = class User {
     permissionLevel = 'MEMBER',
     grade = faker.random.arrayElement(['B1 G1', 'B1 G2', 'B2 G1', 'B2 G2', 'B3 G1', 'B3 G2', 'B3 G3', 'I4 G1', 'I4 G2', 'I5 G1', 'I5 G2']),
     bts = faker.random.boolean(),
-    isActive = faker.random.boolean()
+    isActive = faker.random.boolean(),
+    creationDate = new Date(faker.date.recent(31 * 12)).getTime()
   }) {
     this.firstname = firstname
     this.lastname = lastname
@@ -19,5 +20,6 @@ module.exports = class User {
     this.grade = grade
     this.bts = bts
     this.isActive = isActive
+    this.creationDate = creationDate
   }
 }
