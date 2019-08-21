@@ -73,13 +73,11 @@ exports.changePasswordUser = async (req, res) => {
 }
 
 // change l'incription à la liste de mail de l'utilisateur
-exports.changeIsSubMail = async (req, res) => {
+exports.setInformationMails = async (req, res) => {
   const _userId = req.decodedUserId
-  const _isSubMail = req.body.isSubMail
+  const _value = req.params.value
 
-  console.log(_userId + ' - ' + _isSubMail)
-
-  await UserService.setIsSubMail(_userId, _isSubMail)
+  await UserService.setInformationMails(_userId, _value)
 
   return res.status(200).json({
     message: 'Le statut à bien été modifié'

@@ -4,6 +4,7 @@ const UserController = require('../controllers/user.controller')
 const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
+const ValueVerificationMiddleware = require('../middlewares/value.verification.middleware')
 
 const router = express.Router()
 
@@ -30,9 +31,15 @@ router.patch('/password', [
   UserController.changePasswordUser
 ])
 
-router.patch('/isSubMail', [
+// ===========================================
+// == Paramètres =============================
+// ===========================================
+
+// Toggle l'adhésion aux mails d'informations
+router.patch('/information-mails/:value', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
-  UserController.changeIsSubMail
+  ValueVerificationMiddleware.hasBoolean,
+  UserController.setInformationMails
 ])
 
 module.exports = router

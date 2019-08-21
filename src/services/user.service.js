@@ -28,7 +28,7 @@ exports.findOne = async (search, includePassword) => {
     return user
   } else {
     const user = await User.findOne(search)
-      .select('firstname lastname email permissionLevel grade bts isActive isSubMail')
+      .select('-password')
       .lean()
     return user
   }
@@ -55,8 +55,8 @@ exports.setPassword = async (userId, value) => {
   await user.save()
 }
 
-exports.setIsSubMail = async (userId, isSubMail) => {
+exports.setInformationMails = async (userId, value) => {
   const user = await User.findById(userId)
-  user.isSubMail = isSubMail
+  user.hasInformationMails = value
   await user.save()
 }
