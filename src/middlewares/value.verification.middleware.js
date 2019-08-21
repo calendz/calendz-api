@@ -3,7 +3,7 @@ exports.hasBoolean = (req, res, next) => {
 
   if (_value !== 'true' && _value !== 'false') {
     return res.status(412).json({
-      message: 'Veuillez spécifier une valeur !'
+      message: 'Veuillez spécifier une valeur'
     })
   }
 
