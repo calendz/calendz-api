@@ -273,6 +273,38 @@ describe('./routes/user.route', () => {
     })
   })
 
+  // ===============================================
+  // == GET /api/v1/user/all - get all users
+  // ===============================================
+  describe('GET /api/v1/user/all - get all users', () => {
+    it('should fail (401) : not authenticated', (done) => {
+      request(app).get('/api/v1/user/all').set(helper.defaultSets).expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (403) : not admin', (done) => {
+      request(app).get('/api/v1/user/all').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
+          done()
+        })
+    })
+
+    it('should success (200) : got users list', (done) => {
+      request(app).get('/api/v1/user/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.users)
+          assert.isArray(res.body.users)
+          done()
+        })
+    })
+  })
+
   // ====================================================================
   // == POST /api/v1/user/password-reset - réinitialisation mot de passe
   // ====================================================================
