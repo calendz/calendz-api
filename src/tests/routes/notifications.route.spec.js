@@ -98,9 +98,9 @@ describe('./routes/notifications.route', () => {
   })
 
   // ===============================================================================================
-  // == PATCH /api/v1/notifications/:userId/read/:notificationId - mark a notification as not read
+  // == PATCH /api/v1/notifications/:userId/unread/:notificationId - mark a notification as not read
   // ===============================================================================================
-  describe(`PATCH /api/v1/notifications/:userId/read/:notificationId - unread a notification`, () => {
+  describe(`PATCH /api/v1/notifications/:userId/unread/:notificationId - unread a notification`, () => {
     helper.requireAuth('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
     helper.requireAdminOrSameUser('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
 
