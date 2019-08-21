@@ -30,4 +30,9 @@ router.patch('/password', [
   UserController.changePasswordUser
 ])
 
+router.patch('/isSubMail', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  UserController.changeIsSubMail
+])
+
 module.exports = router
