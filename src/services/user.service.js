@@ -35,7 +35,7 @@ exports.findOne = async (search, includePassword) => {
 }
 
 exports.findAll = async (search) => {
-  const users = await User.find({ search }).lean()
+  const users = await User.find({ search }).select('-password').lean()
   return users
 }
 

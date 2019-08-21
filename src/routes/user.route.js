@@ -4,6 +4,7 @@ const UserController = require('../controllers/user.controller')
 const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
+const PermissionVerificationMiddleware = require('../middlewares/permission.verification.middleware')
 
 const router = express.Router()
 
@@ -14,6 +15,13 @@ router.post('/', [
   UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
   UserVerificationMiddleware.isEmailNotUsed,
   UserController.create
+])
+
+// Get all users
+router.get('/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserController.getAll
 ])
 
 // Réinitialisation du mot de passe de l'utilisateur

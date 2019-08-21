@@ -5,6 +5,14 @@ const mailer = require('../config/mailgun')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
 
+// get all users
+exports.getAll = async (req, res) => {
+  const users = await UserService.findAll()
+  return res.status(200).json({
+    users
+  })
+}
+
 // creates a new user (register)
 exports.create = async (req, res) => {
   const _firstname = req.body.firstname
