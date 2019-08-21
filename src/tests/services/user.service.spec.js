@@ -85,4 +85,24 @@ describe('./services/user.service', () => {
       })
     })
   })
+
+  describe('#setInformationMails', () => {
+    it('should set hasInformationMails to true', (done) => {
+      UserService.setInformationMails(userId, true).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isTrue(user.hasInformationMails)
+          done()
+        })
+      })
+    })
+
+    it('should set hasInformationMails to false', (done) => {
+      UserService.setInformationMails(userId, false).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isFalse(user.hasInformationMails)
+          done()
+        })
+      })
+    })
+  })
 })

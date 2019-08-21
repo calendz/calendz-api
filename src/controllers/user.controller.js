@@ -71,3 +71,15 @@ exports.changePasswordUser = async (req, res) => {
     message: 'Votre mot de passe a bien été modifié'
   })
 }
+
+// change l'incription à la liste de mail de l'utilisateur
+exports.setInformationMails = async (req, res) => {
+  const _userId = req.decodedUserId
+  const _value = req.params.value
+
+  await UserService.setInformationMails(_userId, _value)
+
+  return res.status(200).json({
+    message: 'Le statut à bien été modifié'
+  })
+}

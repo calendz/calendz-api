@@ -28,7 +28,7 @@ exports.findOne = async (search, includePassword) => {
     return user
   } else {
     const user = await User.findOne(search)
-      .select('firstname lastname email permissionLevel grade bts isActive')
+      .select('-password')
       .lean()
     return user
   }
@@ -52,5 +52,11 @@ exports.setActive = async (userId, value) => {
 exports.setPassword = async (userId, value) => {
   const user = await User.findById(userId)
   user.password = bcrypt.hashSync(value, 10)
+  await user.save()
+}
+
+exports.setInformationMails = async (userId, value) => {
+  const user = await User.findById(userId)
+  user.hasInformationMails = value
   await user.save()
 }
