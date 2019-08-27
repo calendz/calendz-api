@@ -23,6 +23,18 @@ jobs:
         - npm run test:mock
         - npm run test:coverage
         - npm run test:coveralls
+    - stage: Build Docker image
+      if: branch = feature/continuous-deployment
+      script:
+      - "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')"
+      - echo "==== Building calendz-api:$PACKAGE_VERSION ===="
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t calendz/calendz-api .
+      - docker images
+      - docker tag calendz/calendz-api calendz/calendz-api:latest
+      - docker tag calendz/calendz-api calendz/calendz-api:$PACKAGE_VERSION
+      - docker push calendz/calendz-api:latest
+      - docker push calendz/calendz-api:$PACKAGE_VERSION
 
 after_success:
   - wget https://raw.githubusercontent.com/calendz/travis-discord-webhook/master/send.sh
