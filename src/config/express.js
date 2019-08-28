@@ -42,7 +42,7 @@ app.use(helmet())
 // enable CORS (Cross Origin Resource Sharing)
 // app.use(cors())
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: config.front_url.substring(0, config.front_url.length - 3),
   credentials: true
 }))
 
