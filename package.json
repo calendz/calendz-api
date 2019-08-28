@@ -2,6 +2,7 @@
   "name": "calendz-api",
   "version": "1.0.0",
   "description": "calendz's backend api",
+  "private": true,
   "main": "app.js",
   "scripts": {
     "start": "node ./src/app.js",
