@@ -9,6 +9,10 @@ node_js:
 services:
   - mongodb
 
+before_install:
+- openssl aes-256-cbc -K $encrypted_994543d654b9_key -iv $encrypted_994543d654b9_iv
+  -in .travis/deploy_key.enc -out .travis/deploy_key -d
+
 before_script:
   - sleep 10
   - mongo calendz --eval 'db.createUser({user:"username",pwd:"password",roles:["readWrite"]});'
@@ -23,16 +27,34 @@ jobs:
         - npm run test:mock
         - npm run test:coverage
         - npm run test:coveralls
+      after_success:
+        - wget https://raw.githubusercontent.com/calendz/travis-discord-webhook/master/send.sh
+        - chmod +x send.sh
+        - ./send.sh success $DISCORD_WEBHOOK_URL
+      after_failure:
+        - wget https://raw.githubusercontent.com/calendz/travis-discord-webhook/master/send.sh
+        - chmod +x send.sh
+        - ./send.sh failure $DISCORD_WEBHOOK_URL
 
-after_success:
-  - wget https://raw.githubusercontent.com/calendz/travis-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - ./send.sh success $DISCORD_WEBHOOK_URL
+    # Build and push both current version & latest version
+    - stage: Build Docker image
+      if: branch = master
+      script:
+      - "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')"
+      - echo "==== Building calendz/api:$PACKAGE_VERSION ===="
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t calendz/api .
+      - docker images
+      - docker tag calendz/api calendz/api:latest
+      - docker tag calendz/api calendz/api:${PACKAGE_VERSION}
+      - docker push calendz/api:latest
+      - docker push calendz/api:${PACKAGE_VERSION}
 
-after_failure:
-  - wget https://raw.githubusercontent.com/calendz/travis-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - ./send.sh failure $DISCORD_WEBHOOK_URL
+    # Deploy latest API version
+    - stage: Deploy
+      if: branch = master
+      script:
+        - sh .travis/deploy.sh
 
 cache:
   directories:

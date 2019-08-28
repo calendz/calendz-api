@@ -9,7 +9,8 @@ const userSchema = new Schema({
   permissionLevel: { type: String, enum: ['MEMBER', 'ADMIN'], default: 'MEMBER', required: true },
   grade: { type: String, enum: ['B1 G1', 'B1 G2', 'B2 G1', 'B2 G2', 'B3 G1', 'B3 G2', 'B3 G3', 'I4 G1', 'I4 G2', 'I5 G1', 'I5 G2'], required: true },
   bts: { type: Boolean, default: false, required: false },
-  isActive: { type: Boolean, default: false, required: true }
+  isActive: { type: Boolean, default: false, required: true },
+  hasInformationMails: { type: Boolean, default: true, required: true }
 })
 
 module.exports = mongoose.model('User', userSchema)

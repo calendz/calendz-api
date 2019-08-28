@@ -31,9 +31,9 @@ describe('./services/user.service', () => {
     })
   })
 
-  describe('#getById', () => {
+  describe('#findOne', () => {
     it('should get user by its id', (done) => {
-      UserService.getById(userId).then((user) => {
+      UserService.findOne({ _id: userId }).then((user) => {
         assert.isDefined(user._id)
         assert.isUndefined(user.password)
         assert.strictEqual(user.firstname, firstname)
@@ -45,15 +45,11 @@ describe('./services/user.service', () => {
     })
   })
 
-  describe('#getByEmail', () => {
-    it('should get user by its id', (done) => {
-      UserService.getByEmail(email).then((user) => {
-        assert.isDefined(user._id)
-        assert.isUndefined(user.password)
-        assert.strictEqual(user.firstname, firstname)
-        assert.strictEqual(user.lastname, lastname)
-        assert.strictEqual(user.email, email)
-        assert.strictEqual(user.grade, grade)
+  describe('#findAll', () => {
+    it('should get all users', (done) => {
+      UserService.findAll().then((users) => {
+        assert.isDefined(users)
+        assert.isArray(users)
         done()
       })
     })
@@ -84,6 +80,26 @@ describe('./services/user.service', () => {
       UserService.setPassword(userId, 'newPassword').then(() => {
         User.findById(userId).then((user) => {
           assert.isTrue(bcrypt.compareSync('newPassword', user.password))
+          done()
+        })
+      })
+    })
+  })
+
+  describe('#setInformationMails', () => {
+    it('should set hasInformationMails to true', (done) => {
+      UserService.setInformationMails(userId, true).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isTrue(user.hasInformationMails)
+          done()
+        })
+      })
+    })
+
+    it('should set hasInformationMails to false', (done) => {
+      UserService.setInformationMails(userId, false).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isFalse(user.hasInformationMails)
           done()
         })
       })

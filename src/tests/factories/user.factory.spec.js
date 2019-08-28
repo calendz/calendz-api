@@ -40,6 +40,10 @@ describe('./mock/factories/user.factory', () => {
       it('should have a isActive', () => {
         assert.isDefined(user.isActive)
       })
+
+      it('should have a hasInformationMails', () => {
+        assert.isDefined(user.hasInformationMails)
+      })
     })
 
     describe('with specified properties', () => {
@@ -51,7 +55,8 @@ describe('./mock/factories/user.factory', () => {
         grade: 'B1 G1',
         bts: true,
         permissionLevel: 'MEMBER',
-        isActive: true
+        isActive: true,
+        hasInformationMails: false
       })
 
       it('should have a firstname', () => {
@@ -84,6 +89,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a isActive', () => {
         assert.strictEqual(user.isActive, true)
+      })
+
+      it('should have a hasInformationMails', () => {
+        assert.strictEqual(user.hasInformationMails, false)
       })
     })
   })

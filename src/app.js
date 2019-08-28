@@ -14,10 +14,10 @@ initMongo(async () => {
   /* istanbul ignore if */
   // 2nd: if needed: populate db w/ fake dataset
   if (config.populate && config.node_env !== 'test') {
-    logger.info('===== Started dataset =====')
+    logger.warn('POPULATE: started dataset')
     await seedData.removeAllData().then(async () => {
       await seedData.seedData().then(() => {
-        logger.info('===== Dataset completed =====')
+        logger.warn('POPULATE: dataset completed')
       })
     })
   }

@@ -22,18 +22,21 @@ exports.create = async (firstname, lastname, email, password, grade) => {
 //  == Getters
 // ================================================
 
-exports.getById = async (userId) => {
-  const user = await User.findById(userId)
-    .select('firstname lastname email permissionLevel grade bts')
-    .lean()
-  return user
+exports.findOne = async (search, includePassword) => {
+  if (includePassword) {
+    const user = await User.findOne(search).lean()
+    return user
+  } else {
+    const user = await User.findOne(search)
+      .select('-password')
+      .lean()
+    return user
+  }
 }
 
-exports.getByEmail = async (email) => {
-  const user = await User.findOne({ email })
-    .select('firstname lastname email permissionLevel grade bts')
-    .lean()
-  return user
+exports.findAll = async (search) => {
+  const users = await User.find({ search }).lean()
+  return users
 }
 
 // ================================================
@@ -49,5 +52,11 @@ exports.setActive = async (userId, value) => {
 exports.setPassword = async (userId, value) => {
   const user = await User.findById(userId)
   user.password = bcrypt.hashSync(value, 10)
+  await user.save()
+}
+
+exports.setInformationMails = async (userId, value) => {
+  const user = await User.findById(userId)
+  user.hasInformationMails = value
   await user.save()
 }

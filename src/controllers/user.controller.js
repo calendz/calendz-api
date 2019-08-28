@@ -42,16 +42,44 @@ exports.changePassword = async (req, res) => {
 
 // envoie un mail pour réinitialiser le mot de passe
 exports.sendResetPasswordEmail = async (req, res) => {
-  const _email = req.body.email
+  const _user = req.user
 
   // création token page de réinitialisation du mot de passe
-  const user = await UserService.getByEmail(_email)
-  const token = await TokenService.create(user._id, uuidv4(), 'PASSWORD_RESET')
+  const token = await TokenService.create(_user._id, uuidv4(), 'PASSWORD_RESET')
 
   // envoie mail reset
-  await mailer.sendPasswordResetEmail(user.email, user.firstname, user.lastname, `${config.front_url}password-reset/${token.value}`)
+  await mailer.sendPasswordResetEmail(_user.email, _user.firstname, _user.lastname, `${config.front_url}password-reset/${token.value}`)
 
   return res.status(200).json({
     message: 'L\'email a bien été envoyé'
+  })
+}
+
+// change le mot de passe de l'utilisateur
+exports.changePasswordUser = async (req, res) => {
+  const _password = req.body.password
+  const _userId = req.decodedUserId
+
+  // update le mdp
+  await UserService.setPassword(_userId, _password)
+
+  // envoie mail d'informations
+  const _user = await UserService.findOne({ _id: _userId })
+  await mailer.sendPasswordChangedEmail(_user.email, _user.firstname, _user.lastname)
+
+  return res.status(200).json({
+    message: 'Votre mot de passe a bien été modifié'
+  })
+}
+
+// change l'incription à la liste de mail de l'utilisateur
+exports.setInformationMails = async (req, res) => {
+  const _userId = req.decodedUserId
+  const _value = req.params.value
+
+  await UserService.setInformationMails(_userId, _value)
+
+  return res.status(200).json({
+    message: 'Le statut à bien été modifié'
   })
 }
