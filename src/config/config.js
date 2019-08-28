@@ -41,7 +41,7 @@ const config = convict({
     host: {
       doc: 'The MongoDB hostname',
       format: String,
-      default: '127.0.0.1',
+      default: 'calendz-database',
       arg: 'db_host',
       env: 'DB_HOST'
     },
