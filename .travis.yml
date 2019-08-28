@@ -41,20 +41,6 @@ jobs:
       - docker push calendz/api:${PACKAGE_VERSION}
     - stage: Deploy
       if: branch = feature/continuous-deployment
-      env:
-        - NODE_ENV=production
-        - FRONT_URL=https://calendz.app/#/
-        - APP_PORT=3001
-        - POPULATE=false
-        - DB_HOST=calendz-database
-        - DB_PORT=27017
-        - DB_USER=username
-        - DB_PASSWORD=password
-        - COOKIE_SECURE=true
-        - JWT_EXPIRATION=900
-        - JWT_EXPIRATION_REFRESH=30
-        - JWT_RAW_TOKEN=test
-        - MAILED_ENABLED=true
       script:
         - sh .travis/deploy.sh
 
