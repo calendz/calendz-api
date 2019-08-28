@@ -9,6 +9,10 @@ node_js:
 services:
   - mongodb
 
+before_install:
+- openssl aes-256-cbc -K $encrypted_994543d654b9_key -iv $encrypted_994543d654b9_iv
+  -in .travis/deploy_key.enc -out .travis/deploy_key -d
+
 before_script:
   - sleep 10
   - mongo calendz --eval 'db.createUser({user:"username",pwd:"password",roles:["readWrite"]});'
@@ -35,6 +39,24 @@ jobs:
       - docker tag calendz/api calendz/api:${PACKAGE_VERSION}
       - docker push calendz/api:latest
       - docker push calendz/api:${PACKAGE_VERSION}
+    - stage: Deploy
+      if: branch = feature/continuous-deployment
+      env:
+        - NODE_ENV=production
+        - FRONT_URL=https://calendz.app/#/
+        - APP_PORT=3001
+        - POPULATE=false
+        - DB_HOST=calendz-database
+        - DB_PORT=27017
+        - DB_USER=username
+        - DB_PASSWORD=password
+        - COOKIE_SECURE=true
+        - JWT_EXPIRATION=900
+        - JWT_EXPIRATION_REFRESH=30
+        - JWT_RAW_TOKEN=test
+        - MAILED_ENABLED=true
+      script:
+        - sh .travis/deploy.sh
 
 after_success:
   - wget https://raw.githubusercontent.com/calendz/travis-discord-webhook/master/send.sh
