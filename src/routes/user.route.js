@@ -47,4 +47,12 @@ router.patch('/:userId', [
   UserController.updateUserInformations
 ])
 
+// Suppression d'un compte utilisateur
+router.delete('/:userId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserVerificationMiddleware.hasValidId,
+  UserController.deleteAccount
+])
+
 module.exports = router

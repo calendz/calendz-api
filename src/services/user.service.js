@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs')
 const User = require('../models/user.model')
+const Notification = require('../models/notification.model')
+const Refresh = require('../models/refresh.model')
+const Token = require('../models/token.model')
 
 // ================================================
 //  == Methods
@@ -65,4 +68,17 @@ exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _
   user.bts = _bts
   user.isActive = _isActive
   await user.save()
+}
+
+exports.deleteAccount = async (userId) => {
+  await User.findByIdAndDelete(userId)
+  await Notification.deleteMany({
+    user: userId
+  })
+  await Token.deleteMany({
+    user: userId
+  })
+  await Refresh.deleteMany({
+    user: userId
+  })
 }

@@ -97,3 +97,14 @@ exports.updateUserInformations = async (req, res) => {
     message: 'Les informations ont bien été modifiés'
   })
 }
+
+// suppression compte utilisateur
+exports.deleteAccount = async (req, res) => {
+  const _userId = req.params.userId
+
+  await UserService.deleteAccount(_userId)
+
+  return res.status(200).json({
+    message: 'Le compte à bien été supprimé'
+  })
+}
