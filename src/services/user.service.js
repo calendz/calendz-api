@@ -54,3 +54,15 @@ exports.setPassword = async (userId, value) => {
   user.password = bcrypt.hashSync(value, 10)
   await user.save()
 }
+
+exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _bts, _isActive) => {
+  const user = await User.findById(userId)
+  user.firstname = _firstname
+  user.lastname = _lastname
+  user.email = _email
+  user.permissionLevel = _permissionLevel
+  user.grade = _grade
+  user.bts = _bts
+  user.isActive = _isActive
+  await user.save()
+}

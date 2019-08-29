@@ -38,4 +38,13 @@ router.patch('/password', [
   UserController.changePasswordUser
 ])
 
+// Actualisation des information d'un utilisateur
+router.patch('/:userId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserVerificationMiddleware.hasValidId,
+  UserVerificationMiddleware.hasValidModifyFields,
+  UserController.updateUserInformations
+])
+
 module.exports = router
