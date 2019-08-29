@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
   const token = await TokenService.create(user._id, uuidv4(), 'EMAIL_VERIFICATION')
 
   // envoie mail de confirmation
-  await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}email-confirmation/${token.value}`)
+  await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)
 
   return res.status(201).json({
     id: user._id,
@@ -48,7 +48,7 @@ exports.sendResetPasswordEmail = async (req, res) => {
   const token = await TokenService.create(_user._id, uuidv4(), 'PASSWORD_RESET')
 
   // envoie mail reset
-  await mailer.sendPasswordResetEmail(_user.email, _user.firstname, _user.lastname, `${config.front_url}password-reset/${token.value}`)
+  await mailer.sendPasswordResetEmail(_user.email, _user.firstname, _user.lastname, `${config.front_url}/password-reset/${token.value}`)
 
   return res.status(200).json({
     message: 'L\'email a bien été envoyé'

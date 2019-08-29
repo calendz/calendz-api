@@ -5,14 +5,14 @@ const helper = require('../test.helper')
 
 describe('./routes/notifications.route', () => {
   // ===================================================================
-  // == GET /api/v1/notifications/:userId - get user's notifications
+  // == GET /v1/notifications/:userId - get user's notifications
   // ===================================================================
-  describe(`GET /api/v1/notifications/:userId - get user's notifications`, () => {
-    helper.requireAuth('get', '/api/v1/notifications/5d4f26aa046ad506f9583bd3')
-    helper.requireAdminOrSameUser('get', '/api/v1/notifications/5d4f26aa046ad506f9583bd3')
+  describe(`GET /v1/notifications/:userId - get user's notifications`, () => {
+    helper.requireAuth('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
+    helper.requireAdminOrSameUser('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
 
     it('should fail (404) : user not found', (done) => {
-      request(app).get('/api/v1/notifications/5d4f26aa046ad506f9583bc9').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).get('/v1/notifications/5d4f26aa046ad506f9583bc9').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
@@ -22,7 +22,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should success (200) : récupération des notifications', (done) => {
-      request(app).get('/api/v1/notifications/5d4f26aa046ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).get('/v1/notifications/5d4f26aa046ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
@@ -34,14 +34,14 @@ describe('./routes/notifications.route', () => {
   })
 
   // ========================================================================================
-  // == PATCH /api/v1/notifications/:userId/read/all - read all user's notifications
+  // == PATCH /v1/notifications/:userId/read/all - read all user's notifications
   // ========================================================================================
-  describe(`PATCH /api/v1/notifications/:userId/read/all - read all notifications`, () => {
-    helper.requireAuth('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
-    helper.requireAdminOrSameUser('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
+  describe(`PATCH /v1/notifications/:userId/read/all - read all notifications`, () => {
+    helper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
+    helper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
 
     it('should fail (404) : user not found', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bc9/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
@@ -51,7 +51,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should success (200) : notifications lues', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
@@ -61,14 +61,14 @@ describe('./routes/notifications.route', () => {
   })
 
   // ==========================================================================================
-  // == PATCH /api/v1/notifications/:userId/read/:notificationId - mark a notification as read
+  // == PATCH /v1/notifications/:userId/read/:notificationId - mark a notification as read
   // ==========================================================================================
-  describe(`PATCH /api/v1/notifications/:userId/read/:notificationId - read a notification`, () => {
-    helper.requireAuth('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
-    helper.requireAdminOrSameUser('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
+  describe(`PATCH /v1/notifications/:userId/read/:notificationId - read a notification`, () => {
+    helper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
+    helper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
 
     it('should fail (404) : user not found', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bc9/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
@@ -78,7 +78,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (404) : notification not found', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583cd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583cd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
@@ -88,7 +88,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should success (200) : notification lue', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
@@ -98,14 +98,14 @@ describe('./routes/notifications.route', () => {
   })
 
   // ===============================================================================================
-  // == PATCH /api/v1/notifications/:userId/read/:notificationId - mark a notification as not read
+  // == PATCH /v1/notifications/:userId/read/:notificationId - mark a notification as not read
   // ===============================================================================================
-  describe(`PATCH /api/v1/notifications/:userId/read/:notificationId - unread a notification`, () => {
-    helper.requireAuth('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
-    helper.requireAdminOrSameUser('patch', '/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
+  describe(`PATCH /v1/notifications/:userId/read/:notificationId - unread a notification`, () => {
+    helper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
+    helper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
 
     it('should fail (404) : user not found', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bc9/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
@@ -115,7 +115,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (404) : notification not found', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583cd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583cd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
@@ -125,7 +125,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should success (200) : notification non-lue', (done) => {
-      request(app).patch('/api/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
@@ -135,9 +135,9 @@ describe('./routes/notifications.route', () => {
   })
 
   // ==========================================================
-  // == POST /api/v1/notifications - create some notifications
+  // == POST /v1/notifications - create some notifications
   // ==========================================================
-  describe(`POST /api/v1/notifications - create some notifications`, () => {
+  describe(`POST /v1/notifications - create some notifications`, () => {
     const title = 'Un titre'
     const target = ['all']
     const message = 'Un message'
@@ -145,7 +145,7 @@ describe('./routes/notifications.route', () => {
     const type = 'gradient-danger'
 
     it('should fail (401) : not authenticated', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSets).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ title, target, message, icon, type })
         .end((err, res) => {
           if (err) return done(err)
@@ -154,7 +154,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (403) : not admin', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
         .send({ title, target, message, icon, type })
         .end((err, res) => {
           if (err) return done(err)
@@ -164,7 +164,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (412) : missing title', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ target, message, icon, type })
         .end((err, res) => {
           if (err) return done(err)
@@ -175,7 +175,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (412) : missing target', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, message, icon, type })
         .end((err, res) => {
           if (err) return done(err)
@@ -186,7 +186,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (412) : missing message', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, target, icon, type })
         .end((err, res) => {
           if (err) return done(err)
@@ -197,7 +197,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (412) : missing icon', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, target, message, type })
         .end((err, res) => {
           if (err) return done(err)
@@ -208,7 +208,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should fail (412) : missing type', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, target, message, icon })
         .end((err, res) => {
           if (err) return done(err)
@@ -219,7 +219,7 @@ describe('./routes/notifications.route', () => {
     })
 
     it('should success (201) : notifications created', (done) => {
-      request(app).post('/api/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, target, message, icon, type })
         .expect(201)
         .end((err, res) => {

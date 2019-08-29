@@ -12,7 +12,7 @@ const config = convict({
   front_url: {
     doc: `Calendz's front url`,
     format: String,
-    default: 'http://localhost:8080/#/',
+    default: 'http://localhost:8080',
     arg: 'front_url',
     env: 'FRONT_URL'
   },
