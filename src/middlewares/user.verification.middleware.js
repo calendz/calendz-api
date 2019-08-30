@@ -228,9 +228,9 @@ exports.hasValidModifyFields = (req, res, next) => {
   const permissionsLevel = ['ADMIN', 'MEMBER']
   if (permissionsLevel.indexOf(_permissionLevel) === -1) errors.push('Veuillez indiquer un role valide')
 
-  if (!(_bts === true || _bts === false)) errors.push('Veuillez indiquer une option BTS valide')
+  if (_bts !== true && _bts !== false) errors.push('Veuillez indiquer une option BTS valide')
 
-  if (!(_isActive === true || _isActive === false)) errors.push('Veuillez indiquer une activité valide')
+  if (_isActive !== true && _isActive !== false) errors.push('Veuillez indiquer une activité valide')
 
   if (errors.length) {
     return res.status(412).json({
