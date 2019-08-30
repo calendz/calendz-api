@@ -5,6 +5,7 @@ const UserVerificationMiddleware = require('../middlewares/user.verification.mid
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
 const ValueVerificationMiddleware = require('../middlewares/value.verification.middleware')
+const PermissionVerificationMiddleware = require('../middlewares/permission.verification.middleware')
 
 const router = express.Router()
 
@@ -15,6 +16,13 @@ router.post('/', [
   UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
   UserVerificationMiddleware.isEmailNotUsed,
   UserController.create
+])
+
+// Get all users
+router.get('/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserController.getAll
 ])
 
 // Réinitialisation du mot de passe de l'utilisateur
@@ -29,6 +37,24 @@ router.patch('/password', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
   UserController.changePasswordUser
+])
+
+// Actualisation des information d'un utilisateur
+router.patch('/:userId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserVerificationMiddleware.hasValidId,
+  UserVerificationMiddleware.hasValidModifyFields,
+  UserController.updateUserInformations
+])
+
+// Suppression d'un compte utilisateur
+router.delete('/:userId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserVerificationMiddleware.hasValidId,
+  UserVerificationMiddleware.isNotSelf,
+  UserController.deleteAccount
 ])
 
 // ===========================================

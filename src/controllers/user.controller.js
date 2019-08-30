@@ -5,6 +5,14 @@ const mailer = require('../config/mailgun')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
 
+// get all users
+exports.getAll = async (req, res) => {
+  const users = await UserService.findAll()
+  return res.status(200).json({
+    users
+  })
+}
+
 // creates a new user (register)
 exports.create = async (req, res) => {
   const _firstname = req.body.firstname
@@ -81,5 +89,34 @@ exports.setInformationMails = async (req, res) => {
 
   return res.status(200).json({
     message: 'Le statut à bien été modifié'
+  })
+}
+
+// actualise les informations d'un utilisateur
+exports.updateUserInformations = async (req, res) => {
+  const _userId = req.params.userId
+  const _firstname = req.body.firstname
+  const _lastname = req.body.lastname
+  const _email = req.body.email
+  const _permissionLevel = req.body.permissionLevel
+  const _grade = req.body.grade
+  const _bts = req.body.bts
+  const _isActive = req.body.isActive
+
+  await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _bts, _isActive)
+
+  return res.status(200).json({
+    message: 'Les informations ont bien été modifiées'
+  })
+}
+
+// suppression compte utilisateur
+exports.deleteAccount = async (req, res) => {
+  const _userId = req.params.userId
+
+  await UserService.deleteAccount(_userId)
+
+  return res.status(200).json({
+    message: 'Le compte à bien été supprimé'
   })
 }

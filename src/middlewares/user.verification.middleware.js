@@ -200,3 +200,57 @@ exports.hasExistingEmail = async (req, res, next) => {
   req.user = user
   return next()
 }
+
+exports.hasValidModifyFields = (req, res, next) => {
+  const _firstname = req.body.firstname
+  const _lastname = req.body.lastname
+  const _email = req.body.email
+  const _permissionLevel = req.body.permissionLevel
+  const _grade = req.body.grade
+  const _bts = req.body.bts
+  const _isActive = req.body.isActive
+
+  const errors = []
+  if (_firstname.length < 3) errors.push('Le prénom indiqué est trop court')
+  if (_lastname.length < 3) errors.push('Le nom indiqué est trop court')
+  if (_email.length < 12) errors.push('L\'adresse mail indiquée est trop courte')
+
+  if (_firstname.length > 32) errors.push('Le prénom indiqué est trop long')
+  if (_lastname.length > 32) errors.push('Le nom indiqué est trop long')
+  if (_email.length > 64) errors.push('L\'adresse mail indiquée est trop longue')
+
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  if (!re.test(_email.toLowerCase())) errors.push('Veuillez indiquer une adresse mail valide')
+  if (!_email.includes('@epsi.fr') && !_email.includes('@wis.fr')) errors.push('Seules les adresses EPSI et WIS sont acceptées')
+  const grades = ['B1 G1', 'B1 G2', 'B2 G1', 'B2 G2', 'B3 G1', 'B3 G2', 'B3 G3', 'I4 G1', 'I4 G2', 'I5 G1', 'I5 G2']
+  if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
+
+  const permissionsLevel = ['ADMIN', 'MEMBER']
+  if (permissionsLevel.indexOf(_permissionLevel) === -1) errors.push('Veuillez indiquer un role valide')
+
+  if (_bts !== true && _bts !== false) errors.push('Veuillez indiquer une option BTS valide')
+
+  if (_isActive !== true && _isActive !== false) errors.push('Veuillez indiquer une activité valide')
+
+  if (errors.length) {
+    return res.status(412).json({
+      message: 'Certains champs requis sont invalides',
+      errors: errors
+    })
+  }
+
+  return next()
+}
+
+exports.isNotSelf = (req, res, next) => {
+  const _targetUserId = req.params.userId
+  const _userId = req.decodedUserId
+
+  if (_userId === _targetUserId) {
+    return res.status(423).json({
+      message: 'Vous ne pouvez vous auto-supprimer depuis ce panel, pour cela rendez-vous sur la page "Paramètres"'
+    })
+  }
+
+  return next()
+}
