@@ -613,6 +613,16 @@ describe('./routes/user.route', () => {
         })
     })
 
+    it('should fail (423) : no self delete', (done) => {
+      request(app).delete('/api/v1/user/5d45c90b0a7827069971e116').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(423)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous ne pouvez vous auto-supprimer depuis ce panel, pour cela rendez-vous sur la page "Paramètres"`)
+          done()
+        })
+    })
+
     it('should success (200) : le compte à bien été supprimé', (done) => {
       request(app).delete('/api/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
