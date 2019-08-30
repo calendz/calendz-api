@@ -94,7 +94,7 @@ exports.updateUserInformations = async (req, res) => {
   await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _bts, _isActive)
 
   return res.status(200).json({
-    message: 'Les informations ont bien été modifiés'
+    message: 'Les informations ont bien été modifiées'
   })
 }
 
