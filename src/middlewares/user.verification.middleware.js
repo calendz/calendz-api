@@ -241,3 +241,16 @@ exports.hasValidModifyFields = (req, res, next) => {
 
   return next()
 }
+
+exports.isNotSelf = (req, res, next) => {
+  const _targetUserId = req.params.userId
+  const _userId = req.decodedUserId
+
+  if (_userId === _targetUserId) {
+    return res.status(423).json({
+      message: 'Vous ne pouvez vous auto-supprimer depuis ce panel, pour cela rendez-vous sur la page "Paramètres"'
+    })
+  }
+
+  return next()
+}

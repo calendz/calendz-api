@@ -52,6 +52,7 @@ router.delete('/:userId', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.isAdmin,
   UserVerificationMiddleware.hasValidId,
+  UserVerificationMiddleware.isNotSelf,
   UserController.deleteAccount
 ])
 
