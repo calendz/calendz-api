@@ -4,6 +4,7 @@ const mailer = require('../config/mailgun')
 
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
+const NotificationModel = require('../models/notification.model')
 
 // get all users
 exports.getAll = async (req, res) => {
@@ -27,6 +28,15 @@ exports.create = async (req, res) => {
 
   // envoie mail de confirmation
   await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)
+
+  const notificationRegister = new NotificationModel({
+    user: user._id,
+    title: 'Bienvenue sur Calendz !',
+    message: 'L\'équipe de Calendz vous souhaite la bienvenue sur notre plateforme. N\'hésitez pas à nous contacter en cas de besoin.',
+    icon: 'fas fa-trophy',
+    type: 'gradient-purple'
+  })
+  await notificationRegister.save()
 
   return res.status(201).json({
     id: user._id,
