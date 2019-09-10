@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const UserService = require('../services/user.service')
+const TokenService = require('../services/token.service')
 
 // ============================================
 // == check if body contains required infos
@@ -132,10 +133,12 @@ exports.hasValidId = async (req, res, next) => {
 exports.isActive = async (req, res, next) => {
   const _email = req.body.email
   const user = await UserService.findOne({ email: _email })
+  const token = await TokenService.findOne({ user: user._id, type: 'EMAIL_VERIFICATION' })
 
   if (!user.isActive) {
     return res.status(403).json({
-      message: 'Veuillez confirmer votre email afin de pouvoir vous connecter'
+      message: 'Veuillez confirmer votre email afin de pouvoir vous connecter',
+      code: token.value
     })
   }
 

@@ -32,6 +32,12 @@ router.post('/verify/email', [
   AuthController.confirmEmail
 ])
 
+// Renvoyer email de vérification
+router.post('/verify/email/resend', [
+  TokenValidationMiddleware.hasValidToken('EMAIL_VERIFICATION'),
+  AuthController.resendValidation
+])
+
 // Envoie d'un mail pour réinitialiser le mot de passe
 router.post('/password-reset/send-mail', [
   UserVerificationMiddleware.hasExistingEmail,
