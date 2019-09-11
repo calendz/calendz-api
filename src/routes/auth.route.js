@@ -33,8 +33,9 @@ router.post('/verify/email', [
 ])
 
 // Renvoyer email de vérification
-router.post('/verify/email/resend', [
-  TokenValidationMiddleware.hasValidToken('EMAIL_VERIFICATION'),
+router.post('/verify/email/resend/:userId', [
+  UserVerificationMiddleware.hasValidId,
+  UserVerificationMiddleware.isNotActive,
   AuthController.resendValidation
 ])
 

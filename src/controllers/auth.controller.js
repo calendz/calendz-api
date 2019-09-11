@@ -47,13 +47,10 @@ exports.confirmEmail = async (req, res) => {
 }
 
 exports.resendValidation = async (req, res) => {
-  const tokenValue = req.body.token
+  const user = req.user
+  const token = req.token
 
-  // TODO:
-  // charger token
-  // charger user à partir de l'user du token
-  const user = await UserService.findOne({ value: tokenValue, type: 'EMAIL_VERIFICATION' })
-  await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${tokenValue}`)
+  await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)
 
   res.status(200).json({})
 }
