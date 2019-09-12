@@ -75,6 +75,7 @@ module.exports.seedData = async function seedData () {
     await user2.save()
 
     const user3 = new UserModel({
+      _id: '5d4f26aa046ad506f9583be8',
       firstname: 'Thomas',
       lastname: 'Zimmermann',
       email: 'thomas.zimmermann@epsi.fr',
@@ -99,6 +100,32 @@ module.exports.seedData = async function seedData () {
     })
     await user4.save()
 
+    const user5 = new UserModel({
+      _id: '5d4f26aa046ad506f9583bc8',
+      firstname: 'Maxime',
+      lastname: 'Durand',
+      email: 'maxime.durand@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      grade: 'B3 G1',
+      bts: false,
+      isActive: false
+    })
+    await user5.save()
+
+    const user6 = new UserModel({
+      _id: '5d4f26aa046ad506f9583ca1',
+      firstname: 'Tom',
+      lastname: 'Cooper',
+      email: 'tom.cooper@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      grade: 'B3 G1',
+      bts: false,
+      isActive: false
+    })
+    await user6.save()
+
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
@@ -119,6 +146,13 @@ module.exports.seedData = async function seedData () {
       type: 'EMAIL_VERIFICATION'
     })
     await token3.save()
+
+    const token4 = new TokenModel({
+      user: user6._id,
+      value: 'aValidToken4',
+      type: 'EMAIL_VERIFICATION'
+    })
+    await token4.save()
 
     const refreshToken1 = new RefreshModel({
       user: '5d45c90b0a7827069971e116',

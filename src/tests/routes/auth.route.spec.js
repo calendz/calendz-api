@@ -173,6 +173,50 @@ describe('./routes/auth.route', () => {
     })
   })
 
+  // ==========================================================================
+  // == POST /v1/auth/verify/email/resend/:userId - renvoi email coonfirmation
+  // ==========================================================================
+  describe('POST /v1/auth/verify/email/resend/:userId - renvoi email coonfirmation', () => {
+    it('should fail (404) : aucun utilisateur correspondant', (done) => {
+      request(app).post('/v1/auth/verify/email/resend/5d4f26aa046ad506f9583bd2').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Aucun utilisateur correspondant`)
+          done()
+        })
+    })
+
+    it('should fail (400) : cet utilisateur est (déjà) actif', (done) => {
+      request(app).post('/v1/auth/verify/email/resend/5d45c90b0a7827069971e116').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Cet utilisateur est (déjà) actif`)
+          done()
+        })
+    })
+
+    it('should fail (500) : cet utilisateur ne possède pas de token de vérification d\'email', (done) => {
+      request(app).post('/v1/auth/verify/email/resend/5d4f26aa046ad506f9583bc8').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(500)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Cet utilisateur ne possède pas de token de vérification d'email`)
+          done()
+        })
+    })
+
+    it('should success (200) : mail bien envoyé', (done) => {
+      request(app).post('/v1/auth/verify/email/resend/5d4f26aa046ad506f9583ca1').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
   // =================================================================================
   // == POST /v1/auth/password-reset/send-mail - envoie mail réinitialisation mdp
   // =================================================================================
