@@ -1,4 +1,6 @@
 const cookie = require('../config/cookie')
+const config = require('../config/config')
+const mailer = require('../config/mailgun')
 const JwtService = require('../services/jwt.service')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
@@ -42,4 +44,13 @@ exports.confirmEmail = async (req, res) => {
   return res.status(200).json({
     message: 'Votre adresse mail a bien été validée'
   })
+}
+
+exports.resendValidation = async (req, res) => {
+  const user = req.user
+  const token = req.token
+
+  await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)
+
+  res.status(200).json({})
 }

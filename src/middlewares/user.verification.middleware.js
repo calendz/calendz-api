@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs')
+const logger = require('../config/winston')
 const UserService = require('../services/user.service')
+const TokenService = require('../services/token.service')
 
 // ============================================
 // == check if body contains required infos
@@ -135,11 +137,40 @@ exports.isActive = async (req, res, next) => {
 
   if (!user.isActive) {
     return res.status(403).json({
-      message: 'Veuillez confirmer votre email afin de pouvoir vous connecter'
+      message: 'Veuillez confirmer votre email afin de pouvoir vous connecter',
+      userId: user._id
     })
   }
 
   req.user = user
+  return next()
+}
+
+// checks if the user is not active
+exports.isNotActive = async (req, res, next) => {
+  const user = req.user
+
+  // get (if it exists) the 'EMAIL_VERIFICATION' token
+  const token = await TokenService.findOne({ user: user._id, type: 'EMAIL_VERIFICATION' })
+
+  if (user.isActive) {
+    // if activation token exists, delete it
+    if (token) await TokenService.deleteByValue(token.value)
+
+    return res.status(400).json({
+      message: `Cet utilisateur est (déjà) actif`
+    })
+  }
+
+  // this case shouldn't happen, but we better catch it anyway
+  if (!token) {
+    logger.error(`user ${user._id} doesn't have any email verification token (he should)`)
+    return res.status(500).json({
+      message: 'Cet utilisateur ne possède pas de token de vérification d\'email'
+    })
+  }
+
+  req.token = token
   return next()
 }
 
