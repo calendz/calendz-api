@@ -41,6 +41,7 @@ router.patch('/password', [
 
 // Actualisation des information d'un utilisateur
 router.patch('/:userId', [
+  UserVerificationMiddleware.isIdObjectId,
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.isAdmin,
   UserVerificationMiddleware.hasValidId,
@@ -50,6 +51,7 @@ router.patch('/:userId', [
 
 // Suppression d'un compte utilisateur
 router.delete('/:userId', [
+  UserVerificationMiddleware.isIdObjectId,
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.isAdmin,
   UserVerificationMiddleware.hasValidId,

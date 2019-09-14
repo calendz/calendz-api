@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const UserService = require('../services/user.service')
+const mongoose = require('../../node_modules/mongoose')
 
 // ============================================
 // == check if body contains required infos
@@ -253,4 +254,16 @@ exports.isNotSelf = (req, res, next) => {
   }
 
   return next()
+}
+
+exports.isIdObjectId = (req, res, next) => {
+  const _userId = req.params.userId
+
+  if (mongoose.Types.ObjectId.isValid(_userId)) {
+    next()
+  } else {
+    return res.status(412).json({
+      message: 'ID is not objectId'
+    })
+  }
 }
