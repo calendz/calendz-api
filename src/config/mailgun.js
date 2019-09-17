@@ -1,11 +1,11 @@
+/* istanbul ignore file */
 const config = require('./config')
 const logger = require('./winston')
 const mailgun = require('mailgun-js')
 const mg = mailgun({ apiKey: config.mailer.api_key, domain: config.mailer.domain, host: config.mailer.host })
 
 exports.sendVerificationEmail = async (to, firstname, lastname, link) => {
-  /* istanbul ignore if */
-  if (!config.mailer.enabled) return logger.warn(`Mail not send (link: ${link}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
 
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
@@ -17,15 +17,14 @@ exports.sendVerificationEmail = async (to, firstname, lastname, link) => {
     'v:link': link
   }
 
-  mg.messages().send(data, /* istanbul ignore next */ (error, body) => {
+  mg.messages().send(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
 }
 
 exports.sendPasswordResetEmail = async (to, firstname, lastname, link) => {
-  /* istanbul ignore if */
-  if (!config.mailer.enabled) return logger.warn(`Mail not send (link: ${link}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
 
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
@@ -37,15 +36,14 @@ exports.sendPasswordResetEmail = async (to, firstname, lastname, link) => {
     'v:link': link
   }
 
-  mg.messages().send(data, /* istanbul ignore next */ (error, body) => {
+  mg.messages().send(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
 }
 
 exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
-  /* istanbul ignore if */
-  if (!config.mailer.enabled) return logger.warn(`Mail not send (to: ${to}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
 
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
@@ -56,7 +54,7 @@ exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
     'v:lastname': lastname
   }
 
-  mg.messages().send(data, /* istanbul ignore next */ (error, body) => {
+  mg.messages().send(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })

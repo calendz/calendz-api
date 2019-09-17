@@ -44,6 +44,10 @@ describe('./mock/factories/user.factory', () => {
       it('should have a hasInformationMails', () => {
         assert.isDefined(user.hasInformationMails)
       })
+
+      it('should have a creationDate', () => {
+        assert.isDefined(user.creationDate)
+      })
     })
 
     describe('with specified properties', () => {
@@ -56,7 +60,8 @@ describe('./mock/factories/user.factory', () => {
         bts: true,
         permissionLevel: 'MEMBER',
         isActive: true,
-        hasInformationMails: false
+        hasInformationMails: false,
+        creationDate: '1565791447'
       })
 
       it('should have a firstname', () => {
@@ -93,6 +98,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a hasInformationMails', () => {
         assert.strictEqual(user.hasInformationMails, false)
+      })
+
+      it('should have a creationDate', () => {
+        assert.strictEqual(user.creationDate, '1565791447')
       })
     })
   })

@@ -273,6 +273,38 @@ describe('./routes/user.route', () => {
     })
   })
 
+  // ===============================================
+  // == GET /v1/user/all - get all users
+  // ===============================================
+  describe('GET /v1/user/all - get all users', () => {
+    it('should fail (401) : not authenticated', (done) => {
+      request(app).get('/v1/user/all').set(helper.defaultSets).expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (403) : not admin', (done) => {
+      request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
+          done()
+        })
+    })
+
+    it('should success (200) : got users list', (done) => {
+      request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.users)
+          assert.isArray(res.body.users)
+          done()
+        })
+    })
+  })
+
   // ====================================================================
   // == POST /v1/user/password-reset - réinitialisation mot de passe
   // ====================================================================
@@ -459,6 +491,186 @@ describe('./routes/user.route', () => {
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
+          done()
+        })
+    })
+  })
+
+  // ============================================================
+  // == PATCH /v1/user/:userId - changement de mot de passe
+  // ============================================================
+  describe('PATCH /v1/user/:userId - mise à jour donnés utilisateur', () => {
+    it('should fail (401) : authentification requise', (done) => {
+      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (403) : not admin', (done) => {
+      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
+          done()
+        })
+    })
+
+    it('should fail (404) : aucun utilisateur correspondant', (done) => {
+      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd2').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Aucun utilisateur correspondant`)
+          done()
+        })
+    })
+
+    it('should fail (412) : champs invalides', (done) => {
+      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .send({
+          userId: '5d4f26aa046ad506f9583bd1',
+          firstname: 'a',
+          lastname: 'a',
+          email: 't.t@epsi.fr',
+          permissionLevel: 'not a valide',
+          grade: 'not a valid grade',
+          bts: 'not a boolean',
+          isActive: 'not a boolean'
+        })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Certains champs requis sont invalides`)
+          helper.hasBodyErrorsThatContains(res.body, 'Le prénom indiqué est trop court')
+          helper.hasBodyErrorsThatContains(res.body, 'Le nom indiqué est trop court')
+          helper.hasBodyErrorsThatContains(res.body, 'L\'adresse mail indiquée est trop courte')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une classe valide')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un role valide')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une option BTS valide')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une activité valide')
+          done()
+        })
+    })
+
+    it('should fail (412) : champs invalides', (done) => {
+      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .send({
+          userId: '5d4f26aa046ad506f9583bd1',
+          firstname: 'azeaozeuazeahzeaehazuiehazehazjie',
+          lastname: 'azeaozeuazeahzeaehazuiehazehazjie',
+          email: 'azeaozeuazeahzeaehazuiehazehazjie.azeaozeuazeahzeaehazuiehazehazjie@example.com',
+          permissionLevel: 'not a valide',
+          grade: 'not a valid grade',
+          bts: 'not a boolean',
+          isActive: 'not a boolean'
+        })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Certains champs requis sont invalides`)
+          helper.hasBodyErrorsThatContains(res.body, 'Le prénom indiqué est trop long')
+          helper.hasBodyErrorsThatContains(res.body, 'Le nom indiqué est trop long')
+          helper.hasBodyErrorsThatContains(res.body, 'L\'adresse mail indiquée est trop longue')
+          helper.hasBodyErrorsThatContains(res.body, 'Seules les adresses EPSI et WIS sont acceptées')
+          done()
+        })
+    })
+
+    it('should fail (412) : email invalide', (done) => {
+      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .send({
+          userId: '5d4f26aa046ad506f9583bd1',
+          firstname: 'azeaze',
+          lastname: 'azeaze',
+          email: 'azeaze.azeazee@xample',
+          permissionLevel: 'MEMBER',
+          grade: 'B1 G1',
+          bts: true,
+          isActive: true
+        })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Certains champs requis sont invalides`)
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une adresse mail valide')
+          done()
+        })
+    })
+
+    it('should success (200) : aucun utilisateur correspondant', (done) => {
+      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .send({
+          userId: '5d4f26aa046ad506f9583bd1',
+          firstname: 'Test2',
+          lastname: 'Test2',
+          email: 'test2.test2@epsi.fr',
+          permissionLevel: 'MEMBER',
+          grade: 'I5 G2',
+          bts: true,
+          isActive: true
+        })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Les informations ont bien été modifiées`)
+          done()
+        })
+    })
+  })
+
+  // ============================================================
+  // == DELETE /v1/user/:userId - suppression compte
+  // ============================================================
+  describe('DELETE /v1/user/:userId - mise à jour donnés utilisateur', () => {
+    it('should fail (401) : authentification requise', (done) => {
+      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (403) : not admin', (done) => {
+      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
+          done()
+        })
+    })
+
+    it('should fail (404) : aucun utilisateur correspondant', (done) => {
+      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd2').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Aucun utilisateur correspondant`)
+          done()
+        })
+    })
+
+    it('should fail (423) : no self delete', (done) => {
+      request(app).delete('/v1/user/5d45c90b0a7827069971e116').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(423)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous ne pouvez vous auto-supprimer depuis ce panel, pour cela rendez-vous sur la page "Paramètres"`)
+          done()
+        })
+    })
+
+    it('should success (200) : le compte à bien été supprimé', (done) => {
+      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Le compte à bien été supprimé`)
           done()
         })
     })

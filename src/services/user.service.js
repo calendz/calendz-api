@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs')
 const User = require('../models/user.model')
+const Notification = require('../models/notification.model')
+const Refresh = require('../models/refresh.model')
+const Token = require('../models/token.model')
 
 // ================================================
 //  == Methods
@@ -16,6 +19,31 @@ exports.create = async (firstname, lastname, email, password, grade) => {
 
   await user.save()
   return user
+}
+
+exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _bts, _isActive) => {
+  const user = await User.findById(userId)
+  user.firstname = _firstname
+  user.lastname = _lastname
+  user.email = _email
+  user.permissionLevel = _permissionLevel
+  user.grade = _grade
+  user.bts = _bts
+  user.isActive = _isActive
+  await user.save()
+}
+
+exports.deleteAccount = async (userId) => {
+  await User.findByIdAndDelete(userId)
+  await Notification.deleteMany({
+    user: userId
+  })
+  await Token.deleteMany({
+    user: userId
+  })
+  await Refresh.deleteMany({
+    user: userId
+  })
 }
 
 // ================================================
@@ -35,7 +63,7 @@ exports.findOne = async (search, includePassword) => {
 }
 
 exports.findAll = async (search) => {
-  const users = await User.find({ search }).lean()
+  const users = await User.find({ search }).select('-password').lean()
   return users
 }
 
