@@ -19,10 +19,10 @@ const app = express()
 /* istanbul ignore if */
 // logging method
 if (config.node_env === 'development') {
-  app.use(morgan('dev'))
+  app.use(morgan('dev', { stream: { write: message => logger.log('silly', message.trim()) } }))
 } else if (config.node_env === 'production') {
   /* istanbul ignore next */
-  app.use(morgan('common'))
+  app.use(morgan('combined', { stream: { write: message => logger.debug(message.trim()) } }))
 }
 
 app.use(bodyParser.json())
