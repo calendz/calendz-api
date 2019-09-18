@@ -10,6 +10,7 @@ const router = express.Router()
 
 // Récupération des notifications d'un utilisateur
 router.get('/:userId', [
+  UserVerificationMiddleware.isIdObjectId,
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.sameUserOrAdmin,
   UserVerificationMiddleware.hasValidId,
@@ -18,6 +19,7 @@ router.get('/:userId', [
 
 // Marque toutes les notifications comme "lues"
 router.patch('/:userId/read/all', [
+  UserVerificationMiddleware.isIdObjectId,
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.sameUserOrAdmin,
   UserVerificationMiddleware.hasValidId,
@@ -26,6 +28,7 @@ router.patch('/:userId/read/all', [
 
 // Marque une notification comme "lue"
 router.patch('/:userId/read/:notificationId', [
+  UserVerificationMiddleware.isIdObjectId,
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.sameUserOrAdmin,
   UserVerificationMiddleware.hasValidId,
@@ -35,6 +38,7 @@ router.patch('/:userId/read/:notificationId', [
 
 // Marque une notification comme "non-lue"
 router.patch('/:userId/unread/:notificationId', [
+  UserVerificationMiddleware.isIdObjectId,
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   PermissionVerificationMiddleware.sameUserOrAdmin,
   UserVerificationMiddleware.hasValidId,
