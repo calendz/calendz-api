@@ -262,7 +262,7 @@ exports.isIdObjectId = (req, res, next) => {
   if (mongoose.Types.ObjectId.isValid(_userId)) {
     next()
   } else {
-    return res.status(412).json({
+    return res.status(422).json({
       message: 'ID is not objectId'
     })
   }
