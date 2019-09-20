@@ -22,12 +22,14 @@ exports.sameUserOrAdmin = async (req, res, next) => {
 // check if the user is admin
 exports.isAdmin = async (req, res, next) => {
   const _decodedUserId = req.decodedUserId
-  const user = await UserService.findOne({ _id: _decodedUserId })
+
+  const user = req.user || await UserService.findOne({ _id: _decodedUserId })
   if (user.permissionLevel !== 'ADMIN') {
     return res.status(403).json({
       message: `Vous n'avez pas la permission d'effectuer cela`
     })
   }
 
+  req.user = user
   return next()
 }

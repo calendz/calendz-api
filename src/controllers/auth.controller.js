@@ -36,9 +36,9 @@ exports.logout = async (req, res) => {
 
 // confirms user's email address
 exports.confirmEmail = async (req, res) => {
-  const _token = req.body.token
+  const _tokenValue = req.body.token
 
-  const token = await TokenService.deleteByValue(_token)
+  const token = await TokenService.deleteOne(_tokenValue)
   await UserService.setActive(token.user, true)
 
   return res.status(200).json({

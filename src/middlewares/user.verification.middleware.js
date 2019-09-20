@@ -134,7 +134,7 @@ exports.hasValidId = async (req, res, next) => {
 // checks if the user is active
 exports.isActive = async (req, res, next) => {
   const _email = req.body.email
-  const user = await UserService.findOne({ email: _email })
+  const user = req.user || await UserService.findOne({ email: _email })
 
   if (!user.isActive) {
     return res.status(403).json({
@@ -178,7 +178,7 @@ exports.isNotActive = async (req, res, next) => {
 // check if email && username aren't already used
 exports.isEmailNotUsed = async (req, res, next) => {
   const _email = req.body.email
-  const user = await UserService.findOne({ email: _email })
+  const user = req.user || await UserService.findOne({ email: _email })
 
   if (user) {
     return res.status(412).json({
@@ -195,7 +195,8 @@ exports.isPasswordAndUserMatch = async (req, res, next) => {
   const _email = req.body.email
   const _password = req.body.password
 
-  const user = await UserService.findOne({ email: _email }, true)
+  const user = req.user || await UserService.findOne({ email: _email }, true)
+
   if (!user) {
     return res.status(404).json({
       message: 'L\'adresse mail indiquée ne correspond à aucun utilisateur'

@@ -50,7 +50,7 @@ exports.changePassword = async (req, res) => {
   const _password = req.body.password
 
   // supprime le token puis update le mdp
-  const token = await TokenService.deleteByValue(_tokenValue)
+  const token = await TokenService.deleteOne(_tokenValue)
   await UserService.setPassword(token.user, _password)
 
   return res.status(200).json({

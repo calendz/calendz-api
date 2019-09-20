@@ -66,7 +66,7 @@ router.delete('/:userId', [
 // Toggle l'adhésion aux mails d'informations
 router.patch('/information-mails/:value', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
-  ValueVerificationMiddleware.hasBoolean,
+  ValueVerificationMiddleware.isBoolean,
   UserController.setInformationMails
 ])
 

@@ -1,4 +1,4 @@
-exports.hasBoolean = (req, res, next) => {
+exports.isBoolean = (req, res, next) => {
   const _value = req.params.value
 
   if (_value !== 'true' && _value !== 'false') {
