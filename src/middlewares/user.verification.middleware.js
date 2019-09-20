@@ -120,6 +120,13 @@ exports.hasValidPasswordAndPasswordConfirmation = (req, res, next) => {
 
 exports.hasValidId = async (req, res, next) => {
   const _userId = req.params.userId
+
+  if (!mongoose.Types.ObjectId.isValid(_userId)) {
+    return res.status(422).json({
+      message: 'ID is not a valid ObjectID'
+    })
+  }
+
   const user = await UserService.findOne({ _id: _userId })
   if (!user) {
     return res.status(404).json({
@@ -286,16 +293,4 @@ exports.isNotSelf = (req, res, next) => {
   }
 
   return next()
-}
-
-exports.isIdObjectId = (req, res, next) => {
-  const _userId = req.params.userId
-
-  if (mongoose.Types.ObjectId.isValid(_userId)) {
-    next()
-  } else {
-    return res.status(422).json({
-      message: 'ID is not objectId'
-    })
-  }
 }
