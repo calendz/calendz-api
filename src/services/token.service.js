@@ -15,7 +15,7 @@ exports.create = async (user, value, type) => {
   return token
 }
 
-exports.deleteByValue = async (value) => {
+exports.deleteOne = async (value) => {
   const token = await Token.findOneAndDelete({ value })
   return token
 }

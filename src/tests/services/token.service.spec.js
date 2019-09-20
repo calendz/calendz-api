@@ -25,9 +25,9 @@ describe('./services/token.service', () => {
     })
   })
 
-  describe('#deleteByValue', () => {
+  describe('#deleteOne', () => {
     it('should delete the token', (done) => {
-      TokenService.deleteByValue(value).then(() => {
+      TokenService.deleteOne(value).then(() => {
         Token.findOne({ value }).then((token) => {
           if (token) {
             done('Shouldn\'t have found this token')
