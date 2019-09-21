@@ -11,6 +11,6 @@ node_modules/
 coverage/
 .nyc_output/
 
-# ssh key for deployment
-deploy_key
-deploy_key.pub
+# ssh key
+deploy_rsa
+deploy_rsa.pub
