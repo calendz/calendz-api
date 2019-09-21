@@ -10,8 +10,8 @@ services:
   - mongodb
 
 before_install:
-- openssl aes-256-cbc -K $encrypted_38e48307ffcd_key -iv $encrypted_38e48307ffcd_iv
-  -in .travis/deploy_rsa.enc -out .travis/deploy_rsa -d
+- openssl aes-256-cbc -K $encrypted_994543d654b9_key -iv $encrypted_994543d654b9_iv
+  -in .travis/deploy_key.enc -out .travis/deploy_key -d
 
 before_script:
   - sleep 10
@@ -23,7 +23,7 @@ jobs:
   include:
     - stage: Tests
       if: tag IS blank
-      script:
+      script: 
         - npm run lint
         - npm run test:mock
         - npm run test:coverage
