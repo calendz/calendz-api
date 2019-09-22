@@ -126,6 +126,18 @@ module.exports.seedData = async function seedData () {
     })
     await user6.save()
 
+    const user7 = new UserModel({
+      firstname: 'Tristan',
+      lastname: 'Giffen',
+      email: 'tristan.giffen@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'ADMIN',
+      grade: 'B3 G1',
+      bts: false,
+      isActive: true
+    })
+    await user7.save()
+
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
