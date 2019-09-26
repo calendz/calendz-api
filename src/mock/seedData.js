@@ -55,7 +55,8 @@ module.exports.seedData = async function seedData () {
       email: 'arthur.dufour1@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: true
     })
@@ -68,7 +69,8 @@ module.exports.seedData = async function seedData () {
       email: 'alexandre.tuet1@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: true
     })
@@ -81,7 +83,8 @@ module.exports.seedData = async function seedData () {
       email: 'thomas.zimmermann@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: false
     })
@@ -94,7 +97,8 @@ module.exports.seedData = async function seedData () {
       email: 'test.test@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: true
     })
@@ -107,7 +111,8 @@ module.exports.seedData = async function seedData () {
       email: 'maxime.durand@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: false
     })
@@ -120,7 +125,8 @@ module.exports.seedData = async function seedData () {
       email: 'tom.cooper@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: false
     })
@@ -132,7 +138,8 @@ module.exports.seedData = async function seedData () {
       email: 'tristan.giffen@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
-      grade: 'B3 G1',
+      grade: 'I2',
+      city: 'Lyon',
       bts: false,
       isActive: true
     })

@@ -21,9 +21,10 @@ exports.create = async (req, res) => {
   const _email = req.body.email
   const _password = req.body.password
   const _grade = req.body.grade
+  const _city = req.body.city
 
   // création utilisateur et création token confirmation mail
-  const user = await UserService.create(_firstname, _lastname, _email, _password, _grade)
+  const user = await UserService.create(_firstname, _lastname, _email, _password, _grade, _city)
   const token = await TokenService.create(user._id, uuidv4(), 'EMAIL_VERIFICATION')
 
   // envoie mail de confirmation
@@ -110,10 +111,11 @@ exports.updateUserInformations = async (req, res) => {
   const _email = req.body.email
   const _permissionLevel = req.body.permissionLevel
   const _grade = req.body.grade
+  const _city = req.body.city
   const _bts = req.body.bts
   const _isActive = req.body.isActive
 
-  await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _bts, _isActive)
+  await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _city, _bts, _isActive)
 
   return res.status(200).json({
     message: 'Les informations ont bien été modifiées'

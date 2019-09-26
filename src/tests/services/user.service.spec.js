@@ -9,7 +9,8 @@ describe('./services/user.service', () => {
   const lastname = 'Doe'
   const email = 'john.doe123@epsi.fr'
   const password = 'password'
-  const grade = 'B1 G1'
+  const grade = 'B1'
+  const city = 'Lyon'
   let userId
 
   // ===============================================
@@ -17,11 +18,12 @@ describe('./services/user.service', () => {
   // ===============================================
   describe('#create', () => {
     it('should create a user', (done) => {
-      UserService.create(firstname, lastname, email, password, grade).then((user) => {
+      UserService.create(firstname, lastname, email, password, grade, city).then((user) => {
         assert.strictEqual(user.firstname, firstname)
         assert.strictEqual(user.lastname, lastname)
         assert.strictEqual(user.email, email)
         assert.strictEqual(user.grade, grade)
+        assert.strictEqual(user.city, city)
         assert.isTrue(user._id instanceof mongoose.mongo.ObjectID)
         userId = user._id
         done()
@@ -40,6 +42,7 @@ describe('./services/user.service', () => {
         assert.strictEqual(user.lastname, lastname)
         assert.strictEqual(user.email, email)
         assert.strictEqual(user.grade, grade)
+        assert.strictEqual(user.city, city)
         done()
       })
     })
@@ -108,13 +111,14 @@ describe('./services/user.service', () => {
 
   describe('#updateUserInformations', () => {
     it('should update user\'s informations', done => {
-      UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'B1 G2', true, true).then(() => {
+      UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'B1', 'Paris', true, true).then(() => {
         User.findById(userId).then(user => {
           assert.strictEqual(user.firstname, 'test_firstname')
           assert.strictEqual(user.lastname, 'test_lastname')
           assert.strictEqual(user.email, 'test.email@epsi.fr')
           assert.strictEqual(user.permissionLevel, 'MEMBER')
-          assert.strictEqual(user.grade, 'B1 G2')
+          assert.strictEqual(user.grade, 'B1')
+          assert.strictEqual(user.city, 'Paris')
           assert.strictEqual(user.isActive, true)
           assert.strictEqual(user.bts, true)
           done()

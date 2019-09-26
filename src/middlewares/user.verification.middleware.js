@@ -33,12 +33,14 @@ exports.hasRegisterFields = (req, res, next) => {
   const _lastname = req.body.lastname
   const _email = req.body.email
   const _grade = req.body.grade
+  const _city = req.body.city
 
   const errors = []
   if (!_firstname) errors.push('Veuillez indiquer votre prénom')
   if (!_lastname) errors.push('Veuillez indiquer votre nom')
   if (!_email) errors.push('Veuillez indiquer votre adresse mail')
   if (!_grade) errors.push('Veuillez indiquer votre classe')
+  if (!_city) errors.push('Veuillez indiquer votre ville')
 
   if (errors.length) {
     return res.status(412).json({
@@ -55,6 +57,7 @@ exports.hasValidRegisterFields = (req, res, next) => {
   const _lastname = req.body.lastname
   const _email = req.body.email
   const _grade = req.body.grade
+  const _city = req.body.city
 
   const errors = []
   if (_firstname.length < 3) errors.push('Le prénom indiqué est trop court')
@@ -68,8 +71,10 @@ exports.hasValidRegisterFields = (req, res, next) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   if (!re.test(_email.toLowerCase())) errors.push('Veuillez indiquer une adresse mail valide')
   if (!_email.includes('@epsi.fr') && !_email.includes('@wis.fr')) errors.push('Seules les adresses EPSI et WIS sont acceptées')
-  const grades = ['B1 G1', 'B1 G2', 'B2 G1', 'B2 G2', 'B3 G1', 'B3 G2', 'B3 G3', 'I4 G1', 'I4 G2', 'I5 G1', 'I5 G2']
+  const grades = ['B1', 'B2', 'B3', 'I1', 'I2']
   if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
+  const cities = ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Paris', 'Dakar']
+  if (cities.indexOf(_city) === -1) errors.push('Veuillez indiquer une ville valide')
 
   if (errors.length) {
     return res.status(412).json({
@@ -247,6 +252,7 @@ exports.hasValidModifyFields = (req, res, next) => {
   const _email = req.body.email
   const _permissionLevel = req.body.permissionLevel
   const _grade = req.body.grade
+  const _city = req.body.city
   const _bts = req.body.bts
   const _isActive = req.body.isActive
 
@@ -262,8 +268,10 @@ exports.hasValidModifyFields = (req, res, next) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   if (!re.test(_email.toLowerCase())) errors.push('Veuillez indiquer une adresse mail valide')
   if (!_email.includes('@epsi.fr') && !_email.includes('@wis.fr')) errors.push('Seules les adresses EPSI et WIS sont acceptées')
-  const grades = ['B1 G1', 'B1 G2', 'B2 G1', 'B2 G2', 'B3 G1', 'B3 G2', 'B3 G3', 'I4 G1', 'I4 G2', 'I5 G1', 'I5 G2']
+  const grades = ['B1', 'B2', 'B3', 'I1', 'I2']
   if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
+  const cities = ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Paris', 'Dakar']
+  if (cities.indexOf(_city) === -1) errors.push('Veuillez indiquer une ville valide')
 
   const permissionsLevel = ['ADMIN', 'MEMBER']
   if (permissionsLevel.indexOf(_permissionLevel) === -1) errors.push('Veuillez indiquer un role valide')

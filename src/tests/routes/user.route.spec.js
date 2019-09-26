@@ -10,7 +10,7 @@ describe('./routes/user.route', () => {
   describe('POST /v1/user - user register', () => {
     it('should fail (412) : veuillez indiquer votre prénom', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1 G1' })
+        .send({ lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -22,7 +22,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : veuillez indiquer votre nom', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'John', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -34,7 +34,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : veuillez indiquer votre adresse mail', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', password: '123AZE', password2: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -46,7 +46,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : veuillez indiquer un mot de passe', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password2: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -58,7 +58,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : veuillez confirmer votre mot de passe', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -70,7 +70,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : veuillez indiquer votre classe', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -80,9 +80,21 @@ describe('./routes/user.route', () => {
         })
     })
 
+    it('should fail (412) : veuillez indiquer votre ville', (done) => {
+      request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer votre ville')
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          done()
+        })
+    })
+
     it('should fail (412) : le prénom indiqué est trop court', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'Jo', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'Jo', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -94,7 +106,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : le nom indiqué est trop court', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Do', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Do', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -106,7 +118,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : l\'adresse mail indiquée est trop courte', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'a.z@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'a.z@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -118,7 +130,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : le mot de passe indiqué est trop court', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZ', password2: '123AZ', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZ', password2: '123AZ', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -130,7 +142,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : le prénom indiqué est trop long', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'azeazeazeazeazeazeazeazeazeazeaze', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'azeazeazeazeazeazeazeazeazeazeaze', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -142,7 +154,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : le nom indiqué est trop long', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'azeazeazeazeazeazeazeazeazeazeaze', email: 'john.doe@epsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'azeazeazeazeazeazeazeazeazeazeaze', email: 'john.doe@epsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -154,7 +166,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : l\'adresse mail indiquée est trop longue', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'azeazeazeazeazeazeazeazeazeazeaze.azeazeazeazeazeazeazeazeazeazeaze@epsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'azeazeazeazeazeazeazeazeazeazeaze.azeazeazeazeazeazeazeazeazeazeaze@epsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -166,7 +178,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : le mot de passe indiqué est trop long', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'azeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaze', password2: 'azeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaze', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'azeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaze', password2: 'azeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaze', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -178,7 +190,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : veuillez indiquer une adresse mail valide', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doeepsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doeepsi.fr', password: '123AZE', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -190,7 +202,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : seules les adresses EPSI et WIS sont acceptées', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@gmail.com', password: '123AZE', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@gmail.com', password: '123AZE', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -202,7 +214,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : cette adresse mail est déjà utilisée', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'alexandre.tuet1@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'alexandre.tuet1@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -213,7 +225,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : votre mot de passe doit contenir au moins un chiffre', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'alexandre.tuet@epsi.fr', password: 'AZEAZE', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'alexandre.tuet@epsi.fr', password: 'AZEAZE', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -225,7 +237,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : votre mot de passe doit contenir au moins une lettre', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123123', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123123', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -237,7 +249,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : les deux mots de passe ne correspondent pas', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE1234', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE1234', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -249,7 +261,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : veuillez indiquer une classe valide', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1 G4' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1 G4', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
@@ -259,9 +271,21 @@ describe('./routes/user.route', () => {
         })
     })
 
+    it('should fail (412) : veuillez indiquer une ville valide', (done) => {
+      request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1 G4', city: 'NotACity' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une ville valide')
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          done()
+        })
+    })
+
     it('should success (201) : votre compte a bien été créé', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1 G1' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
         .expect(201)
         .end((err, res) => {
           if (err) return done(err)
@@ -538,6 +562,7 @@ describe('./routes/user.route', () => {
           email: 't.t@epsi.fr',
           permissionLevel: 'not a valide',
           grade: 'not a valid grade',
+          city: 'not a vaid city',
           bts: 'not a boolean',
           isActive: 'not a boolean'
         })
@@ -549,6 +574,7 @@ describe('./routes/user.route', () => {
           helper.hasBodyErrorsThatContains(res.body, 'Le nom indiqué est trop court')
           helper.hasBodyErrorsThatContains(res.body, 'L\'adresse mail indiquée est trop courte')
           helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une classe valide')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une ville valide')
           helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un role valide')
           helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une option BTS valide')
           helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une activité valide')
@@ -565,6 +591,7 @@ describe('./routes/user.route', () => {
           email: 'azeaozeuazeahzeaehazuiehazehazjie.azeaozeuazeahzeaehazuiehazehazjie@example.com',
           permissionLevel: 'not a valide',
           grade: 'not a valid grade',
+          city: 'not a valid city',
           bts: 'not a boolean',
           isActive: 'not a boolean'
         })
@@ -588,7 +615,8 @@ describe('./routes/user.route', () => {
           lastname: 'azeaze',
           email: 'azeaze.azeazee@xample',
           permissionLevel: 'MEMBER',
-          grade: 'B1 G1',
+          grade: 'B1',
+          city: 'Lyon',
           bts: true,
           isActive: true
         })
@@ -609,7 +637,8 @@ describe('./routes/user.route', () => {
           lastname: 'Test2',
           email: 'test2.test2@epsi.fr',
           permissionLevel: 'MEMBER',
-          grade: 'I5 G2',
+          grade: 'I2',
+          city: 'Lyon',
           bts: true,
           isActive: true
         })
