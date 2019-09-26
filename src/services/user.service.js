@@ -8,20 +8,21 @@ const Token = require('../models/token.model')
 //  == Methods
 // ================================================
 
-exports.create = async (firstname, lastname, email, password, grade) => {
+exports.create = async (firstname, lastname, email, password, grade, city) => {
   const user = new User({
     firstname,
     lastname,
     email,
     password: bcrypt.hashSync(password, 10),
-    grade
+    grade,
+    city
   })
 
   await user.save()
   return user
 }
 
-exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _bts, _isActive) => {
+exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _city, _bts, _isActive) => {
   const user = await User.findById(userId)
   user.firstname = _firstname
   user.lastname = _lastname
@@ -29,6 +30,7 @@ exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _
   user.permissionLevel = _permissionLevel
   user.grade = _grade
   user.bts = _bts
+  user.city = _city
   user.isActive = _isActive
   await user.save()
 }
