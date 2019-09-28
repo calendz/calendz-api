@@ -26,5 +26,5 @@ exports.getSettings = async (search) => {
   const system = await Sysconf.findOne(search)
     .select('settings')
     .lean()
-  return system.settings
+  return system ? system.settings : null
 }
