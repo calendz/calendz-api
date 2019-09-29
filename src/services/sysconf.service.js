@@ -5,7 +5,7 @@ const Sysconf = require('../models/sysconf.model')
 // ================================================
 
 exports.initSettings = async () => {
-  const settings = await this.getSettings({ env: 'production' })
+  const settings = await this.getSettings()
 
   if (!settings) {
     Sysconf.create({
@@ -18,12 +18,16 @@ exports.initSettings = async () => {
   }
 }
 
+exports.updateSettings = async (update) => {
+  await Sysconf.findOneAndUpdate({ env: 'production' }, update)
+}
+
 // ================================================
 //  == Getters
 // ================================================
 
-exports.getSettings = async (search) => {
-  const system = await Sysconf.findOne(search)
+exports.getSettings = async () => {
+  const system = await Sysconf.findOne({ env: 'production' })
     .select('settings')
     .lean()
   return system ? system.settings : null
