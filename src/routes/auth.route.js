@@ -13,8 +13,8 @@ const router = express.Router()
 
 // User login
 router.post('/', [
-  SysconfVerificationMiddleware.isLoginEnabled,
   UserVerificationMiddleware.hasAuthValidFields,
+  SysconfVerificationMiddleware.isLoginEnabled,
   UserVerificationMiddleware.isPasswordAndUserMatch,
   UserVerificationMiddleware.isActive,
   AuthController.login
