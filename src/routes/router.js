@@ -2,6 +2,7 @@ const express = require('express')
 const authRoutes = require('./auth.route')
 const userRoutes = require('./user.route')
 const notificationsRoutes = require('./notifications.route')
+const sysconfRoutes = require('./sysconf.route')
 const version = require('../../package.json').version
 
 const router = express.Router()
@@ -14,5 +15,6 @@ router.get('/version', (req, res) => { res.json({ version }) })
 router.use('/auth', authRoutes)
 router.use('/user', userRoutes)
 router.use('/notifications', notificationsRoutes)
+router.use('/sysconf', sysconfRoutes)
 
 module.exports = router

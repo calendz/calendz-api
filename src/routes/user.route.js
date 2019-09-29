@@ -6,11 +6,13 @@ const TokenValidationMiddleware = require('../middlewares/token.validation.middl
 const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
 const ValueVerificationMiddleware = require('../middlewares/value.verification.middleware')
 const PermissionVerificationMiddleware = require('../middlewares/permission.verification.middleware')
+const SysconfVerificationMiddleware = require('../middlewares/sysconf.verification.middleware')
 
 const router = express.Router()
 
 // Inscription d'un utilisateur
 router.post('/', [
+  SysconfVerificationMiddleware.isRegisterEnabled,
   UserVerificationMiddleware.hasRegisterFields,
   UserVerificationMiddleware.hasValidRegisterFields,
   UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,

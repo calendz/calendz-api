@@ -2,12 +2,13 @@ const assert = require('chai').assert
 const request = require('supertest')
 const app = require('../../app')
 const helper = require('../test.helper')
+const Sysconf = require('../../models/sysconf.model')
 
 describe('./routes/user.route', () => {
   // ===============================================
   // == POST /v1/user - user register
   // ===============================================
-  describe('POST /v1/user - user register', () => {
+  describe('POST /v1/user - user register', async () => {
     it('should fail (412) : veuillez indiquer votre prénom', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ lastname: 'Doe', email: 'john.doe@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
@@ -283,17 +284,32 @@ describe('./routes/user.route', () => {
         })
     })
 
+    it('should fail (403) : inscription désactivée', (done) => {
+      Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.registerEnabled': false }).then(() => {
+        request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
+          .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
+          .expect(403)
+          .end((err, res) => {
+            if (err) return done(err)
+            helper.hasBodyMessage(res.body, `L'inscription au site est actuellement désactivée... Ré-essayez plus tard !`)
+            done()
+          })
+      })
+    })
+
     it('should success (201) : votre compte a bien été créé', (done) => {
-      request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
-        .expect(201)
-        .end((err, res) => {
-          if (err) return done(err)
-          assert.property(res.body, 'id')
-          assert.isDefined(res.body.id)
-          helper.hasBodyMessage(res.body, 'Votre compte a bien été créé')
-          done()
-        })
+      Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.registerEnabled': true }).then(() => {
+        request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
+          .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1', city: 'Lyon' })
+          .expect(201)
+          .end((err, res) => {
+            if (err) return done(err)
+            assert.property(res.body, 'id')
+            assert.isDefined(res.body.id)
+            helper.hasBodyMessage(res.body, 'Votre compte a bien été créé')
+            done()
+          })
+      })
     })
   })
 
@@ -303,6 +319,7 @@ describe('./routes/user.route', () => {
   describe('GET /v1/user/all - get all users', () => {
     it('should fail (401) : not authenticated', (done) => {
       request(app).get('/v1/user/all').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(401)
         .end((err, res) => {
           if (err) return done(err)
           done()
@@ -311,6 +328,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (403) : not admin', (done) => {
       request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+        .expect(403)
         .end((err, res) => {
           if (err) return done(err)
           helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
@@ -320,6 +338,7 @@ describe('./routes/user.route', () => {
 
     it('should success (200) : got users list', (done) => {
       request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
         .end((err, res) => {
           if (err) return done(err)
           assert.isDefined(res.body.users)
@@ -357,7 +376,7 @@ describe('./routes/user.route', () => {
     it('should fail (412) : le type du token est invalide', (done) => {
       request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ token: 'aValidToken3' })
-        // .expect(412)
+        .expect(412)
         .end((err, res) => {
           if (err) return done(err)
           helper.hasBodyMessage(res.body, 'Le type du token est invalide')
