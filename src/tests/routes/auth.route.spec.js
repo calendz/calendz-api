@@ -2,6 +2,7 @@ const assert = require('chai').assert
 const request = require('supertest')
 const app = require('../../app')
 const helper = require('../test.helper')
+const Sysconf = require('../../models/sysconf.model')
 
 describe('./routes/auth.route', () => {
   // ===============================================
@@ -92,21 +93,53 @@ describe('./routes/auth.route', () => {
         })
     })
 
+    it('should fail (403) : connexion désactivée', (done) => {
+      Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.loginEnabled': false }).then(() => {
+        request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
+          .send({ email: 'thomas.zimmermann@epsi.fr', password: 'password' })
+          .expect(403)
+          .end((err, res) => {
+            if (err) return done(err)
+            helper.hasBodyMessage(res.body, 'La connexion au site est actuellement désactivée pour cause de maintenance. Ré-essayez plus tard !')
+            done()
+          })
+      })
+    })
+
+    it('should success (201) : connexion désactivée, mais bypass car admin', (done) => {
+      Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.loginEnabled': false }).then(() => {
+        request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
+          .send({ email: 'arthur.dufour1@epsi.fr', password: 'password' })
+          .expect(201)
+          .end((err, res) => {
+            if (err) return done(err)
+            assert.property(res.body, 'user')
+            assert.isDefined(res.body.user)
+            assert.isDefined(res.header['set-cookie'][0])
+            assert.isTrue(res.header['set-cookie'][0].includes('accessToken'))
+            helper.hasBodyMessage(res.body, 'Connexion réussie')
+            done()
+          })
+      })
+    })
+
     it('should success (201) : connexion réussie (avec rememberMe)', (done) => {
-      request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ email: 'arthur.dufour1@epsi.fr', password: 'password', rememberMe: true })
-        .expect(201)
-        .end((err, res) => {
-          if (err) return done(err)
-          assert.property(res.body, 'user')
-          assert.isDefined(res.body.user)
-          assert.isDefined(res.header['set-cookie'][0])
-          assert.isTrue(res.header['set-cookie'][0].includes('accessToken'))
-          assert.isDefined(res.header['set-cookie'][1])
-          assert.isTrue(res.header['set-cookie'][1].includes('refreshToken'))
-          helper.hasBodyMessage(res.body, 'Connexion réussie')
-          done()
-        })
+      Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.loginEnabled': true }).then(() => {
+        request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
+          .send({ email: 'arthur.dufour1@epsi.fr', password: 'password', rememberMe: true })
+          .expect(201)
+          .end((err, res) => {
+            if (err) return done(err)
+            assert.property(res.body, 'user')
+            assert.isDefined(res.body.user)
+            assert.isDefined(res.header['set-cookie'][0])
+            assert.isTrue(res.header['set-cookie'][0].includes('accessToken'))
+            assert.isDefined(res.header['set-cookie'][1])
+            assert.isTrue(res.header['set-cookie'][1].includes('refreshToken'))
+            helper.hasBodyMessage(res.body, 'Connexion réussie')
+            done()
+          })
+      })
     })
   })
 

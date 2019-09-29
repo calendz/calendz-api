@@ -8,6 +8,7 @@ const UserModel = require('../models/user.model')
 const TokenModel = require('../models/token.model')
 const RefreshModel = require('../models/refresh.model')
 const NotificationModel = require('../models/notification.model')
+const SysconfModel = require('../models/sysconf.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
@@ -37,6 +38,7 @@ module.exports.removeAllData = async function removeAllData () {
     await TokenModel.deleteMany({})
     await RefreshModel.deleteMany({})
     await NotificationModel.deleteMany({})
+    await SysconfModel.deleteMany({})
     logger.warn('POPULATE: successfully removed all data')
   } catch (err) {
     logger.error(err)
