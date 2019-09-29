@@ -13,13 +13,13 @@ exports.getSettings = async (req, res) => {
 // toggle login state
 exports.toggleLogin = async (req, res) => {
   const _value = req.params.value
-  await SysconfService.updateSettings({ loginEnabled: _value })
+  await SysconfService.updateLoginEnabled(_value)
   return res.status(200).json({})
 }
 
 // toggle register state
 exports.toggleRegister = async (req, res) => {
   const _value = req.params.value
-  await SysconfService.updateSettings({ registerEnabled: _value })
+  await SysconfService.updateRegisterEnabled(_value)
   return res.status(200).json({})
 }

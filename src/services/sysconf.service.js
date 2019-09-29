@@ -18,8 +18,12 @@ exports.initSettings = async () => {
   }
 }
 
-exports.updateSettings = async (update) => {
-  await Sysconf.findOneAndUpdate({ env: 'production' }, update)
+exports.updateLoginEnabled = async (value) => {
+  await Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.loginEnabled': value })
+}
+
+exports.updateRegisterEnabled = async (value) => {
+  await Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.registerEnabled': value })
 }
 
 // ================================================
