@@ -3,6 +3,7 @@ const UserVerificationMiddleware = require('../middlewares/user.verification.mid
 const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
 const AuthController = require('../controllers/auth.controller')
 const UserController = require('../controllers/user.controller')
+const SysconfVerificationMiddleware = require('../middlewares/sysconf.verification.middleware')
 
 const router = express.Router()
 
@@ -13,6 +14,7 @@ const router = express.Router()
 // User login
 router.post('/', [
   UserVerificationMiddleware.hasAuthValidFields,
+  SysconfVerificationMiddleware.isLoginEnabled,
   UserVerificationMiddleware.isPasswordAndUserMatch,
   UserVerificationMiddleware.isActive,
   AuthController.login

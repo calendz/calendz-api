@@ -21,6 +21,16 @@ describe('./routes/notifications.route', () => {
         })
     })
 
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).get('/v1/notifications/azeazeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
     it('should success (200) : récupération des notifications', (done) => {
       request(app).get('/v1/notifications/5d4f26aa046ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)

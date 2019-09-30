@@ -8,6 +8,7 @@ const UserModel = require('../models/user.model')
 const TokenModel = require('../models/token.model')
 const RefreshModel = require('../models/refresh.model')
 const NotificationModel = require('../models/notification.model')
+const SysconfModel = require('../models/sysconf.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
@@ -37,6 +38,7 @@ module.exports.removeAllData = async function removeAllData () {
     await TokenModel.deleteMany({})
     await RefreshModel.deleteMany({})
     await NotificationModel.deleteMany({})
+    await SysconfModel.deleteMany({})
     logger.warn('POPULATE: successfully removed all data')
   } catch (err) {
     logger.error(err)
@@ -55,7 +57,8 @@ module.exports.seedData = async function seedData () {
       email: 'arthur.dufour1@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: true
     })
@@ -68,7 +71,8 @@ module.exports.seedData = async function seedData () {
       email: 'alexandre.tuet1@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: true
     })
@@ -81,7 +85,8 @@ module.exports.seedData = async function seedData () {
       email: 'thomas.zimmermann@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: false
     })
@@ -94,7 +99,8 @@ module.exports.seedData = async function seedData () {
       email: 'test.test@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: true
     })
@@ -107,7 +113,8 @@ module.exports.seedData = async function seedData () {
       email: 'maxime.durand@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: false
     })
@@ -120,11 +127,25 @@ module.exports.seedData = async function seedData () {
       email: 'tom.cooper@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
-      grade: 'B3 G1',
+      grade: 'B3',
+      city: 'Lyon',
       bts: false,
       isActive: false
     })
     await user6.save()
+
+    const user7 = new UserModel({
+      firstname: 'Tristan',
+      lastname: 'Giffen',
+      email: 'tristan.giffen@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'ADMIN',
+      grade: 'I2',
+      city: 'Lyon',
+      bts: false,
+      isActive: true
+    })
+    await user7.save()
 
     const token1 = new TokenModel({
       user: user3._id,
