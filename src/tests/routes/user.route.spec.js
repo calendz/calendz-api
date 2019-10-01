@@ -215,7 +215,7 @@ describe('./routes/user.route', () => {
 
     it('should fail (412) : cette adresse mail est déjà utilisée', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ firstname: 'John', lastname: 'Doe', email: 'alexandre.tuet1@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
+        .send({ firstname: 'John', lastname: 'Doe', email: 'alexandre.tuet@epsi.fr', password: '123AZE', password2: '123AZE', grade: 'B1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)

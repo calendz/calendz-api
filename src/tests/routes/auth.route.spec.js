@@ -57,7 +57,7 @@ describe('./routes/auth.route', () => {
 
     it('should fail (401) : mot de passe invalide', (done) => {
       request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ email: 'arthur.dufour1@epsi.fr', password: 'azeaze' })
+        .send({ email: 'arthur.dufour@epsi.fr', password: 'azeaze' })
         .expect(401)
         .end((err, res) => {
           if (err) return done(err)
@@ -79,7 +79,7 @@ describe('./routes/auth.route', () => {
 
     it('should success (201) : connexion réussie (sans rememberMe)', (done) => {
       request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ email: 'arthur.dufour1@epsi.fr', password: 'password' })
+        .send({ email: 'arthur.dufour@epsi.fr', password: 'password' })
         .expect(201)
         .end((err, res) => {
           if (err) return done(err)
@@ -109,7 +109,7 @@ describe('./routes/auth.route', () => {
     it('should success (201) : connexion désactivée, mais bypass car admin', (done) => {
       Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.loginEnabled': false }).then(() => {
         request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-          .send({ email: 'arthur.dufour1@epsi.fr', password: 'password' })
+          .send({ email: 'arthur.dufour@epsi.fr', password: 'password' })
           .expect(201)
           .end((err, res) => {
             if (err) return done(err)
@@ -126,7 +126,7 @@ describe('./routes/auth.route', () => {
     it('should success (201) : connexion réussie (avec rememberMe)', (done) => {
       Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.loginEnabled': true }).then(() => {
         request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-          .send({ email: 'arthur.dufour1@epsi.fr', password: 'password', rememberMe: true })
+          .send({ email: 'arthur.dufour@epsi.fr', password: 'password', rememberMe: true })
           .expect(201)
           .end((err, res) => {
             if (err) return done(err)
@@ -277,7 +277,7 @@ describe('./routes/auth.route', () => {
 
     it('should success (200) : l\'email a bien été envoyé', (done) => {
       request(app).post('/v1/auth/password-reset/send-mail').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ email: 'alexandre.tuet1@epsi.fr' })
+        .send({ email: 'alexandre.tuet@epsi.fr' })
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
