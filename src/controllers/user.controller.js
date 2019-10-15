@@ -46,6 +46,17 @@ exports.create = async (req, res) => {
   })
 }
 
+exports.changeBts = async (req, res) => {
+  const _value = req.params.value
+  const _userId = req.decodedUserId
+
+  await UserService.setBts(_userId, _value)
+
+  return res.status(200).json({
+    message: 'Modification effectué avec succès'
+  })
+}
+
 // modification du mot de passe
 exports.changePassword = async (req, res) => {
   const _tokenValue = req.body.token
