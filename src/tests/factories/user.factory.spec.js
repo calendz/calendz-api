@@ -29,6 +29,10 @@ describe('./mock/factories/user.factory', () => {
         assert.isDefined(user.grade)
       })
 
+      it('should have a group', () => {
+        assert.isDefined(user.group)
+      })
+
       it('should have a city', () => {
         assert.isDefined(user.city)
       })
@@ -61,6 +65,7 @@ describe('./mock/factories/user.factory', () => {
         email: 'john.doe@epsi.fr',
         password: 'password',
         grade: 'B1',
+        group: 'G1',
         city: 'Lyon',
         bts: true,
         permissionLevel: 'MEMBER',
@@ -87,6 +92,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a grade', () => {
         assert.strictEqual(user.grade, 'B1')
+      })
+
+      it('should have a group', () => {
+        assert.strictEqual(user.group, 'G1')
       })
 
       it('should have a city', () => {

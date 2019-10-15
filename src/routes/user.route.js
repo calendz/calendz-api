@@ -34,6 +34,13 @@ router.post('/password-reset', [
   UserController.changePassword
 ])
 
+// Changement champ bts utilisateur
+router.patch('/bts/:value', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  ValueVerificationMiddleware.isBoolean,
+  UserController.changeBts
+])
+
 // Changement du mot de passe utilisateur
 router.patch('/password', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,

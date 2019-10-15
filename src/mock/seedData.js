@@ -58,6 +58,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true
@@ -72,6 +73,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true
@@ -86,6 +88,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: false
@@ -100,6 +103,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true
@@ -114,6 +118,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G2 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: false
@@ -128,6 +133,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G2 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: false
@@ -141,6 +147,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'I2',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true
