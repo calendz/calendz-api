@@ -81,6 +81,26 @@ describe('./services/user.service', () => {
     })
   })
 
+  describe('#setBts', () => {
+    it('should set user\'s bts to true', (done) => {
+      UserService.setBts(userId, true).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isTrue(user.bts)
+          done()
+        })
+      })
+    })
+
+    it('should set user\'s bts to false', (done) => {
+      UserService.setBts(userId, false).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isFalse(user.bts)
+          done()
+        })
+      })
+    })
+  })
+
   describe('#setPassword', () => {
     it('should change user\'s password', (done) => {
       UserService.setPassword(userId, 'newPassword').then(() => {

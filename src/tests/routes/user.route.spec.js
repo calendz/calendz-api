@@ -510,6 +510,48 @@ describe('./routes/user.route', () => {
   })
 
   // ==============================================================================
+  // == PATCH /v1/user/bts/:value - toggle bts
+  // ==============================================================================
+  describe('PATCH /v1/user/bts/:value - changement valeur bts', () => {
+    it('should fail (401) : authentification requise', (done) => {
+      request(app).patch('/v1/user/bts/true').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (412) : invalid value', (done) => {
+      request(app).patch('/v1/user/bts/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Veuillez spécifier une valeur')
+          done()
+        })
+    })
+
+    it('should success (200) : bts true', (done) => {
+      request(app).patch('/v1/user/bts/true').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should success (200) : hasInformationMails false', (done) => {
+      request(app).patch('/v1/user/bts/false').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
+  // ==============================================================================
   // == PATCH /v1/user/information-mails/:value - toggle inscription mail list
   // ==============================================================================
   describe('PATCH /v1/user/information-mails/:value - changement mot de passe', () => {

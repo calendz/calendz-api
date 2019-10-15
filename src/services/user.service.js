@@ -81,6 +81,12 @@ exports.setActive = async (userId, value) => {
   await user.save()
 }
 
+exports.setBts = async (userId, value) => {
+  const user = await User.findOne({ _id: userId })
+  user.bts = value
+  await user.save()
+}
+
 exports.setPassword = async (userId, value) => {
   const user = await User.findById(userId)
   user.password = bcrypt.hashSync(value, 10)
