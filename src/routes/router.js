@@ -3,18 +3,17 @@ const authRoutes = require('./auth.route')
 const userRoutes = require('./user.route')
 const notificationsRoutes = require('./notifications.route')
 const sysconfRoutes = require('./sysconf.route')
-const version = require('../../package.json').version
+const miscRoutes = require('./misc.route')
 
 const router = express.Router()
 
-// Route utilisée pour vérifier si l'API est up
-router.get('/health-check', (req, res) => { res.send('OK') })
-// Route utilisée pour récupérer la version de l'api
-router.get('/version', (req, res) => { res.json({ version }) })
-
+// Core routes
 router.use('/auth', authRoutes)
 router.use('/user', userRoutes)
 router.use('/notifications', notificationsRoutes)
 router.use('/sysconf', sysconfRoutes)
+
+// Other routes
+router.use('/', miscRoutes)
 
 module.exports = router
