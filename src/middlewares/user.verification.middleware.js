@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs')
+const mongoose = require('mongoose')
 const logger = require('../config/winston')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
-const mongoose = require('../../node_modules/mongoose')
 
 // ============================================
 // == check if body contains required infos
