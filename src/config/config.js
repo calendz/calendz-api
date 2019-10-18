@@ -102,6 +102,13 @@ const config = convict({
       default: 'api.eu.mailgun.net',
       arg: 'mailer_host',
       env: 'MAILER_HOST'
+    },
+    contact: {
+      doc: `Email adress`,
+      format: 'email',
+      default: 'arthur.dufour@epsi.fr',
+      arg: 'mailer_contact',
+      env: 'MAILER_CONTACT'
     }
   },
   cookie: {
