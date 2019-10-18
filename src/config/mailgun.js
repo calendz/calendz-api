@@ -59,3 +59,20 @@ exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
     logger.debug(body)
   })
 }
+
+exports.sendContactEmail = async (to, from, subject, message) => {
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+
+  const data = {
+    from,
+    to,
+    subject,
+    template: 'contact',
+    'v:message': message
+  }
+
+  mg.messages().send(data, (error, body) => {
+    if (error) logger.error(error)
+    logger.debug(body)
+  })
+}
