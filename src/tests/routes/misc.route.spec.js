@@ -39,5 +39,19 @@ describe('./routes/misc.route', () => {
           done()
         })
     })
+
+    it('should success (200) : send contact email', (done) => {
+      request(app).post('/v1/contact').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({
+          subject: 'Test message',
+          email: 'test@example.com',
+          message: 'Some short message'
+        })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
   })
 })
