@@ -132,6 +132,17 @@ describe('./services/user.service', () => {
     })
   })
 
+  describe('#setCalendarColor', () => {
+    it('should change calendar color', (done) => {
+      UserService.setCalendarColor(userId, 'b23ce4').then(() => {
+        User.findById(userId).then((user) => {
+          assert.strictEqual(user.settings.calendarColor, 'b23ce4')
+          done()
+        })
+      })
+    })
+  })
+
   describe('#updateUserInformations', () => {
     it('should update user\'s informations', done => {
       UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'B1', 'G2', 'Paris', true, true).then(() => {

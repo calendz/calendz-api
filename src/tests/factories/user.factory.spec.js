@@ -56,6 +56,10 @@ describe('./mock/factories/user.factory', () => {
       it('should have a creationDate', () => {
         assert.isDefined(user.creationDate)
       })
+
+      it('should have a settings.calendarColor', () => {
+        assert.isDefined(user.settings.calendarColor)
+      })
     })
 
     describe('with specified properties', () => {
@@ -71,7 +75,10 @@ describe('./mock/factories/user.factory', () => {
         permissionLevel: 'MEMBER',
         isActive: true,
         hasInformationMails: false,
-        creationDate: '1565791447'
+        creationDate: '1565791447',
+        settings: {
+          calendarColor: '47a8a2'
+        }
       })
 
       it('should have a firstname', () => {
@@ -120,6 +127,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a creationDate', () => {
         assert.strictEqual(user.creationDate, '1565791447')
+      })
+
+      it('should have a settings.calendarColor', () => {
+        assert.strictEqual(user.settings.calendarColor, '47a8a2')
       })
     })
   })

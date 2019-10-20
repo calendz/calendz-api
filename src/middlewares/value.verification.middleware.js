@@ -9,3 +9,15 @@ exports.isBoolean = (req, res, next) => {
 
   return next()
 }
+
+exports.isValidHexColor = (req, res, next) => {
+  const _value = req.params.value
+
+  if (!/^[0-9A-F]{6}$/i.test(_value)) {
+    return res.status(412).json({
+      message: 'Veuillez spécifier une couleur valide'
+    })
+  }
+
+  return next()
+}

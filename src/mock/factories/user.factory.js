@@ -13,7 +13,10 @@ module.exports = class User {
     bts = faker.random.boolean(),
     isActive = faker.random.boolean(),
     hasInformationMails = faker.random.boolean(),
-    creationDate = new Date(faker.date.recent(365)).getTime()
+    creationDate = new Date(faker.date.recent(365)).getTime(),
+    settings = {
+      calendarColor: '172b4d'
+    }
   }) {
     this.firstname = firstname
     this.lastname = lastname
@@ -27,5 +30,6 @@ module.exports = class User {
     this.isActive = isActive
     this.hasInformationMails = hasInformationMails
     this.creationDate = creationDate
+    this.settings = settings
   }
 }

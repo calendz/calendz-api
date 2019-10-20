@@ -115,6 +115,18 @@ exports.setInformationMails = async (req, res) => {
   })
 }
 
+// change la couleur de l'emploi du temps de l'utilisateur
+exports.setCalendarColor = async (req, res) => {
+  const _userId = req.decodedUserId
+  const _value = req.params.value
+
+  await UserService.setCalendarColor(_userId, _value)
+
+  return res.status(200).json({
+    message: 'La couleur à bien été modifiée'
+  })
+}
+
 // actualise les informations d'un utilisateur
 exports.updateUserInformations = async (req, res) => {
   const _userId = req.params.userId

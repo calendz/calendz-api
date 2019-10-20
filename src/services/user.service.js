@@ -98,3 +98,9 @@ exports.setInformationMails = async (userId, value) => {
   user.hasInformationMails = value
   await user.save()
 }
+
+exports.setCalendarColor = async (userId, value) => {
+  const user = await User.findById(userId)
+  user.settings.calendarColor = value
+  await user.save()
+}
