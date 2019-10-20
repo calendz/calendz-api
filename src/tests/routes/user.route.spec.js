@@ -593,6 +593,39 @@ describe('./routes/user.route', () => {
     })
   })
 
+  // ==============================================================================
+  // == PATCH /v1/user/calendar-color/:value - change user's calendar color
+  // ==============================================================================
+  describe('PATCH /v1/user/calendar-color/:value - changement couleur edt', () => {
+    it('should fail (401) : authentification requise', (done) => {
+      request(app).patch('/v1/user/calendar-color/false').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (412) : invalid value', (done) => {
+      request(app).patch('/v1/user/calendar-color/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Veuillez spécifier une couleur valide')
+          done()
+        })
+    })
+
+    it('should success (200) : set white', (done) => {
+      request(app).patch('/v1/user/calendar-color/ffffff').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
   // ============================================================
   // == PATCH /v1/user/:userId - mise à jour utilisateur
   // ============================================================
