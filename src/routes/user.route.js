@@ -77,4 +77,11 @@ router.patch('/information-mails/:value', [
   UserController.setInformationMails
 ])
 
+// Changement de la couleur de l'emploi du temps de l'utilisateur
+router.patch('/calendar-color/:value', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  ValueVerificationMiddleware.isValidHexColor,
+  UserController.setCalendarColor
+])
+
 module.exports = router

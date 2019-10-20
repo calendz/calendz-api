@@ -13,7 +13,10 @@ const userSchema = new Schema({
   bts: { type: Boolean, default: false, required: false },
   isActive: { type: Boolean, default: false, required: true },
   hasInformationMails: { type: Boolean, default: true, required: true },
-  creationDate: { type: String, required: true, default: () => Date.now() }
+  creationDate: { type: String, required: true, default: () => Date.now() },
+  settings: {
+    calendarColor: { type: String, default: '#172b4d', required: true }
+  }
 })
 
 module.exports = mongoose.model('User', userSchema)
