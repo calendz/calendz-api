@@ -30,4 +30,11 @@ router.patch('/settings/register-enabled/:value', [
   SysconfController.toggleRegister
 ])
 
+// Delete all refresh tokens (disconnects all users)
+router.delete('/refresh-tokens/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  SysconfController.deleteAllRefreshTokens
+])
+
 module.exports = router
