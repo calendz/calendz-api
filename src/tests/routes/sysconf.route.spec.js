@@ -145,4 +145,37 @@ describe('./routes/sysconf.route', () => {
         })
     })
   })
+
+  // ==========================================================================
+  // == DELETE /v1/sysconf/refresh-tokens/all - delete all refresh tokens
+  // ==========================================================================
+  describe('DELETE /v1/sysconf/refresh-tokens/all - delete all refresh tokens', async () => {
+    it('should fail (401) : not authenticated', (done) => {
+      request(app).delete('/v1/sysconf/refresh-tokens/all').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should fail (403) : not admin', (done) => {
+      request(app).delete('/v1/sysconf/refresh-tokens/all').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
+        .expect(403)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
+          done()
+        })
+    })
+
+    it('shoud success (200) : deleted all refresh tokens', (done) => {
+      request(app).delete('/v1/sysconf/refresh-tokens/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
 })

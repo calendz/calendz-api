@@ -1,4 +1,5 @@
 const assert = require('chai').assert
+const Refresh = require('../../models/refresh.model')
 const Sysconf = require('../../models/sysconf.model')
 const SysconfService = require('../../services/sysconf.service')
 
@@ -57,6 +58,18 @@ describe('./services/sysconf.service', () => {
       SysconfService.updateRegisterEnabled(true).then(async () => {
         const system = await Sysconf.findOne({ env: 'production' })
         assert.strictEqual(system.settings.loginEnabled, true)
+        done()
+      }, (err) => {
+        done(err)
+      })
+    })
+  })
+
+  describe('#deleteAllRefreshTokens', () => {
+    it('shoud delete all refresh tokens', (done) => {
+      SysconfService.deleteAllRefreshTokens().then(async () => {
+        const refreshes = await Refresh.find({})
+        assert.isEmpty(refreshes)
         done()
       }, (err) => {
         done(err)
