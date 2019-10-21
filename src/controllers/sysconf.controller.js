@@ -23,3 +23,9 @@ exports.toggleRegister = async (req, res) => {
   await SysconfService.updateRegisterEnabled(_value)
   return res.status(200).json({})
 }
+
+// delete all refresh tokens (disconnects all users)
+exports.deleteAllRefreshTokens = async (req, res) => {
+  await SysconfService.deleteAllRefreshTokens()
+  return res.status(200).json({})
+}

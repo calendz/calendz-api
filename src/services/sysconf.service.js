@@ -1,4 +1,5 @@
 const Sysconf = require('../models/sysconf.model')
+const Refresh = require('../models/refresh.model')
 
 // ================================================
 //  == Methods
@@ -24,6 +25,10 @@ exports.updateLoginEnabled = async (value) => {
 
 exports.updateRegisterEnabled = async (value) => {
   await Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.registerEnabled': value })
+}
+
+exports.deleteAllRefreshTokens = async () => {
+  await Refresh.deleteMany({})
 }
 
 // ================================================
