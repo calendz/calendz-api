@@ -54,10 +54,11 @@ module.exports.seedData = async function seedData () {
       _id: '5d45c90b0a7827069971e116',
       firstname: 'Arthur',
       lastname: 'Dufour',
-      email: 'arthur.dufour1@epsi.fr',
+      email: 'arthur.dufour@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true
@@ -68,10 +69,11 @@ module.exports.seedData = async function seedData () {
       _id: '5d4f26aa046ad506f9583bd3',
       firstname: 'Alexandre',
       lastname: 'Tuet',
-      email: 'alexandre.tuet1@epsi.fr',
+      email: 'alexandre.tuet@epsi.fr',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true
@@ -86,6 +88,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: false
@@ -100,6 +103,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true
@@ -114,6 +118,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G2 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: false
@@ -128,6 +133,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'MEMBER',
       grade: 'B3',
+      group: 'G2 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: false
@@ -141,6 +147,7 @@ module.exports.seedData = async function seedData () {
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'I2',
+      group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
       isActive: true

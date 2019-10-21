@@ -29,6 +29,10 @@ describe('./mock/factories/user.factory', () => {
         assert.isDefined(user.grade)
       })
 
+      it('should have a group', () => {
+        assert.isDefined(user.group)
+      })
+
       it('should have a city', () => {
         assert.isDefined(user.city)
       })
@@ -52,6 +56,10 @@ describe('./mock/factories/user.factory', () => {
       it('should have a creationDate', () => {
         assert.isDefined(user.creationDate)
       })
+
+      it('should have a settings.calendarColor', () => {
+        assert.isDefined(user.settings.calendarColor)
+      })
     })
 
     describe('with specified properties', () => {
@@ -61,12 +69,16 @@ describe('./mock/factories/user.factory', () => {
         email: 'john.doe@epsi.fr',
         password: 'password',
         grade: 'B1',
+        group: 'G1',
         city: 'Lyon',
         bts: true,
         permissionLevel: 'MEMBER',
         isActive: true,
         hasInformationMails: false,
-        creationDate: '1565791447'
+        creationDate: '1565791447',
+        settings: {
+          calendarColor: '47a8a2'
+        }
       })
 
       it('should have a firstname', () => {
@@ -87,6 +99,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a grade', () => {
         assert.strictEqual(user.grade, 'B1')
+      })
+
+      it('should have a group', () => {
+        assert.strictEqual(user.group, 'G1')
       })
 
       it('should have a city', () => {
@@ -111,6 +127,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a creationDate', () => {
         assert.strictEqual(user.creationDate, '1565791447')
+      })
+
+      it('should have a settings.calendarColor', () => {
+        assert.strictEqual(user.settings.calendarColor, '47a8a2')
       })
     })
   })

@@ -34,6 +34,13 @@ router.post('/password-reset', [
   UserController.changePassword
 ])
 
+// Changement champ bts utilisateur
+router.patch('/bts/:value', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  ValueVerificationMiddleware.isBoolean,
+  UserController.changeBts
+])
+
 // Changement du mot de passe utilisateur
 router.patch('/password', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
@@ -68,6 +75,13 @@ router.patch('/information-mails/:value', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
   ValueVerificationMiddleware.isBoolean,
   UserController.setInformationMails
+])
+
+// Changement de la couleur de l'emploi du temps de l'utilisateur
+router.patch('/calendar-color/:value', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  ValueVerificationMiddleware.isValidHexColor,
+  UserController.setCalendarColor
 ])
 
 module.exports = router

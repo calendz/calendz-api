@@ -8,13 +8,14 @@ const Token = require('../models/token.model')
 //  == Methods
 // ================================================
 
-exports.create = async (firstname, lastname, email, password, grade, city) => {
+exports.create = async (firstname, lastname, email, password, grade, group, city) => {
   const user = new User({
     firstname,
     lastname,
     email,
     password: bcrypt.hashSync(password, 10),
     grade,
+    group,
     city
   })
 
@@ -22,13 +23,14 @@ exports.create = async (firstname, lastname, email, password, grade, city) => {
   return user
 }
 
-exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _city, _bts, _isActive) => {
+exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _isActive) => {
   const user = await User.findById(userId)
   user.firstname = _firstname
   user.lastname = _lastname
   user.email = _email
   user.permissionLevel = _permissionLevel
   user.grade = _grade
+  user.group = _group
   user.bts = _bts
   user.city = _city
   user.isActive = _isActive
@@ -79,6 +81,12 @@ exports.setActive = async (userId, value) => {
   await user.save()
 }
 
+exports.setBts = async (userId, value) => {
+  const user = await User.findOne({ _id: userId })
+  user.bts = value
+  await user.save()
+}
+
 exports.setPassword = async (userId, value) => {
   const user = await User.findById(userId)
   user.password = bcrypt.hashSync(value, 10)
@@ -88,5 +96,11 @@ exports.setPassword = async (userId, value) => {
 exports.setInformationMails = async (userId, value) => {
   const user = await User.findById(userId)
   user.hasInformationMails = value
+  await user.save()
+}
+
+exports.setCalendarColor = async (userId, value) => {
+  const user = await User.findById(userId)
+  user.settings.calendarColor = value
   await user.save()
 }
