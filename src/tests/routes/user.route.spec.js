@@ -287,6 +287,18 @@ describe('./routes/user.route', () => {
         })
     })
 
+    it('should fail (412) : veuillez indiquer un groupe valide', (done) => {
+      request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1', group: 'G4', city: 'Lyon' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un groupe valide')
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          done()
+        })
+    })
+
     it('should fail (412) : veuillez indiquer une ville valide', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1 G4', group: 'G1', city: 'NotACity' })

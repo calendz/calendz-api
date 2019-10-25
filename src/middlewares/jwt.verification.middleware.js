@@ -64,6 +64,7 @@ exports.hasValidAccessOrRefreshToken = async (req, res, next) => {
       }
 
       const user = await UserService.findOne({ _id: decoded._id })
+      /* istanbul ignore if */
       if (!user) {
         return res.status(400).json({
           logout: true,

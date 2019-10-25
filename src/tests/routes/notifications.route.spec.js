@@ -79,12 +79,32 @@ describe('./routes/notifications.route', () => {
     authHelper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
     authHelper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
 
+    it('should fail (422) : invalid notification id', (done) => {
+      request(app).patch('/v1/notifications/invalidid/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
     it('should fail (404) : user not found', (done) => {
       request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err)
           helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
+          done()
+        })
+    })
+
+    it('should fail (422) : invalid notification id', (done) => {
+      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/read/invalidid').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
           done()
         })
     })
