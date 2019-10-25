@@ -1,6 +1,8 @@
 const assert = require('chai').assert
 const request = require('supertest')
 const app = require('../../app')
+
+const authHelper = require('../helpers/auth.helper')
 const helper = require('../test.helper')
 
 describe('./routes/notifications.route', () => {
@@ -8,8 +10,8 @@ describe('./routes/notifications.route', () => {
   // == GET /v1/notifications/:userId - get user's notifications
   // ===================================================================
   describe(`GET /v1/notifications/:userId - get user's notifications`, () => {
-    helper.requireAuth('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
-    helper.requireAdminOrSameUser('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
+    authHelper.requireAuth('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
+    authHelper.requireAdminOrSameUser('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
 
     it('should fail (404) : user not found', (done) => {
       request(app).get('/v1/notifications/5d4f26aa046ad506f9583bc9').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -47,8 +49,8 @@ describe('./routes/notifications.route', () => {
   // == PATCH /v1/notifications/:userId/read/all - read all user's notifications
   // ========================================================================================
   describe(`PATCH /v1/notifications/:userId/read/all - read all notifications`, () => {
-    helper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
-    helper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
+    authHelper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
+    authHelper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
 
     it('should fail (404) : user not found', (done) => {
       request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -74,8 +76,8 @@ describe('./routes/notifications.route', () => {
   // == PATCH /v1/notifications/:userId/read/:notificationId - mark a notification as read
   // ==========================================================================================
   describe(`PATCH /v1/notifications/:userId/read/:notificationId - read a notification`, () => {
-    helper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
-    helper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
+    authHelper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
+    authHelper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/5d4f26aa246ad506f9583bd1')
 
     it('should fail (404) : user not found', (done) => {
       request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -111,8 +113,8 @@ describe('./routes/notifications.route', () => {
   // == PATCH /v1/notifications/:userId/read/:notificationId - mark a notification as not read
   // ===============================================================================================
   describe(`PATCH /v1/notifications/:userId/read/:notificationId - unread a notification`, () => {
-    helper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
-    helper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
+    authHelper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
+    authHelper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
 
     it('should fail (404) : user not found', (done) => {
       request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -154,24 +156,8 @@ describe('./routes/notifications.route', () => {
     const icon = 'fas fa-fire'
     const type = 'gradient-danger'
 
-    it('should fail (401) : not authenticated', (done) => {
-      request(app).post('/v1/notifications').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ title, target, message, icon, type })
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-
-    it('should fail (403) : not admin', (done) => {
-      request(app).post('/v1/notifications').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
-        .send({ title, target, message, icon, type })
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
-          done()
-        })
-    })
+    authHelper.requireAuth('post', '/v1/notifications', { title, target, message, icon, type })
+    authHelper.requireAdmin('post', '/v1/notifications', { title, target, message, icon, type })
 
     it('should fail (412) : missing title', (done) => {
       request(app).post('/v1/notifications').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)

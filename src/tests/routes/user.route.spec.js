@@ -1,7 +1,10 @@
 const assert = require('chai').assert
 const request = require('supertest')
 const app = require('../../app')
+
+const authHelper = require('../helpers/auth.helper')
 const helper = require('../test.helper')
+
 const Sysconf = require('../../models/sysconf.model')
 
 describe('./routes/user.route', () => {
@@ -329,24 +332,8 @@ describe('./routes/user.route', () => {
   // == GET /v1/user/all - get all users
   // ===============================================
   describe('GET /v1/user/all - get all users', () => {
-    it('should fail (401) : not authenticated', (done) => {
-      request(app).get('/v1/user/all').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-
-    it('should fail (403) : not admin', (done) => {
-      request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
-        .expect(403)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
-          done()
-        })
-    })
+    authHelper.requireAuth('get', '/v1/user/all')
+    authHelper.requireAdmin('get', '/v1/user/all')
 
     it('should success (200) : got users list', (done) => {
       request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
@@ -403,15 +390,7 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/password - changement de mot de passe
   // ============================================================
   describe('PATCH /v1/user/password - changement mot de passe', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/password').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ password: 'password2', password2: 'password2' })
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/password', { password: 'password2', password2: 'password2' })
 
     it('should fail (412) : veuillez indiquer un mot de passe', (done) => {
       request(app).patch('/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -513,14 +492,7 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/bts/:value - toggle bts
   // ==============================================================================
   describe('PATCH /v1/user/bts/:value - changement valeur bts', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/bts/true').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/bts/true')
 
     it('should fail (412) : invalid value', (done) => {
       request(app).patch('/v1/user/bts/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -541,7 +513,7 @@ describe('./routes/user.route', () => {
         })
     })
 
-    it('should success (200) : hasInformationMails false', (done) => {
+    it('should success (200) : bts false', (done) => {
       request(app).patch('/v1/user/bts/false').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -555,14 +527,7 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/information-mails/:value - toggle inscription mail list
   // ==============================================================================
   describe('PATCH /v1/user/information-mails/:value - changement mot de passe', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/information-mails/false').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/information-mails/false')
 
     it('should fail (412) : invalid value', (done) => {
       request(app).patch('/v1/user/information-mails/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -597,14 +562,7 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/calendar-color/:value - change user's calendar color
   // ==============================================================================
   describe('PATCH /v1/user/calendar-color/:value - changement couleur edt', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/calendar-color/false').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/calendar-color/false')
 
     it('should fail (412) : invalid value', (done) => {
       request(app).patch('/v1/user/calendar-color/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -630,24 +588,8 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/:userId - mise à jour utilisateur
   // ============================================================
   describe('PATCH /v1/user/:userId - mise à jour donnés utilisateur', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-
-    it('should fail (403) : not admin', (done) => {
-      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
-        .expect(403)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/5d4f26aa046ad506f9583bd1')
+    authHelper.requireAdmin('patch', '/v1/user/5d4f26aa046ad506f9583bd1')
 
     it('should fail (404) : aucun utilisateur correspondant', (done) => {
       request(app).patch('/v1/user/5d4f26aa046ad506f9583bd2').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
@@ -766,24 +708,8 @@ describe('./routes/user.route', () => {
   // == DELETE /v1/user/:userId - suppression compte
   // ============================================================
   describe('DELETE /v1/user/:userId - mise à jour donnés utilisateur', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-
-    it('should fail (403) : not admin', (done) => {
-      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
-        .expect(403)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
-          done()
-        })
-    })
+    authHelper.requireAuth('delete', '/v1/user/5d4f26aa046ad506f9583bd1')
+    authHelper.requireAdmin('delete', '/v1/user/5d4f26aa046ad506f9583bd1')
 
     it('should fail (404) : aucun utilisateur correspondant', (done) => {
       request(app).delete('/v1/user/5d4f26aa046ad506f9583bd2').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
