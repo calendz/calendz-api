@@ -172,6 +172,7 @@ exports.isNotActive = async (req, res, next) => {
   const token = await TokenService.findOne({ user: user._id, type: 'EMAIL_VERIFICATION' })
 
   if (user.isActive) {
+    /* istanbul ignore if */
     // if activation token exists, delete it
     if (token) await TokenService.deleteByValue(token.value)
 

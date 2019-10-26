@@ -1,7 +1,9 @@
 const assert = require('chai').assert
 const request = require('supertest')
 const app = require('../../app')
-const helper = require('../test.helper')
+
+const helper = require('../helpers/test.helper')
+
 const Sysconf = require('../../models/sysconf.model')
 
 describe('./routes/auth.route', () => {
