@@ -23,6 +23,7 @@ exports.hasValidContactMailFields = async (req, res, next) => {
   // check if fields are valid
   if (_subject.length > 64) errors.push('Le sujet est trop long')
   if (_email.length > 64) errors.push(`L'adresse mail est trop longue`)
+  /* istanbul ignore if */
   if (_message.length > 4000) errors.push('Le message est trop long')
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   if (!re.test(_email.toLowerCase())) errors.push('Veuillez indiquer une adresse mail valide')

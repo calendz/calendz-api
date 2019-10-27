@@ -1,7 +1,10 @@
 const assert = require('chai').assert
 const request = require('supertest')
 const app = require('../../app')
-const helper = require('../test.helper')
+
+const helper = require('../helpers/test.helper')
+const authHelper = require('../helpers/auth.helper')
+
 const Sysconf = require('../../models/sysconf.model')
 
 describe('./routes/user.route', () => {
@@ -284,6 +287,18 @@ describe('./routes/user.route', () => {
         })
     })
 
+    it('should fail (412) : veuillez indiquer un groupe valide', (done) => {
+      request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1', group: 'G4', city: 'Lyon' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un groupe valide')
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          done()
+        })
+    })
+
     it('should fail (412) : veuillez indiquer une ville valide', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@epsi.fr', password: 'AZE123', password2: 'AZE123', grade: 'B1 G4', group: 'G1', city: 'NotACity' })
@@ -329,24 +344,8 @@ describe('./routes/user.route', () => {
   // == GET /v1/user/all - get all users
   // ===============================================
   describe('GET /v1/user/all - get all users', () => {
-    it('should fail (401) : not authenticated', (done) => {
-      request(app).get('/v1/user/all').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-
-    it('should fail (403) : not admin', (done) => {
-      request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
-        .expect(403)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
-          done()
-        })
-    })
+    authHelper.requireAuth('get', '/v1/user/all')
+    authHelper.requireAdmin('get', '/v1/user/all')
 
     it('should success (200) : got users list', (done) => {
       request(app).get('/v1/user/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
@@ -396,22 +395,107 @@ describe('./routes/user.route', () => {
         })
     })
 
-    helper.testPasswordWithConfirmation('/v1/user/password-reset')
+    it('should fail (412) : veuillez indiquer un mot de passe', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un mot de passe')
+          done()
+        })
+    })
+
+    it('should fail (412) : veuillez confirmer votre mot de passe', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2', password: 'password123' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez confirmer votre mot de passe')
+          done()
+        })
+    })
+
+    it('should fail (412) : le mot de passe indiqué est trop court', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2', password: 'azez', password2: 'azez' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Le mot de passe indiqué est trop court')
+          done()
+        })
+    })
+
+    it('should fail (412) : le mot de passe indiqué est trop long', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2', password: 'azeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeaze', password2: 'aazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeazeze' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Le mot de passe indiqué est trop long')
+          done()
+        })
+    })
+
+    it('should fail (412) : votre mot de passe doit contenir au moins un chiffre', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2', password: 'azeaze', password2: 'azeaze' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Votre mot de passe doit contenir au moins un chiffre')
+          done()
+        })
+    })
+
+    it('should fail (412) : votre mot de passe doit contenir au moins une lettre', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2', password: '123123', password2: '123123' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Votre mot de passe doit contenir au moins une lettre')
+          done()
+        })
+    })
+
+    it('should fail (412) : les deux mots de passe ne correspondent pas', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2', password: 'azeaze1', password2: 'azeaze123' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Les deux mots de passe ne correspondent pas')
+          done()
+        })
+    })
+
+    it('should success (200) : votre mot de passe a bien été modifié', (done) => {
+      request(app).post('/v1/user/password-reset').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken2', password: 'azeaze123', password2: 'azeaze123' })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Votre mot de passe a bien été modifié')
+          done()
+        })
+    })
   })
 
   // ============================================================
   // == PATCH /v1/user/password - changement de mot de passe
   // ============================================================
   describe('PATCH /v1/user/password - changement mot de passe', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/password').set(helper.defaultSets).expect('Content-Type', /json/)
-        .send({ password: 'password2', password2: 'password2' })
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/password', { password: 'password2', password2: 'password2' })
 
     it('should fail (412) : veuillez indiquer un mot de passe', (done) => {
       request(app).patch('/v1/user/password').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -513,14 +597,7 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/bts/:value - toggle bts
   // ==============================================================================
   describe('PATCH /v1/user/bts/:value - changement valeur bts', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/bts/true').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/bts/true')
 
     it('should fail (412) : invalid value', (done) => {
       request(app).patch('/v1/user/bts/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -541,7 +618,7 @@ describe('./routes/user.route', () => {
         })
     })
 
-    it('should success (200) : hasInformationMails false', (done) => {
+    it('should success (200) : bts false', (done) => {
       request(app).patch('/v1/user/bts/false').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -555,14 +632,7 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/information-mails/:value - toggle inscription mail list
   // ==============================================================================
   describe('PATCH /v1/user/information-mails/:value - changement mot de passe', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/information-mails/false').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/information-mails/false')
 
     it('should fail (412) : invalid value', (done) => {
       request(app).patch('/v1/user/information-mails/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -597,14 +667,7 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/calendar-color/:value - change user's calendar color
   // ==============================================================================
   describe('PATCH /v1/user/calendar-color/:value - changement couleur edt', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/calendar-color/false').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/calendar-color/false')
 
     it('should fail (412) : invalid value', (done) => {
       request(app).patch('/v1/user/calendar-color/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -630,24 +693,8 @@ describe('./routes/user.route', () => {
   // == PATCH /v1/user/:userId - mise à jour utilisateur
   // ============================================================
   describe('PATCH /v1/user/:userId - mise à jour donnés utilisateur', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-
-    it('should fail (403) : not admin', (done) => {
-      request(app).patch('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
-        .expect(403)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
-          done()
-        })
-    })
+    authHelper.requireAuth('patch', '/v1/user/5d4f26aa046ad506f9583bd1')
+    authHelper.requireAdmin('patch', '/v1/user/5d4f26aa046ad506f9583bd1')
 
     it('should fail (404) : aucun utilisateur correspondant', (done) => {
       request(app).patch('/v1/user/5d4f26aa046ad506f9583bd2').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
@@ -766,24 +813,8 @@ describe('./routes/user.route', () => {
   // == DELETE /v1/user/:userId - suppression compte
   // ============================================================
   describe('DELETE /v1/user/:userId - mise à jour donnés utilisateur', () => {
-    it('should fail (401) : authentification requise', (done) => {
-      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSets).expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
-    })
-
-    it('should fail (403) : not admin', (done) => {
-      request(app).delete('/v1/user/5d4f26aa046ad506f9583bd1').set(helper.defaultSetsWithAccessWrongUser).expect('Content-Type', /json/)
-        .expect(403)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, `Vous n'avez pas la permission d'effectuer cela`)
-          done()
-        })
-    })
+    authHelper.requireAuth('delete', '/v1/user/5d4f26aa046ad506f9583bd1')
+    authHelper.requireAdmin('delete', '/v1/user/5d4f26aa046ad506f9583bd1')
 
     it('should fail (404) : aucun utilisateur correspondant', (done) => {
       request(app).delete('/v1/user/5d4f26aa046ad506f9583bd2').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
