@@ -71,6 +71,18 @@ exports.changePassword = async (req, res) => {
   })
 }
 
+// modification avatar
+exports.changeAvatar = async (req, res) => {
+  const _avatar = req.body.avatar
+  const _userId = req.decodedUserId
+
+  await UserService.setAvatar(_userId, _avatar)
+
+  return res.status(200).json({
+    message: 'Avatar enregistré avec succès'
+  })
+}
+
 // envoie un mail pour réinitialiser le mot de passe
 exports.sendResetPasswordEmail = async (req, res) => {
   const _user = req.user

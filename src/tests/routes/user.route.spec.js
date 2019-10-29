@@ -593,6 +593,46 @@ describe('./routes/user.route', () => {
     })
   })
 
+  // ============================================================
+  // == PATCH /v1/user/avatar - changement de photo de profil
+  // ============================================================
+  describe('PATCH /v1/user/avatar - changement photo de profil', () => {
+    authHelper.requireAuth('patch', '/v1/user/avatar', { avatar: 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048' })
+
+    it('should fail (412) : aucun avatar', (done) => {
+      request(app).patch('/v1/user/avatar').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({})
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Veuillez indiquer une url d'avatar`)
+          done()
+        })
+    })
+
+    it('should fail (412) : avatar non valide', (done) => {
+      request(app).patch('/v1/user/avatar').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ avatar: 'cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Veuillez indiquer une url valide`)
+          done()
+        })
+    })
+
+    it('should success (200) : avatar modifié', (done) => {
+      request(app).patch('/v1/user/avatar').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ avatar: 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048' })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Avatar enregistré avec succès')
+          done()
+        })
+    })
+  })
+
   // ==============================================================================
   // == PATCH /v1/user/bts/:value - toggle bts
   // ==============================================================================
