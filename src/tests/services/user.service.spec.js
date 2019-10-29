@@ -161,4 +161,15 @@ describe('./services/user.service', () => {
       })
     })
   })
+
+  describe('#updateLastActiveDate', () => {
+    it(`should update user's last active date`, done => {
+      UserService.updateLastActiveDate(userId).then(() => {
+        User.findById(userId).then(user => {
+          assert.isTrue(user.lastActiveDate < Date.now())
+          done()
+        })
+      })
+    })
+  })
 })

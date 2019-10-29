@@ -14,6 +14,7 @@ module.exports = class User {
     isActive = faker.random.boolean(),
     hasInformationMails = faker.random.boolean(),
     creationDate = new Date(faker.date.recent(365)).getTime(),
+    lastActiveDate = new Date(faker.date.recent(30)).getTime(),
     settings = {
       calendarColor: '172b4d'
     }
@@ -30,6 +31,7 @@ module.exports = class User {
     this.isActive = isActive
     this.hasInformationMails = hasInformationMails
     this.creationDate = creationDate
+    this.lastActiveDate = lastActiveDate
     this.settings = settings
   }
 }
