@@ -14,6 +14,13 @@ router.get('/settings', [
   SysconfController.getSettings
 ])
 
+// Calculate & return some statistics
+router.get('/stats', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  SysconfController.getStats
+])
+
 // Toggle login state
 router.patch('/settings/login-enabled/:value', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
