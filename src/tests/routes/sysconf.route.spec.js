@@ -27,6 +27,31 @@ describe('./routes/sysconf.route', () => {
     })
   })
 
+  // ===============================================
+  // == GET /v1/sysconf/stats - get stats
+  // ===============================================
+  describe('GET /v1/sysconf/stats - get stats', async () => {
+    authHelper.requireAuth('get', '/v1/sysconf/stats')
+    authHelper.requireAdmin('get', '/v1/sysconf/stats')
+
+    it('shoud success (200) : got stats', (done) => {
+      request(app).get('/v1/sysconf/stats').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.stats)
+          assert.isDefined(res.body.stats.users)
+          assert.isDefined(res.body.stats.users.total)
+          assert.isDefined(res.body.stats.users.inactive)
+          assert.isDefined(res.body.stats.users.mailing)
+          assert.isDefined(res.body.stats.users.bts)
+          assert.isDefined(res.body.stats.grades)
+          assert.isDefined(res.body.stats.cities)
+          done()
+        })
+    })
+  })
+
   // ==========================================================================
   // == PATCH /v1/sysconf/settings/login-enabled/:value - update login-enabled
   // ==========================================================================
