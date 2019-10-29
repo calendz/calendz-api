@@ -37,6 +37,12 @@ exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _
   await user.save()
 }
 
+exports.updateLastActiveDate = async (userId) => {
+  const user = await User.findById(userId)
+  user.lastActiveDate = Date.now()
+  await user.save()
+}
+
 exports.deleteAccount = async (userId) => {
   await User.findByIdAndDelete(userId)
   await Notification.deleteMany({
