@@ -143,6 +143,17 @@ describe('./services/user.service', () => {
     })
   })
 
+  describe('#setAvatar', () => {
+    it('should change user avatar', (done) => {
+      UserService.setAvatar(userId, 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048').then(() => {
+        User.findById(userId).then((user) => {
+          assert.strictEqual(user.avatarUrl, 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048')
+          done()
+        })
+      })
+    })
+  })
+
   describe('#updateUserInformations', () => {
     it('should update user\'s informations', done => {
       UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'B1', 'G2', 'Paris', true, true).then(() => {
