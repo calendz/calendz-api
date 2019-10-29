@@ -124,6 +124,26 @@ exports.hasValidPasswordAndPasswordConfirmation = (req, res, next) => {
   return next()
 }
 
+// has valid avatar url
+exports.hasValidAvatarUrl = (req, res, next) => {
+  const _avatar = req.body.avatar
+
+  if (!_avatar) {
+    return res.status(412).json({
+      message: `Veuillez indiquer une url d'avatar`
+    })
+  }
+
+  const regexp = /(https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
+  if (!regexp.test(_avatar)) {
+    return res.status(412).json({
+      message: `Veuillez indiquer une url valide`
+    })
+  }
+
+  return next()
+}
+
 // ============================================
 // == database operations
 // ============================================

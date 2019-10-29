@@ -110,3 +110,9 @@ exports.setCalendarColor = async (userId, value) => {
   user.settings.calendarColor = value
   await user.save()
 }
+
+exports.setAvatar = async (userId, value) => {
+  const user = await User.findById(userId)
+  user.avatarUrl = value
+  await user.save()
+}
