@@ -48,6 +48,13 @@ router.patch('/password', [
   UserController.changePasswordUser
 ])
 
+// Changement avatar utilisateur
+router.patch('/avatar', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  UserVerificationMiddleware.hasValidAvatarUrl,
+  UserController.changeAvatar
+])
+
 // Actualisation des information d'un utilisateur
 router.patch('/:userId', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
@@ -55,6 +62,12 @@ router.patch('/:userId', [
   UserVerificationMiddleware.hasValidId,
   UserVerificationMiddleware.hasValidModifyFields,
   UserController.updateUserInformations
+])
+
+// Suppression de son compte
+router.delete('/', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  UserController.delete
 ])
 
 // Suppression d'un compte utilisateur

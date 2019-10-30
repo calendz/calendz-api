@@ -37,6 +37,12 @@ exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _
   await user.save()
 }
 
+exports.updateLastActiveDate = async (userId) => {
+  const user = await User.findById(userId)
+  user.lastActiveDate = Date.now()
+  await user.save()
+}
+
 exports.deleteAccount = async (userId) => {
   await User.findByIdAndDelete(userId)
   await Notification.deleteMany({
@@ -102,5 +108,11 @@ exports.setInformationMails = async (userId, value) => {
 exports.setCalendarColor = async (userId, value) => {
   const user = await User.findById(userId)
   user.settings.calendarColor = value
+  await user.save()
+}
+
+exports.setAvatar = async (userId, value) => {
+  const user = await User.findById(userId)
+  user.avatarUrl = value
   await user.save()
 }

@@ -25,6 +25,10 @@ describe('./mock/factories/user.factory', () => {
         assert.isDefined(user.password)
       })
 
+      it('should have an avatarUrl', () => {
+        assert.isDefined(user.avatarUrl)
+      })
+
       it('should have a grade', () => {
         assert.isDefined(user.grade)
       })
@@ -57,6 +61,10 @@ describe('./mock/factories/user.factory', () => {
         assert.isDefined(user.creationDate)
       })
 
+      it('should have a lastActiveDate', () => {
+        assert.isDefined(user.lastActiveDate)
+      })
+
       it('should have a settings.calendarColor', () => {
         assert.isDefined(user.settings.calendarColor)
       })
@@ -68,6 +76,7 @@ describe('./mock/factories/user.factory', () => {
         lastname: 'Doe',
         email: 'john.doe@epsi.fr',
         password: 'password',
+        avatarUrl: 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048',
         grade: 'B1',
         group: 'G1',
         city: 'Lyon',
@@ -76,6 +85,7 @@ describe('./mock/factories/user.factory', () => {
         isActive: true,
         hasInformationMails: false,
         creationDate: '1565791447',
+        lastActiveDate: '1565494877',
         settings: {
           calendarColor: '47a8a2'
         }
@@ -95,6 +105,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a password', () => {
         assert.strictEqual(user.password, 'password')
+      })
+
+      it('should have an avatarUrl', () => {
+        assert.strictEqual(user.avatarUrl, 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048')
       })
 
       it('should have a grade', () => {
@@ -127,6 +141,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a creationDate', () => {
         assert.strictEqual(user.creationDate, '1565791447')
+      })
+
+      it('should have a lastActiveDate', () => {
+        assert.strictEqual(user.lastActiveDate, '1565494877')
       })
 
       it('should have a settings.calendarColor', () => {

@@ -32,6 +32,8 @@ exports.hasValidAccessOrRefreshToken = async (req, res, next) => {
             })
         }
       }
+
+      UserService.updateLastActiveDate(decoded._id)
       req.decodedUserId = decoded._id
     })
     return next()
@@ -75,6 +77,7 @@ exports.hasValidAccessOrRefreshToken = async (req, res, next) => {
       const accessToken = await JwtService.createAccess(user)
       res.cookie('accessToken', accessToken, cookie.accessTokenConfig)
 
+      UserService.updateLastActiveDate(decoded._id)
       req.decodedUserId = decoded._id
       return next()
     })

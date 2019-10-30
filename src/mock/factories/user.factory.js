@@ -6,6 +6,7 @@ module.exports = class User {
     lastname = faker.name.lastName(),
     email = faker.internet.email(),
     password = faker.internet.password(),
+    avatarUrl = faker.internet.avatar(),
     permissionLevel = 'MEMBER',
     grade = faker.random.arrayElement(['B1', 'B2', 'B3', 'I1', 'I2']),
     group = faker.random.arrayElement(['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)']),
@@ -14,6 +15,7 @@ module.exports = class User {
     isActive = faker.random.boolean(),
     hasInformationMails = faker.random.boolean(),
     creationDate = new Date(faker.date.recent(365)).getTime(),
+    lastActiveDate = new Date(faker.date.recent(30)).getTime(),
     settings = {
       calendarColor: '172b4d'
     }
@@ -22,6 +24,7 @@ module.exports = class User {
     this.lastname = lastname
     this.email = email
     this.password = password
+    this.avatarUrl = avatarUrl
     this.permissionLevel = permissionLevel
     this.grade = grade
     this.group = group
@@ -30,6 +33,7 @@ module.exports = class User {
     this.isActive = isActive
     this.hasInformationMails = hasInformationMails
     this.creationDate = creationDate
+    this.lastActiveDate = lastActiveDate
     this.settings = settings
   }
 }
