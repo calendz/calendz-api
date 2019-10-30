@@ -886,4 +886,21 @@ describe('./routes/user.route', () => {
         })
     })
   })
+
+  // ============================================================
+  // == DELETE /v1/user - suppression compte
+  // ============================================================
+  describe('DELETE /v1/user - mise à jour donnés utilisateur', () => {
+    authHelper.requireAuth('delete', '/v1/user')
+
+    it('should success (200) : le compte à bien été supprimé', (done) => {
+      request(app).delete('/v1/user').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Votre compte a bien été supprimé`)
+          done()
+        })
+    })
+  })
 })
