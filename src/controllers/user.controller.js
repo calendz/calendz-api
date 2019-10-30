@@ -159,6 +159,17 @@ exports.updateUserInformations = async (req, res) => {
   })
 }
 
+// supprimer son propre compte
+exports.delete = async (req, res) => {
+  const _userId = req.decodedUserId
+
+  await UserService.deleteAccount(_userId)
+
+  return res.status(200).json({
+    message: 'Votre compte a bien été supprimé'
+  })
+}
+
 // suppression compte utilisateur
 exports.deleteAccount = async (req, res) => {
   const _userId = req.params.userId

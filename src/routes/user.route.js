@@ -64,6 +64,12 @@ router.patch('/:userId', [
   UserController.updateUserInformations
 ])
 
+// Suppression de son compte
+router.delete('/', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  UserController.delete
+])
+
 // Suppression d'un compte utilisateur
 router.delete('/:userId', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
