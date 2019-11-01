@@ -116,3 +116,7 @@ exports.setAvatar = async (userId, value) => {
   user.avatarUrl = value
   await user.save()
 }
+
+exports.deleteRefreshToken = async (userId) => {
+  await Refresh.deleteOne({ user: userId })
+}

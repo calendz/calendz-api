@@ -154,6 +154,8 @@ exports.updateUserInformations = async (req, res) => {
 
   await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _isActive)
 
+  await UserService.deleteRefreshToken(_userId)
+
   return res.status(200).json({
     message: 'Les informations ont bien été modifiées'
   })
