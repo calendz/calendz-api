@@ -9,10 +9,12 @@ const TokenModel = require('../models/token.model')
 const RefreshModel = require('../models/refresh.model')
 const NotificationModel = require('../models/notification.model')
 const SysconfModel = require('../models/sysconf.model')
+const TaskModel = require('../models/task.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
 const Notification = require('../mock/factories/notification.factory')
+const Task = require('../mock/factories/task.factory')
 
 if (config.node_env === 'mock') {
   initMongo(async () => {
@@ -39,6 +41,7 @@ module.exports.removeAllData = async function removeAllData () {
     await RefreshModel.deleteMany({})
     await NotificationModel.deleteMany({})
     await SysconfModel.deleteMany({})
+    await TaskModel.deleteMany({})
     logger.warn('POPULATE: successfully removed all data')
   } catch (err) {
     logger.error(err)
@@ -215,6 +218,29 @@ module.exports.seedData = async function seedData () {
       message: 'Do fugiat occaecat irure sunt labore qui nulla laborum in culpa adipisicing labore consectetur fugiat.'
     })
     await notification3.save()
+
+    const task1 = new Task({
+      author: user1._id,
+      // use random date
+      type: 'homework',
+      title: 'Exercices de maths',
+      description: 'Faire les exercices 1 & 2 page 23.',
+      subject: 'Mathématiques',
+      city: 'Lyon',
+      grade: 'B3',
+      group: 'G1 (dev)'
+    })
+    const task2 = new Task({
+      author: user2._id,
+      // use random date
+      type: 'DS',
+      title: 'DS de Java',
+      description: `Réviser tout depuis le début de l'année, surtout les threads et la gestion des exceptions + lecture & écriture de fichiers.`,
+      city: 'Lyon',
+      grade: 'B3',
+      group: 'G1 (dev)'
+    })
+    await TaskModel.insertMany([task1, task2])
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
