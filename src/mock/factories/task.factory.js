@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 module.exports = class Task {
   constructor ({
     author = mongoose.Types.ObjectId(),
-    date = new Date(faker.date.future(31)).getTime(),
+    date = new Date(faker.date.recent(-30)).getTime(),
     type = faker.random.arrayElement(['DS', 'homework', 'task']),
     title = faker.lorem.lines(1),
     description = faker.lorem.lines(2),
