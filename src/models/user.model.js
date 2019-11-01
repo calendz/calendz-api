@@ -18,6 +18,9 @@ const userSchema = new Schema({
   lastActiveDate: { type: String, required: false, default: () => Date.now() },
   settings: {
     calendarColor: { type: String, default: '172b4d', required: true }
+  },
+  tasks: {
+    done: [{ type: Schema.Types.ObjectId, ref: 'Task', required: false }]
   }
 })
 

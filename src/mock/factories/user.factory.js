@@ -18,6 +18,9 @@ module.exports = class User {
     lastActiveDate = new Date(faker.date.recent(30)).getTime(),
     settings = {
       calendarColor: '172b4d'
+    },
+    tasks = {
+      done: []
     }
   }) {
     this.firstname = firstname
@@ -35,5 +38,6 @@ module.exports = class User {
     this.creationDate = creationDate
     this.lastActiveDate = lastActiveDate
     this.settings = settings
+    this.tasks = tasks
   }
 }
