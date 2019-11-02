@@ -14,6 +14,8 @@ exports.getAllFrom = async (userId) => {
       { 'targets': { '$in': [user._id] } }
     ]
   })
+    .populate('author', '_id firstname lastname avatarUrl')
+    .populate('targets', '_id firstname lastname avatarUrl')
 
   return tasks || []
 }
