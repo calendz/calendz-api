@@ -23,6 +23,7 @@ exports.hasCreateFields = async (req, res, next) => {
   if (_subject && _subject.length < 2) errors.push('La matière indiquée est trop courte')
   if (_subject && _subject.length > 50) errors.push('La matière indiquée est trop longue')
   if (_description && _description.length < 2) errors.push('La description indiquée est trop courte')
+  /* istanbul ignore if */
   if (_description && _description.length > 1000) errors.push('La description indiquée est trop longue')
 
   const dateParts = _date.split('-')
