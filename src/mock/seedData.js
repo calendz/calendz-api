@@ -240,7 +240,15 @@ module.exports.seedData = async function seedData () {
       grade: 'B3',
       group: 'G1 (dev)'
     })
-    await TaskModel.insertMany([task1, task2])
+    const task3 = new Task({
+      author: user2._id,
+      // use random date
+      type: 'task',
+      title: 'Some task title',
+      targets: [user2._id, user1._id]
+    })
+
+    await TaskModel.insertMany([task1, task2, task3])
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
