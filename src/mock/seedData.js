@@ -58,6 +58,7 @@ module.exports.seedData = async function seedData () {
       firstname: 'Arthur',
       lastname: 'Dufour',
       email: 'arthur.dufour@epsi.fr',
+      avatarUrl: 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048',
       password: bcrypt.hashSync('password', 10),
       permissionLevel: 'ADMIN',
       grade: 'B3',
@@ -66,6 +67,19 @@ module.exports.seedData = async function seedData () {
       bts: false,
       isActive: true
     })
+    const task4 = new Task({
+      _id: '5d43c90b0a7827069971e627',
+      author: user1._id,
+      // use random date
+      type: 'task',
+      subject: 'LANGAGE PROGRAMMATION JAVA',
+      title: 'A task with a subject',
+      city: null,
+      grade: null,
+      group: null,
+      targets: [user1._id]
+    })
+    user1.tasks.done = [task4._id]
     await user1.save()
 
     const user2 = new UserModel({
@@ -235,6 +249,7 @@ module.exports.seedData = async function seedData () {
       // use random date
       type: 'DS',
       title: 'DS de Java',
+      subject: '',
       description: `Réviser tout depuis le début de l'année, surtout les threads et la gestion des exceptions + lecture & écriture de fichiers.`,
       city: 'Lyon',
       grade: 'B3',
@@ -245,10 +260,14 @@ module.exports.seedData = async function seedData () {
       // use random date
       type: 'task',
       title: 'Some task title',
+      subject: '',
+      city: null,
+      grade: null,
+      group: null,
       targets: [user2._id, user1._id]
     })
 
-    await TaskModel.insertMany([task1, task2, task3])
+    await TaskModel.insertMany([task1, task2, task3, task4])
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
