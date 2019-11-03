@@ -234,6 +234,7 @@ module.exports.seedData = async function seedData () {
     await notification3.save()
 
     const task1 = new Task({
+      _id: '5d4f26bb346ad506f9583bd3',
       author: user1._id,
       // use random date
       type: 'homework',

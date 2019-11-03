@@ -13,6 +13,7 @@ describe('./services/user.service', () => {
   const group = 'G1'
   const city = 'Lyon'
   let userId
+  const taskId = '5d4f26aa046bc506f9983ad3'
 
   // ===============================================
   // == Methods
@@ -178,6 +179,28 @@ describe('./services/user.service', () => {
       UserService.updateLastActiveDate(userId).then(() => {
         User.findById(userId).then(user => {
           assert.isTrue(user.lastActiveDate < Date.now())
+          done()
+        })
+      })
+    })
+  })
+
+  describe('#setTaskDone', () => {
+    it(`should add task to done tasks`, done => {
+      UserService.setTaskDone(userId, taskId).then(() => {
+        User.findById(userId).then(user => {
+          assert.include(user.tasks.done, '5d4f26aa046bc506f9983ad3')
+          done()
+        })
+      })
+    })
+  })
+
+  describe('#setTaskNotDone', () => {
+    it(`should remove task from done tasks`, done => {
+      UserService.setTaskNotDone(userId, taskId).then(() => {
+        User.findById(userId).then(user => {
+          assert.notInclude(user.tasks.done, '5d4f26aa046bc506f9983ad3')
           done()
         })
       })

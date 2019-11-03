@@ -45,9 +45,9 @@ describe('./routes/tasks.route', () => {
     })
   })
 
-  // ==========================================================
+  // ===================================================================
   // == POST /v1/tasks - create a task
-  // ==========================================================
+  // ===================================================================
   describe(`POST /v1/tasks - create a task`, () => {
     const date = '02-11-2019'
     const type = 'task'
@@ -184,6 +184,120 @@ describe('./routes/tasks.route', () => {
         .end((err, res) => {
           if (err) return done(err)
           assert.isDefined(res.body.task)
+          done()
+        })
+    })
+  })
+
+  // ===================================================================
+  // == PATCH /v1/tasks/:userId/done/:taskId - set task as done
+  // ===================================================================
+  describe(`PATCH /v1/tasks/:userId/done/:taskId - set task as done`, () => {
+    authHelper.requireAuth('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/done/5d4f26bb346ad506f9583bd3')
+    authHelper.requireAdminOrSameUser('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/done/5d4f26bb346ad506f9583bd3')
+
+    it('should fail (404) : user not found', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bc9/done/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).patch('/v1/tasks/azeazeaze/done/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
+    it('should fail (404) : task not found', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bd3/done/5d4f26bb346ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucune tâche correspondante')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bd3/done/azeazeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
+    it('should fail (200) : task is done', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bd3/done/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
+  // ===================================================================
+  // == PATCH /v1/tasks/:userId/notdone/:taskId - set task as done
+  // ===================================================================
+  describe(`PATCH /v1/tasks/:userId/notdone/:taskId - set task as notdone`, () => {
+    authHelper.requireAuth('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/notdone/5d4f26bb346ad506f9583bd3')
+    authHelper.requireAdminOrSameUser('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/notdone/5d4f26bb346ad506f9583bd3')
+
+    it('should fail (404) : user not found', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bc9/notdone/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).patch('/v1/tasks/azeazeaze/notdone/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
+    it('should fail (404) : task not found', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bd3/notdone/5d4f26bb346ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucune tâche correspondante')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bd3/notdone/azeazeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
+    it('should fail (200) : task is done', (done) => {
+      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bd3/notdone/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
           done()
         })
     })
