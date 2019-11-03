@@ -30,3 +30,21 @@ exports.create = async (req, res) => {
     task
   })
 }
+
+// set task done
+exports.setDone = async (req, res) => {
+  const _userId = req.params.userId
+  const _taskId = req.params.taskId
+
+  await UserService.setTaskDone(_userId, _taskId)
+  return res.status(200).json({})
+}
+
+// set task not done
+exports.setNotDone = async (req, res) => {
+  const _userId = req.params.userId
+  const _taskId = req.params.taskId
+
+  await UserService.setTaskNotDone(_userId, _taskId)
+  return res.status(200).json({})
+}

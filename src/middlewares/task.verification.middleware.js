@@ -1,3 +1,10 @@
+const mongoose = require('mongoose')
+const TasksService = require('../services/tasks.service')
+
+// ============================================
+// == check if body contains required infos
+// ============================================
+
 exports.hasCreateFields = async (req, res, next) => {
   const _title = req.body.title
   const _type = req.body.type
@@ -40,5 +47,28 @@ exports.hasCreateFields = async (req, res, next) => {
       errors: errors
     })
   }
+  return next()
+}
+
+// ============================================
+// == database operations
+// ============================================
+
+exports.hasValidId = async (req, res, next) => {
+  const _taskId = req.params.taskId
+
+  if (!mongoose.Types.ObjectId.isValid(_taskId)) {
+    return res.status(422).json({
+      message: 'ID is not a valid ObjectID'
+    })
+  }
+
+  const task = await TasksService.findOne({ _id: _taskId })
+  if (!task) {
+    return res.status(404).json({
+      message: 'Aucune tâche correspondante'
+    })
+  }
+
   return next()
 }

@@ -23,4 +23,22 @@ router.post('/', [
   TasksController.create
 ])
 
+// Marquer la tâche comme faite
+router.patch('/:userId/done/:taskId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.sameUserOrAdmin,
+  UserVerificationMiddleware.hasValidId,
+  TaskVerificationMiddleware.hasValidId,
+  TasksController.setDone
+])
+
+// Marquer la tâche comme non-faite
+router.patch('/:userId/notdone/:taskId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.sameUserOrAdmin,
+  UserVerificationMiddleware.hasValidId,
+  TaskVerificationMiddleware.hasValidId,
+  TasksController.setNotDone
+])
+
 module.exports = router

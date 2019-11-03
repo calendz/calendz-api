@@ -116,3 +116,16 @@ exports.setAvatar = async (userId, value) => {
   user.avatarUrl = value
   await user.save()
 }
+
+exports.setTaskDone = async (userId, taskId) => {
+  const user = await User.findById(userId)
+  user.tasks.done.push(taskId)
+  await user.save()
+}
+
+exports.setTaskNotDone = async (userId, taskId) => {
+  const user = await User.findById(userId)
+  const index = user.tasks.done.indexOf(taskId)
+  user.tasks.done.splice(index, 1)
+  await user.save()
+}
