@@ -40,6 +40,21 @@ exports.delete = async (req, res) => {
   })
 }
 
+// modify a task
+exports.modify = async (req, res) => {
+  const _taskId = req.params.taskId
+  const _title = req.body.title
+  const _type = req.body.type
+  const _subject = req.body.subject
+  const _date = new Date(req.body.date).getTime()
+  const _description = req.body.description
+
+  const task = await TasksService.modify(_taskId, _title, _type, _subject, _date, _description)
+  return res.status(200).json({
+    task
+  })
+}
+
 // set task done
 exports.setDone = async (req, res) => {
   const _userId = req.params.userId

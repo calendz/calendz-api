@@ -30,6 +30,14 @@ router.delete('/:taskId', [
   TasksController.delete
 ])
 
+// Modification d'une tâche
+router.patch('/:taskId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  TaskVerificationMiddleware.hasValidId,
+  TaskVerificationMiddleware.hasCreateFields,
+  TasksController.modify
+])
+
 // Marquer la tâche comme faite
 router.patch('/:userId/done/:taskId', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
