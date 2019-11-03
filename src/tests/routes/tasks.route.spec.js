@@ -190,10 +190,194 @@ describe('./routes/tasks.route', () => {
   })
 
   // ===================================================================
+  // == PATCH /v1/tasks/:taskId - modify a task
+  // ===================================================================
+  describe(`PATCH /v1/tasks/:taskId - modify a task`, () => {
+    const title = 'Un autre exemple de tâche à supprimer'
+    const type = 'task'
+    const date = '03-11-2019'
+
+    authHelper.requireAuth('patch', '/v1/tasks/1b2c45bb346ad506f9583bd3', { title, type, date })
+
+    it('should fail (404) : task not found', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ba506f9583cc4').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type, date })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucune tâche correspondante')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).patch('/v1/tasks/azeazeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type, date })
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
+    it('should fail (412) : missing title', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ type, date })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un titre')
+          done()
+        })
+    })
+
+    it('should fail (412) : missing type', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, date })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un type')
+          done()
+        })
+    })
+
+    it('should fail (412) : missing date', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une date')
+          done()
+        })
+    })
+
+    it('should fail (412) : title too short', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title: 'a', type, date })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Le titre indiqué est trop court')
+          done()
+        })
+    })
+
+    it('should fail (412) : title too long', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title: 'azeazeaeaeaeaeaeaeaeaeazeazeaeaeyauieyaiuehaiehazoi', type, date })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Le titre indiqué est trop long')
+          done()
+        })
+    })
+
+    it('should fail (412) : subject too short', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject: 'a', type, date })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La matière indiquée est trop courte')
+          done()
+        })
+    })
+
+    it('should fail (412) : subject too long', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject: 'azeazeaeaeaeaeaeaeaeaeazeazeaeaeyauieyaiuehaiehazoi', type, date })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La matière indiquée est trop longue')
+          done()
+        })
+    })
+
+    it('should fail (412) : description too short', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type, date, description: 'a' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La description indiquée est trop courte')
+          done()
+        })
+    })
+
+    it('should fail (412) : invalid date', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type, date: 'someInvalidDate' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La date indiquée est invalide')
+          done()
+        })
+    })
+
+    it('should fail (412) : invalid type', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type: 'someInvalidType', date })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Le type indiqué est invalide')
+          done()
+        })
+    })
+
+    it('should success (200) : task modified', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type, date })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.task)
+          done()
+        })
+    })
+  })
+
+  // ===================================================================
   // == DELETE /v1/tasks/:taskId - delete a task
   // ===================================================================
   describe(`DELETE /v1/tasks/:taskId - delete a task`, () => {
     authHelper.requireAuth('delete', '/v1/tasks/1b2c45bb346ad506f9583bd3')
+
+    it('should fail (404) : task not found', (done) => {
+      request(app).delete('/v1/tasks/1b2c45bb346ba506f9583cc4').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucune tâche correspondante')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).delete('/v1/tasks/azeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
 
     it('should success (200) : task deleted', (done) => {
       request(app).delete('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)

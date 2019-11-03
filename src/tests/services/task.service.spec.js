@@ -49,6 +49,26 @@ describe('./services/tasks.service', () => {
     })
   })
 
+  describe('#modify', () => {
+    it('should modify a task', (done) => {
+      TasksService.modify(taskId, 'Some new title', type, subject, date, description).then(task => {
+        assert.isTrue(task._id instanceof mongoose.mongo.ObjectID)
+        assert.isTrue(task.author._id instanceof mongoose.mongo.ObjectID)
+        assert.strictEqual(task.date, date.toString())
+        assert.strictEqual(task.type, type)
+        assert.strictEqual(task.title, 'Some new title')
+        assert.strictEqual(task.description, description)
+        assert.strictEqual(task.subject, subject)
+        assert.strictEqual(task.city, city)
+        assert.strictEqual(task.grade, grade)
+        assert.strictEqual(task.group, group)
+        assert.isArray(task.targets)
+        taskId = task._id
+        done()
+      }).catch(err => done(err))
+    })
+  })
+
   describe('#delete', () => {
     it('should delete a task', (done) => {
       TasksService.delete(taskId).then(() => {
