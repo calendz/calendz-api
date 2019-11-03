@@ -52,3 +52,7 @@ exports.create = async (author, date, type, title, description, subject, city, g
   task = await this.findOne({ _id: task._id })
   return task
 }
+
+exports.delete = async (taskId) => {
+  await Task.deleteOne({ _id: taskId })
+}

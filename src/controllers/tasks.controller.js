@@ -31,6 +31,15 @@ exports.create = async (req, res) => {
   })
 }
 
+// delete a task
+exports.delete = async (req, res) => {
+  const _taskId = req.params.taskId
+  await TasksService.delete(_taskId)
+  return res.status(200).json({
+    message: 'La tâche a bien été supprimée'
+  })
+}
+
 // set task done
 exports.setDone = async (req, res) => {
   const _userId = req.params.userId
