@@ -177,13 +177,29 @@ describe('./routes/tasks.route', () => {
         })
     })
 
-    it('should fail (200) : invalid type', (done) => {
+    it('should success (200) : task created', (done) => {
       request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, subject, type, date, description })
         .expect(201)
         .end((err, res) => {
           if (err) return done(err)
           assert.isDefined(res.body.task)
+          done()
+        })
+    })
+  })
+
+  // ===================================================================
+  // == DELETE /v1/tasks/:taskId - delete a task
+  // ===================================================================
+  describe(`DELETE /v1/tasks/:taskId - delete a task`, () => {
+    authHelper.requireAuth('delete', '/v1/tasks/1b2c45bb346ad506f9583bd3')
+
+    it('should success (200) : task deleted', (done) => {
+      request(app).delete('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
           done()
         })
     })

@@ -26,7 +26,6 @@ router.post('/', [
 // Suppression d'une tâche
 router.delete('/:taskId', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
-  PermissionVerificationMiddleware.sameUserOrAdmin,
   TaskVerificationMiddleware.hasValidId,
   TasksController.delete
 ])

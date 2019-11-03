@@ -13,6 +13,7 @@ describe('./services/tasks.service', () => {
   const grade = 'B3'
   const group = 'G1 (dev)'
   const targets = []
+  let taskId
 
   // ===============================================
   // == Methods
@@ -42,6 +43,15 @@ describe('./services/tasks.service', () => {
         assert.strictEqual(task.grade, grade)
         assert.strictEqual(task.group, group)
         assert.isArray(task.targets)
+        taskId = task._id
+        done()
+      }).catch(err => done(err))
+    })
+  })
+
+  describe('#delete', () => {
+    it('should delete a task', (done) => {
+      TasksService.delete(taskId).then(() => {
         done()
       }).catch(err => done(err))
     })

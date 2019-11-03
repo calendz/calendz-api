@@ -267,8 +267,20 @@ module.exports.seedData = async function seedData () {
       group: null,
       targets: [user2._id, user1._id]
     })
+    const task5ToDelete = new Task({
+      _id: '1b2c45bb346ad506f9583bd3',
+      author: user1._id,
+      // use random date
+      type: 'task',
+      title: 'Un autre exemple de tâche',
+      subject: '',
+      city: null,
+      grade: null,
+      group: null,
+      targets: [user2._id, user1._id]
+    })
 
-    await TaskModel.insertMany([task1, task2, task3, task4])
+    await TaskModel.insertMany([task1, task2, task3, task4, task5ToDelete])
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
