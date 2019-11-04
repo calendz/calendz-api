@@ -187,6 +187,28 @@ describe('./routes/tasks.route', () => {
           done()
         })
     })
+
+    it('should success (200) : homework created', (done) => {
+      request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject, type: 'homework', date, description })
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.task)
+          done()
+        })
+    })
+
+    it('should success (200) : DS created', (done) => {
+      request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject, type: 'DS', date, description })
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.task)
+          done()
+        })
+    })
   })
 
   // ===================================================================
