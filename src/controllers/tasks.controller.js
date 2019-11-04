@@ -1,5 +1,7 @@
 const TasksService = require('../services/tasks.service')
 const UserService = require('../services/user.service')
+const NotificationsService = require('../services/notifications.service')
+const dateUtil = require('../utils/dateUtil')
 
 // return all user's tasks
 exports.getAll = async (req, res) => {
@@ -25,7 +27,41 @@ exports.create = async (req, res) => {
   const group = _user.group
   const targets = []
 
+  // create the task
   const task = await TasksService.create(author, date, type, title, description, subject, city, grade, group, targets)
+
+  // push notifications to every user affected by the task
+  let notifDate = dateUtil.dateToFullString(dateUtil.timestampToDate(date))
+  let notifTitle = `Une tâche vient d'être ajoutée !`
+  let notifMsg = `La tâche ${title} vient d'être ajoutée pour le <b>${notifDate}</b>.`
+  let notifIcon = `fas fa-tasks`
+  let notifType = `info`
+
+  switch (type) {
+    case 'homework':
+      notifTitle = `Un devoirs vient d'être ajouté !`
+      notifMsg = `Le devoirs "${title}" vient d'être ajouté pour le <b>${notifDate}</b>.`
+      notifIcon = `fas fa-book`
+      notifType = `primary`
+      break
+    case 'DS':
+      notifTitle = `Un DS a été programmé !`
+      notifMsg = `Le DS "${title}" vient d'être ajouté pour le <b>${notifDate}</b>.`
+      notifIcon = `fas fa-graduation-cap`
+      notifType = `warning`
+      break
+  }
+
+  if (!targets.length && city && grade && group) {
+    const users = await UserService.findAll({ city: city, grade: grade, group: group })
+    users.forEach(user => {
+      if (user._id.toString() === _user._id.toString()) return
+      targets.push(user._id)
+    })
+  }
+
+  await NotificationsService.createMany(targets, notifTitle, notifMsg, notifIcon, notifType)
+
   return res.status(201).json({
     task
   })

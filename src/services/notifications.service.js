@@ -20,6 +20,20 @@ exports.create = async (user, title, message, icon, type, timestamp, isRead) => 
   return notification
 }
 
+exports.createMany = async (users, title, message, icon, type) => {
+  const notifications = []
+  users.forEach(user => {
+    notifications.push(new Notification({
+      user,
+      title,
+      message,
+      icon,
+      type
+    }))
+  })
+  await Notification.insertMany(notifications)
+}
+
 exports.createForAll = async (title, target, message, icon, type) => {
   const notifications = []
   const users = await UserService.findAll()
