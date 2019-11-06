@@ -72,8 +72,8 @@ exports.findOne = async (search, includePassword) => {
   }
 }
 
-exports.findAll = async (search) => {
-  const users = await User.find({ search }).select('-password').lean()
+exports.findAll = async (search = {}) => {
+  const users = await User.find(search).select('-password').lean()
   return users
 }
 
@@ -119,4 +119,17 @@ exports.setAvatar = async (userId, value) => {
 
 exports.deleteRefreshToken = async (userId) => {
   await Refresh.deleteOne({ user: userId })
+}
+
+exports.setTaskDone = async (userId, taskId) => {
+  const user = await User.findById(userId)
+  user.tasks.done.push(taskId)
+  await user.save()
+}
+
+exports.setTaskNotDone = async (userId, taskId) => {
+  const user = await User.findById(userId)
+  const index = user.tasks.done.indexOf(taskId)
+  user.tasks.done.splice(index, 1)
+  await user.save()
 }

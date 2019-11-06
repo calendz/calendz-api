@@ -68,6 +68,12 @@ describe('./mock/factories/user.factory', () => {
       it('should have a settings.calendarColor', () => {
         assert.isDefined(user.settings.calendarColor)
       })
+
+      it('should have a list of done tasks', () => {
+        assert.isDefined(user.tasks)
+        assert.isDefined(user.tasks.done)
+        assert.isArray(user.tasks.done)
+      })
     })
 
     describe('with specified properties', () => {
