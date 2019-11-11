@@ -17,7 +17,10 @@ const userSchema = new Schema({
   creationDate: { type: String, required: true, default: () => Date.now() },
   lastActiveDate: { type: String, required: false, default: () => Date.now() },
   settings: {
-    calendarColor: { type: String, default: '172b4d', required: true }
+    calendarColor: { type: String, default: '172b4d', required: true },
+    mail: {
+      taskCreate: { type: Boolean, default: false }
+    }
   },
   tasks: {
     done: [{ type: Schema.Types.ObjectId, ref: 'Task', required: false }]

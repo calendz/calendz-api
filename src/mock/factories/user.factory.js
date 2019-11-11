@@ -17,7 +17,10 @@ module.exports = class User {
     creationDate = new Date(faker.date.recent(365)).getTime(),
     lastActiveDate = new Date(faker.date.recent(30)).getTime(),
     settings = {
-      calendarColor: '172b4d'
+      calendarColor: '172b4d',
+      mail: {
+        taskCreate: faker.random.boolean()
+      }
     },
     tasks = {
       done: []

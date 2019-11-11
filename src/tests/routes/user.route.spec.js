@@ -671,7 +671,7 @@ describe('./routes/user.route', () => {
   // ==============================================================================
   // == PATCH /v1/user/information-mails/:value - toggle inscription mail list
   // ==============================================================================
-  describe('PATCH /v1/user/information-mails/:value - changement mot de passe', () => {
+  describe('PATCH /v1/user/information-mails/:value - toggle inscription mail list', () => {
     authHelper.requireAuth('patch', '/v1/user/information-mails/false')
 
     it('should fail (412) : invalid value', (done) => {
@@ -695,6 +695,41 @@ describe('./routes/user.route', () => {
 
     it('should success (200) : hasInformationMails false', (done) => {
       request(app).patch('/v1/user/information-mails/false').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
+  // ==============================================================================
+  // == PATCH /v1/user/settings/mail-task-create/:value - toggle task create mail
+  // ==============================================================================
+  describe('PATCH /v1/user/settings/mail-task-create/:value - toggle task create mail', () => {
+    authHelper.requireAuth('patch', '/v1/user/settings/mail-task-create/false')
+
+    it('should fail (412) : invalid value', (done) => {
+      request(app).patch('/v1/user/settings/mail-task-create/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Veuillez spécifier une valeur')
+          done()
+        })
+    })
+
+    it('should success (200) : settings.mail.taskCreate true', (done) => {
+      request(app).patch('/v1/user/settings/mail-task-create/true').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('should success (200) : settings.mail.taskCreate false', (done) => {
+      request(app).patch('/v1/user/settings/mail-task-create/false').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
