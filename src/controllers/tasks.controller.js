@@ -2,6 +2,7 @@ const TasksService = require('../services/tasks.service')
 const UserService = require('../services/user.service')
 const NotificationsService = require('../services/notifications.service')
 const dateUtil = require('../utils/dateUtil')
+const mailer = require('../config/mailgun')
 
 // return all user's tasks
 exports.getAll = async (req, res) => {
@@ -54,10 +55,20 @@ exports.create = async (req, res) => {
 
   if (!targets.length && city && grade && group) {
     const users = await UserService.findAll({ city: city, grade: grade, group: group })
-    users.forEach(user => {
-      if (user._id.toString() === _user._id.toString()) return
+
+    for (const user of users) {
+      // don't push notification / mail to self
+      if (user._id.toString() === _user._id.toString()) continue
+
+      /* istanbul ignore if */
+      // push emails to users that are concerned
+      if (user.settings.mail.taskCreate) {
+        await mailer.sendTaskCreate(user.email, user.firstname, title, `${_user.firstname} ${_user.lastname}`, notifDate)
+      }
+
+      // create notification
       targets.push(user._id)
-    })
+    }
   }
 
   await NotificationsService.createMany(targets, notifTitle, notifMsg, notifIcon, notifType)

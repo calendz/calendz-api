@@ -76,3 +76,23 @@ exports.sendContactEmail = async (to, from, subject, message) => {
     logger.debug(body)
   })
 }
+
+exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+
+  const data = {
+    from: 'Calendz <no-reply@calendz.app>',
+    to,
+    subject: `Calendz - Une tâche vient d'être ajoutée !`,
+    template: 'new-task',
+    'v:firstname': firstname,
+    'v:title': title,
+    'v:created_by': createdBy,
+    'v:due_date': dueDate
+  }
+
+  mg.messages().send(data, (error, body) => {
+    if (error) logger.error(error)
+    logger.debug(body)
+  })
+}
