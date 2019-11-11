@@ -36,6 +36,7 @@ exports.hasCreateFields = async (req, res, next) => {
   const dateParts = _date.split('-')
   const testDate = new Date(`${dateParts[1]}-${dateParts[0]}-${dateParts[2]}`)
   if (!(testDate instanceof Date) || isNaN(testDate)) errors.push('La date indiquée est invalide')
+  if (testDate < new Date().setDate(new Date().getDate() - 1)) errors.push(`La date indiquée est déjà passée`)
   req.body.date = `${dateParts[1]}-${dateParts[0]}-${dateParts[2]}`
 
   const types = ['homework', 'DS', 'task']

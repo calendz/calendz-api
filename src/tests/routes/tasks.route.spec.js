@@ -4,6 +4,7 @@ const app = require('../../app')
 
 const helper = require('../helpers/test.helper')
 const authHelper = require('../helpers/auth.helper')
+const DateUtil = require('../../utils/dateUtil')
 
 describe('./routes/tasks.route', () => {
   // ===================================================================
@@ -49,7 +50,7 @@ describe('./routes/tasks.route', () => {
   // == POST /v1/tasks - create a task
   // ===================================================================
   describe(`POST /v1/tasks - create a task`, () => {
-    const date = '02-11-2019'
+    const date = '01-04-2099'
     const type = 'task'
     const title = 'Un titre de tâche'
     const description = 'Description de ma tâche de test'
@@ -165,6 +166,18 @@ describe('./routes/tasks.route', () => {
         })
     })
 
+    it('should fail (412) : invalid date (yesterday)', (done) => {
+      request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject, type, date: DateUtil.dateToDayMonthYear(new Date().setDate(new Date().getDate() - 1)), description })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La date indiquée est déjà passée')
+          done()
+        })
+    })
+
     it('should fail (412) : invalid type', (done) => {
       request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, subject, type: 'someInvalidType', date, description })
@@ -173,6 +186,17 @@ describe('./routes/tasks.route', () => {
           if (err) return done(err)
           helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
           helper.hasBodyErrorsThatContains(res.body, 'Le type indiqué est invalide')
+          done()
+        })
+    })
+
+    it('should success (200) : task created (today)', (done) => {
+      request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject, type, date: DateUtil.dateToDayMonthYear(new Date()), description })
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.task)
           done()
         })
     })
@@ -217,7 +241,7 @@ describe('./routes/tasks.route', () => {
   describe(`PATCH /v1/tasks/:taskId - modify a task`, () => {
     const title = 'Un autre exemple de tâche à supprimer'
     const type = 'task'
-    const date = '03-11-2019'
+    const date = '02-04-2099'
 
     authHelper.requireAuth('patch', '/v1/tasks/1b2c45bb346ad506f9583bd3', { title, type, date })
 
@@ -351,6 +375,18 @@ describe('./routes/tasks.route', () => {
         })
     })
 
+    it('should fail (412) : invalid date (yesterday)', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type, date: DateUtil.dateToDayMonthYear(new Date().setDate(new Date().getDate() - 1)) })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La date indiquée est déjà passée')
+          done()
+        })
+    })
+
     it('should fail (412) : invalid type', (done) => {
       request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, type: 'someInvalidType', date })
@@ -366,6 +402,17 @@ describe('./routes/tasks.route', () => {
     it('should success (200) : task modified', (done) => {
       request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, type, date })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.task)
+          done()
+        })
+    })
+
+    it('should success (200) : task modified (today)', (done) => {
+      request(app).patch('/v1/tasks/1b2c45bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, type, date: DateUtil.dateToDayMonthYear(new Date()) })
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
