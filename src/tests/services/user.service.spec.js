@@ -13,6 +13,7 @@ describe('./services/user.service', () => {
   const group = 'G1'
   const city = 'Lyon'
   let userId
+  const taskId = '5d4f26aa046bc506f9983ad3'
 
   // ===============================================
   // == Methods
@@ -132,6 +133,26 @@ describe('./services/user.service', () => {
     })
   })
 
+  describe('#setMailTaskCreate', () => {
+    it('should set setings.mail.taskCreate to true', (done) => {
+      UserService.setMailTaskCreate(userId, true).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isTrue(user.settings.mail.taskCreate)
+          done()
+        })
+      })
+    })
+
+    it('should set hasInformationMails to false', (done) => {
+      UserService.setMailTaskCreate(userId, false).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isFalse(user.settings.mail.taskCreate)
+          done()
+        })
+      })
+    })
+  })
+
   describe('#setCalendarColor', () => {
     it('should change calendar color', (done) => {
       UserService.setCalendarColor(userId, 'b23ce4').then(() => {
@@ -178,6 +199,28 @@ describe('./services/user.service', () => {
       UserService.updateLastActiveDate(userId).then(() => {
         User.findById(userId).then(user => {
           assert.isTrue(user.lastActiveDate < Date.now())
+          done()
+        })
+      })
+    })
+  })
+
+  describe('#setTaskDone', () => {
+    it(`should add task to done tasks`, done => {
+      UserService.setTaskDone(userId, taskId).then(() => {
+        User.findById(userId).then(user => {
+          assert.include(user.tasks.done, '5d4f26aa046bc506f9983ad3')
+          done()
+        })
+      })
+    })
+  })
+
+  describe('#setTaskNotDone', () => {
+    it(`should remove task from done tasks`, done => {
+      UserService.setTaskNotDone(userId, taskId).then(() => {
+        User.findById(userId).then(user => {
+          assert.notInclude(user.tasks.done, '5d4f26aa046bc506f9983ad3')
           done()
         })
       })

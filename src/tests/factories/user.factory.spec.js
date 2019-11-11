@@ -68,6 +68,16 @@ describe('./mock/factories/user.factory', () => {
       it('should have a settings.calendarColor', () => {
         assert.isDefined(user.settings.calendarColor)
       })
+
+      it('should have a settings.mail.taskCreate', () => {
+        assert.isDefined(user.settings.mail.taskCreate)
+      })
+
+      it('should have a list of done tasks', () => {
+        assert.isDefined(user.tasks)
+        assert.isDefined(user.tasks.done)
+        assert.isArray(user.tasks.done)
+      })
     })
 
     describe('with specified properties', () => {
@@ -87,7 +97,10 @@ describe('./mock/factories/user.factory', () => {
         creationDate: '1565791447',
         lastActiveDate: '1565494877',
         settings: {
-          calendarColor: '47a8a2'
+          calendarColor: '47a8a2',
+          mail: {
+            taskCreate: true
+          }
         }
       })
 
@@ -149,6 +162,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a settings.calendarColor', () => {
         assert.strictEqual(user.settings.calendarColor, '47a8a2')
+      })
+
+      it('should have a settings.mail.taskCreate', () => {
+        assert.strictEqual(user.settings.mail.taskCreate, true)
       })
     })
   })

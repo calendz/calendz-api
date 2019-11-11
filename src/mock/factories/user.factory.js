@@ -9,7 +9,7 @@ module.exports = class User {
     avatarUrl = faker.internet.avatar(),
     permissionLevel = 'MEMBER',
     grade = faker.random.arrayElement(['B1', 'B2', 'B3', 'I1', 'I2']),
-    group = faker.random.arrayElement(['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)']),
+    group = faker.random.arrayElement(['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)']),
     city = faker.random.arrayElement(['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Paris', 'Dakar']),
     bts = faker.random.boolean(),
     isActive = faker.random.boolean(),
@@ -17,7 +17,13 @@ module.exports = class User {
     creationDate = new Date(faker.date.recent(365)).getTime(),
     lastActiveDate = new Date(faker.date.recent(30)).getTime(),
     settings = {
-      calendarColor: '172b4d'
+      calendarColor: '172b4d',
+      mail: {
+        taskCreate: faker.random.boolean()
+      }
+    },
+    tasks = {
+      done: []
     }
   }) {
     this.firstname = firstname
@@ -35,5 +41,6 @@ module.exports = class User {
     this.creationDate = creationDate
     this.lastActiveDate = lastActiveDate
     this.settings = settings
+    this.tasks = tasks
   }
 }

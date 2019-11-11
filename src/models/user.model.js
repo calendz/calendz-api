@@ -9,7 +9,7 @@ const userSchema = new Schema({
   avatarUrl: { type: String, default: 'img/theme/default-pp.png', required: true },
   permissionLevel: { type: String, enum: ['MEMBER', 'ADMIN'], default: 'MEMBER', required: true },
   grade: { type: String, enum: ['B1', 'B2', 'B3', 'I1', 'I2'], required: true },
-  group: { type: String, enum: ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)'], required: true },
+  group: { type: String, enum: ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)'], required: true },
   city: { type: String, enum: ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Paris', 'Dakar'], required: true },
   bts: { type: Boolean, default: false, required: false },
   isActive: { type: Boolean, default: false, required: true },
@@ -17,7 +17,13 @@ const userSchema = new Schema({
   creationDate: { type: String, required: true, default: () => Date.now() },
   lastActiveDate: { type: String, required: false, default: () => Date.now() },
   settings: {
-    calendarColor: { type: String, default: '172b4d', required: true }
+    calendarColor: { type: String, default: '172b4d', required: true },
+    mail: {
+      taskCreate: { type: Boolean, default: false }
+    }
+  },
+  tasks: {
+    done: [{ type: Schema.Types.ObjectId, ref: 'Task', required: false }]
   }
 })
 

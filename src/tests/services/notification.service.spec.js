@@ -5,6 +5,7 @@ const NotificationsService = require('../../services/notifications.service')
 
 describe('./services/notification.service', () => {
   const user = '5d4f26aa046ad506f9583bd3'
+  const users = ['5d4f26aa046ad506f9583bd3']
   const target = ['all']
   const title = 'Le titre'
   const message = 'Un message'
@@ -29,6 +30,14 @@ describe('./services/notification.service', () => {
         assert.isTrue(notif._id instanceof mongoose.mongo.ObjectID)
         assert.isTrue(notif.user instanceof mongoose.mongo.ObjectID)
         notificationId = notif._id
+        done()
+      }).catch(err => done(err))
+    })
+  })
+
+  describe('#createMany', () => {
+    it('should create a notification for many users', (done) => {
+      NotificationsService.createMany(users, title, message, icon, type).then(() => {
         done()
       }).catch(err => done(err))
     })
