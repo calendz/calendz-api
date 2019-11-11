@@ -133,6 +133,26 @@ describe('./services/user.service', () => {
     })
   })
 
+  describe('#setMailTaskCreate', () => {
+    it('should set setings.mail.taskCreate to true', (done) => {
+      UserService.setMailTaskCreate(userId, true).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isTrue(user.settings.mail.taskCreate)
+          done()
+        })
+      })
+    })
+
+    it('should set hasInformationMails to false', (done) => {
+      UserService.setMailTaskCreate(userId, false).then(() => {
+        User.findById(userId).then((user) => {
+          assert.isFalse(user.settings.mail.taskCreate)
+          done()
+        })
+      })
+    })
+  })
+
   describe('#setCalendarColor', () => {
     it('should change calendar color', (done) => {
       UserService.setCalendarColor(userId, 'b23ce4').then(() => {

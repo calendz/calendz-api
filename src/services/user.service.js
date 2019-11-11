@@ -105,6 +105,12 @@ exports.setInformationMails = async (userId, value) => {
   await user.save()
 }
 
+exports.setMailTaskCreate = async (userId, value) => {
+  const user = await User.findById(userId)
+  user.settings.mail.taskCreate = value
+  await user.save()
+}
+
 exports.setCalendarColor = async (userId, value) => {
   const user = await User.findById(userId)
   user.settings.calendarColor = value

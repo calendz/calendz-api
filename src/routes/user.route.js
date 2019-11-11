@@ -90,6 +90,13 @@ router.patch('/information-mails/:value', [
   UserController.setInformationMails
 ])
 
+// Toggle l'adhésion aux mails création de tâches
+router.patch('/settings/mail-task-create/:value', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  ValueVerificationMiddleware.isBoolean,
+  UserController.setMailTaskCreate
+])
+
 // Changement de la couleur de l'emploi du temps de l'utilisateur
 router.patch('/calendar-color/:value', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,

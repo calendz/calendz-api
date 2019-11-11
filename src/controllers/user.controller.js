@@ -127,6 +127,18 @@ exports.setInformationMails = async (req, res) => {
   })
 }
 
+// change l'inscription aux mails de création de tâches
+exports.setMailTaskCreate = async (req, res) => {
+  const _userId = req.decodedUserId
+  const _value = req.params.value
+
+  await UserService.setMailTaskCreate(_userId, _value)
+
+  return res.status(200).json({
+    message: 'Le statut à bien été modifié'
+  })
+}
+
 // change la couleur de l'emploi du temps de l'utilisateur
 exports.setCalendarColor = async (req, res) => {
   const _userId = req.decodedUserId
