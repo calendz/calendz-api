@@ -1,9 +1,9 @@
 const express = require('express')
-const MiscController = require('../controllers/misc.controller')
-const MiscVerificationMiddleware = require('../middlewares/misc.verification.middleware')
-const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
+const MiscController = require('../../controllers/misc.controller')
+const MiscVerificationMiddleware = require('../../middlewares/misc.verification.middleware')
+const JwtVerificationMiddleware = require('../../middlewares/jwt.verification.middleware')
 
-const version = require('../../package.json').version
+const version = require('../../../package.json').version
 
 const router = express.Router()
 

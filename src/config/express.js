@@ -6,7 +6,7 @@ const methodOverride = require('method-override')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const helmet = require('helmet')
-const routes = require('../routes/router')
+const routes = require('../router/router')
 const config = require('./config')
 const logger = require('./winston')
 

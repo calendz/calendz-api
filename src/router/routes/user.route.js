@@ -1,12 +1,12 @@
 const express = require('express')
 
-const UserController = require('../controllers/user.controller')
-const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
-const TokenValidationMiddleware = require('../middlewares/token.validation.middleware')
-const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
-const ValueVerificationMiddleware = require('../middlewares/value.verification.middleware')
-const PermissionVerificationMiddleware = require('../middlewares/permission.verification.middleware')
-const SysconfVerificationMiddleware = require('../middlewares/sysconf.verification.middleware')
+const UserController = require('../../controllers/user.controller')
+const UserVerificationMiddleware = require('../../middlewares/user.verification.middleware')
+const TokenValidationMiddleware = require('../../middlewares/token.validation.middleware')
+const JwtVerificationMiddleware = require('../../middlewares/jwt.verification.middleware')
+const ValueVerificationMiddleware = require('../../middlewares/value.verification.middleware')
+const PermissionVerificationMiddleware = require('../../middlewares/permission.verification.middleware')
+const SysconfVerificationMiddleware = require('../../middlewares/sysconf.verification.middleware')
 
 const router = express.Router()
 

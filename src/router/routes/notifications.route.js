@@ -1,10 +1,10 @@
 const express = require('express')
 
-const JwtVerificationMiddleware = require('../middlewares/jwt.verification.middleware')
-const UserVerificationMiddleware = require('../middlewares/user.verification.middleware')
-const PermissionVerificationMiddleware = require('../middlewares/permission.verification.middleware')
-const NotificationVerificationMiddleware = require('../middlewares/notification.verification.middleware')
-const NotificationsController = require('../controllers/notifications.controller')
+const JwtVerificationMiddleware = require('../../middlewares/jwt.verification.middleware')
+const UserVerificationMiddleware = require('../../middlewares/user.verification.middleware')
+const PermissionVerificationMiddleware = require('../../middlewares/permission.verification.middleware')
+const NotificationVerificationMiddleware = require('../../middlewares/notification.verification.middleware')
+const NotificationsController = require('../../controllers/notifications.controller')
 
 const router = express.Router()
 
