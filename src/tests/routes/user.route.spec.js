@@ -216,13 +216,13 @@ describe('./routes/user.route', () => {
         })
     })
 
-    it('should fail (412) : seules les adresses EPSI sont acceptées', (done) => {
+    it('should fail (412) : seules les adresses EPSI/WIS sont acceptées', (done) => {
       request(app).post('/v1/user').set(helper.defaultSets).expect('Content-Type', /json/)
         .send({ firstname: 'John', lastname: 'Doe', email: 'john.doe@gmail.com', password: '123AZE', password2: 'AZE123', grade: 'B1', group: 'G1', city: 'Lyon' })
         .expect(412)
         .end((err, res) => {
           if (err) return done(err)
-          helper.hasBodyErrorsThatContains(res.body, 'Seules les adresses EPSI sont acceptées')
+          helper.hasBodyErrorsThatContains(res.body, 'Seules les adresses EPSI/WIS sont acceptées')
           helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
           done()
         })
@@ -833,7 +833,7 @@ describe('./routes/user.route', () => {
           helper.hasBodyErrorsThatContains(res.body, 'Le prénom indiqué est trop long')
           helper.hasBodyErrorsThatContains(res.body, 'Le nom indiqué est trop long')
           helper.hasBodyErrorsThatContains(res.body, 'L\'adresse mail indiquée est trop longue')
-          helper.hasBodyErrorsThatContains(res.body, 'Seules les adresses EPSI sont acceptées')
+          helper.hasBodyErrorsThatContains(res.body, 'Seules les adresses EPSI/WIS sont acceptées')
           done()
         })
     })
