@@ -74,7 +74,7 @@ exports.hasValidRegisterFields = (req, res, next) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   if (!re.test(_email.toLowerCase())) errors.push('Veuillez indiquer une adresse mail valide')
   if (!_email.includes('@epsi.fr') && !_email.includes('@wis.fr')) errors.push('Seules les adresses EPSI/WIS sont acceptées')
-  const grades = ['B1', 'B2', 'B3', 'I1', 'I2']
+  const grades = ['B1', 'B2', 'B3', 'I1', 'I2', 'WIS1', 'WIS2', 'WIS3', 'WIS4', 'WIS5']
   if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
   const groups = ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)']
   if (groups.indexOf(_group) === -1) errors.push('Veuillez indiquer un groupe valide')
@@ -295,7 +295,7 @@ exports.hasValidModifyFields = (req, res, next) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   if (!re.test(_email.toLowerCase())) errors.push('Veuillez indiquer une adresse mail valide')
   if (!_email.includes('@epsi.fr') && !_email.includes('@wis.fr')) errors.push('Seules les adresses EPSI/WIS sont acceptées')
-  const grades = ['B1', 'B2', 'B3', 'I1', 'I2']
+  const grades = ['B1', 'B2', 'B3', 'I1', 'I2', 'WIS1', 'WIS2', 'WIS3', 'WIS4', 'WIS5']
   if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
   const groups = ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)']
   if (groups.indexOf(_group) === -1) errors.push('Veuillez indiquer un groupe valide')
