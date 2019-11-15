@@ -19,7 +19,7 @@ exports.getAllFrom = async (userId) => {
 
   const tasks = await Task.find({
     $or: [
-      { 'city': user.city, 'grade': user.grade, 'group': user.group },
+      { 'school': user.school, 'city': user.city, 'grade': user.grade, 'group': user.group },
       { 'targets': { '$in': [user._id] } }
     ]
   })
@@ -34,7 +34,7 @@ exports.getAllFrom = async (userId) => {
 // == Methods
 // ================================================
 
-exports.create = async (author, date, type, title, description, subject, city, grade, group, targets) => {
+exports.create = async (author, date, type, title, description, subject, school, city, grade, group, targets) => {
   let task = new Task({
     author,
     date,
@@ -42,6 +42,7 @@ exports.create = async (author, date, type, title, description, subject, city, g
     title,
     description,
     subject,
+    school,
     city,
     grade,
     group,

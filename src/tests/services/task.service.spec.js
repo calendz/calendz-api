@@ -9,6 +9,7 @@ describe('./services/tasks.service', () => {
   const title = 'Un titre de tâche'
   const description = 'Description de ma tâche de test'
   const subject = 'Une matière'
+  const school = 'EPSI'
   const city = 'Lyon'
   const grade = 'B3'
   const group = 'G1 (dev)'
@@ -31,7 +32,7 @@ describe('./services/tasks.service', () => {
 
   describe('#create', () => {
     it('should create a task', (done) => {
-      TasksService.create(user, date, type, title, description, subject, city, grade, group, targets).then(task => {
+      TasksService.create(user, date, type, title, description, subject, school, city, grade, group, targets).then(task => {
         assert.isTrue(task._id instanceof mongoose.mongo.ObjectID)
         assert.isTrue(task.author._id instanceof mongoose.mongo.ObjectID)
         assert.strictEqual(task.date, date.toString())
@@ -39,6 +40,7 @@ describe('./services/tasks.service', () => {
         assert.strictEqual(task.title, title)
         assert.strictEqual(task.description, description)
         assert.strictEqual(task.subject, subject)
+        assert.strictEqual(task.school, school)
         assert.strictEqual(task.city, city)
         assert.strictEqual(task.grade, grade)
         assert.strictEqual(task.group, group)
@@ -59,6 +61,7 @@ describe('./services/tasks.service', () => {
         assert.strictEqual(task.title, 'Some new title')
         assert.strictEqual(task.description, description)
         assert.strictEqual(task.subject, subject)
+        assert.strictEqual(task.school, school)
         assert.strictEqual(task.city, city)
         assert.strictEqual(task.grade, grade)
         assert.strictEqual(task.group, group)
