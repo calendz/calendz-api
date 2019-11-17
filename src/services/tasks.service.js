@@ -7,8 +7,8 @@ const Task = require('../models/task.model')
 
 exports.findOne = async (search) => {
   const task = await Task.findOne(search)
-    .populate('author', '_id firstname lastname avatarUrl')
-    .populate('targets', '_id firstname lastname avatarUrl')
+    .populate('author', '_id email firstname lastname avatarUrl')
+    .populate('targets', '_id email firstname lastname avatarUrl')
     .lean()
 
   return task
@@ -23,15 +23,15 @@ exports.getAllFrom = async (userId) => {
     'group': user.group,
     'targets': []
   })
-    .populate('author', '_id firstname lastname avatarUrl')
-    .populate('targets', '_id firstname lastname avatarUrl')
+    .populate('author', '_id email firstname lastname avatarUrl')
+    .populate('targets', '_id email firstname lastname avatarUrl')
     .lean()
 
   const tasks2 = await Task.find({
     targets: { '$in': [user._id] }
   })
-    .populate('author', '_id firstname lastname avatarUrl')
-    .populate('targets', '_id firstname lastname avatarUrl')
+    .populate('author', '_id email firstname lastname avatarUrl')
+    .populate('targets', '_id email firstname lastname avatarUrl')
     .lean()
 
   return [...tasks1, ...tasks2] || []
@@ -64,13 +64,14 @@ exports.delete = async (taskId) => {
   await Task.deleteOne({ _id: taskId })
 }
 
-exports.modify = async (_taskId, _title, _type, _subject, _date, _description) => {
+exports.modify = async (_taskId, _title, _type, _subject, _date, _description, _targets) => {
   let task = await Task.findOne({ _id: _taskId })
   task.title = _title
   task.type = _type
   task.subject = _subject
   task.date = _date
   task.description = _description
+  task.targets = _targets
 
   task = await task.save()
   task = await this.findOne({ _id: _taskId })

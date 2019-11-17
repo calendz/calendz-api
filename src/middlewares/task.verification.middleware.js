@@ -45,16 +45,16 @@ exports.hasCreateFields = async (req, res, next) => {
   if (types.indexOf(_type) === -1) errors.push('Le type indiqué est invalide')
 
   // check if targets are all valid
-  if (_targets) {
+  if (_targets && _targets.length > 0) {
     req.body.targets = []
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     for (const target of _targets) {
-      if (!re.test(target.toLowerCase())) {
-        errors.push(`L'email "${target}" n'est pas valide`)
+      if (!re.test(target.email.toLowerCase())) {
+        errors.push(`L'email "${target.email}" n'est pas valide`)
       } else {
-        const user = await UserService.findOne({ email: target })
-        if (!user) errors.push(`L'email "${target}" ne correspond à aucun utilisateur`)
-        req.body.targets.push(user._id)
+        const user = await UserService.findOne({ email: target.email })
+        if (!user) errors.push(`L'email "${target.email}" ne correspond à aucun utilisateur`)
+        else req.body.targets.push(user._id)
       }
     }
 

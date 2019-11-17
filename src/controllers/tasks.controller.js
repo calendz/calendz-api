@@ -107,8 +107,11 @@ exports.modify = async (req, res) => {
   const _subject = req.body.subject
   const _date = new Date(req.body.date).getTime()
   const _description = req.body.description
+  const _targets = req.body.targets
 
-  const task = await TasksService.modify(_taskId, _title, _type, _subject, _date, _description)
+  await TasksService.modify(_taskId, _title, _type, _subject, _date, _description, _targets)
+  const task = await TasksService.findOne({ _id: _taskId })
+
   return res.status(200).json({
     task
   })
