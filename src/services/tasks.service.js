@@ -17,17 +17,24 @@ exports.findOne = async (search) => {
 exports.getAllFrom = async (userId) => {
   const user = await UserService.findOne({ _id: userId })
 
-  const tasks = await Task.find({
-    $or: [
-      { 'city': user.city, 'grade': user.grade, 'group': user.group },
-      { 'targets': { '$in': [user._id] } }
-    ]
+  const tasks1 = await Task.find({
+    'city': user.city,
+    'grade': user.grade,
+    'group': user.group,
+    'targets': []
   })
     .populate('author', '_id firstname lastname avatarUrl')
     .populate('targets', '_id firstname lastname avatarUrl')
     .lean()
 
-  return tasks || []
+  const tasks2 = await Task.find({
+    targets: { '$in': [user._id] }
+  })
+    .populate('author', '_id firstname lastname avatarUrl')
+    .populate('targets', '_id firstname lastname avatarUrl')
+    .lean()
+
+  return [...tasks1, ...tasks2] || []
 }
 
 // ================================================

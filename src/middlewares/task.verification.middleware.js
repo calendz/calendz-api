@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const TasksService = require('../services/tasks.service')
+const UserService = require('../services/user.service')
 
 // ============================================
 // == check if body contains required infos
@@ -11,6 +12,7 @@ exports.hasCreateFields = async (req, res, next) => {
   const _subject = req.body.subject
   const _date = req.body.date
   const _description = req.body.description
+  const _targets = req.body.targets
 
   let errors = []
   if (!_title) errors.push('Veuillez indiquer un titre')
@@ -41,6 +43,23 @@ exports.hasCreateFields = async (req, res, next) => {
 
   const types = ['homework', 'DS', 'task']
   if (types.indexOf(_type) === -1) errors.push('Le type indiqué est invalide')
+
+  // check if targets are all valid
+  if (_targets) {
+    req.body.targets = []
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    for (const target of _targets) {
+      if (!re.test(target.toLowerCase())) {
+        errors.push(`L'email "${target}" n'est pas valide`)
+      } else {
+        const user = await UserService.findOne({ email: target })
+        if (!user) errors.push(`L'email "${target}" ne correspond à aucun utilisateur`)
+        req.body.targets.push(user._id)
+      }
+    }
+
+    req.body.targets.push(req.decodedUserId)
+  }
 
   if (errors.length) {
     return res.status(412).json({

@@ -26,7 +26,7 @@ exports.create = async (req, res) => {
   const city = _user.city
   const grade = _user.grade
   const group = _user.group
-  const targets = []
+  const targets = req.body.targets || []
 
   // create the task
   const task = await TasksService.create(author, date, type, title, description, subject, city, grade, group, targets)
@@ -53,6 +53,7 @@ exports.create = async (req, res) => {
       break
   }
 
+  // task for whole class
   if (!targets.length && city && grade && group) {
     const users = await UserService.findAll({ city: city, grade: grade, group: group })
 
@@ -69,9 +70,20 @@ exports.create = async (req, res) => {
       // create notification
       targets.push(user._id)
     }
-  }
 
-  await NotificationsService.createMany(targets, notifTitle, notifMsg, notifIcon, notifType)
+  // task for targets
+  } else {
+    // send notifications
+    await NotificationsService.createMany(targets, notifTitle, notifMsg, notifIcon, notifType)
+
+    // send mail
+    for (const target of targets) {
+      const user = await UserService.findOne({ _id: target })
+      if (user && user.settings.mail.taskCreate) {
+        await mailer.sendTaskCreate(user.email, user.firstname, title, `${_user.firstname} ${_user.lastname}`, notifDate)
+      }
+    }
+  }
 
   return res.status(201).json({
     task
