@@ -82,6 +82,7 @@ exports.create = async (req, res) => {
     // send mail
     for (const target of targetsToNotify) {
       const user = await UserService.findOne({ _id: target })
+      /* istanbul ignore if */
       if (user && user.settings.mail.taskCreate) {
         await mailer.sendTaskCreate(user.email, user.firstname, title, `${_user.firstname} ${_user.lastname}`, notifDate)
       }

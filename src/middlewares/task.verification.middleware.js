@@ -58,8 +58,7 @@ exports.hasCreateFields = async (req, res, next) => {
       }
     }
 
-    // eslint-disable-next-line eqeqeq
-    if (!req.body.targets.some(id => id == req.decodedUserId)) req.body.targets.push(req.decodedUserId)
+    if (!req.body.targets.some(id => id.toString() === req.decodedUserId.toString())) req.body.targets.push(req.decodedUserId)
   }
 
   if (errors.length) {
