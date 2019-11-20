@@ -73,11 +73,14 @@ exports.create = async (req, res) => {
 
   // task for targets
   } else {
+    // avoid self-sending notifications & emails
+    const targetsToNotify = targets.filter(target => target.toString() !== req.decodedUserId.toString())
+
     // send notifications
-    await NotificationsService.createMany(targets, notifTitle, notifMsg, notifIcon, notifType)
+    await NotificationsService.createMany(targetsToNotify, notifTitle, notifMsg, notifIcon, notifType)
 
     // send mail
-    for (const target of targets) {
+    for (const target of targetsToNotify) {
       const user = await UserService.findOne({ _id: target })
       if (user && user.settings.mail.taskCreate) {
         await mailer.sendTaskCreate(user.email, user.firstname, title, `${_user.firstname} ${_user.lastname}`, notifDate)
