@@ -51,7 +51,7 @@ describe('./services/tasks.service', () => {
 
   describe('#modify', () => {
     it('should modify a task', (done) => {
-      TasksService.modify(taskId, 'Some new title', type, subject, date, description).then(task => {
+      TasksService.modify(taskId, 'Some new title', type, subject, date, description, []).then(task => {
         assert.isTrue(task._id instanceof mongoose.mongo.ObjectID)
         assert.isTrue(task.author._id instanceof mongoose.mongo.ObjectID)
         assert.strictEqual(task.date, date.toString())
