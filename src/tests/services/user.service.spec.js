@@ -24,11 +24,28 @@ describe('./services/user.service', () => {
         assert.strictEqual(user.firstname, firstname)
         assert.strictEqual(user.lastname, lastname)
         assert.strictEqual(user.email, email)
+        assert.strictEqual(user.school, 'EPSI')
         assert.strictEqual(user.grade, grade)
         assert.strictEqual(user.group, group)
         assert.strictEqual(user.city, city)
         assert.isTrue(user._id instanceof mongoose.mongo.ObjectID)
         userId = user._id
+        done()
+      }, (err) => {
+        done(err)
+      })
+    })
+
+    it('should create a user (wis)', (done) => {
+      UserService.create(firstname, lastname, 'john.doe@wis.fr', password, grade, group, city).then((user) => {
+        assert.strictEqual(user.firstname, firstname)
+        assert.strictEqual(user.lastname, lastname)
+        assert.strictEqual(user.email, 'john.doe@wis.fr')
+        assert.strictEqual(user.school, 'WIS')
+        assert.strictEqual(user.grade, grade)
+        assert.strictEqual(user.group, group)
+        assert.strictEqual(user.city, city)
+        assert.isTrue(user._id instanceof mongoose.mongo.ObjectID)
         done()
       }, (err) => {
         done(err)

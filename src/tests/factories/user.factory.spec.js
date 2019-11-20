@@ -29,6 +29,10 @@ describe('./mock/factories/user.factory', () => {
         assert.isDefined(user.avatarUrl)
       })
 
+      it('should have a school', () => {
+        assert.isDefined(user.school)
+      })
+
       it('should have a grade', () => {
         assert.isDefined(user.grade)
       })
@@ -87,6 +91,7 @@ describe('./mock/factories/user.factory', () => {
         email: 'john.doe@epsi.fr',
         password: 'password',
         avatarUrl: 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048',
+        school: 'EPSI',
         grade: 'B1',
         group: 'G1',
         city: 'Lyon',
@@ -122,6 +127,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have an avatarUrl', () => {
         assert.strictEqual(user.avatarUrl, 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048')
+      })
+
+      it('should have a school', () => {
+        assert.strictEqual(user.school, 'EPSI')
       })
 
       it('should have a grade', () => {

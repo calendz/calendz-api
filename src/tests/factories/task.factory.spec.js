@@ -35,6 +35,10 @@ describe('./mock/factories/task.factory', () => {
         assert.isDefined(task.subject)
       })
 
+      it('should have a school', () => {
+        assert.isDefined(task.school)
+      })
+
       it('should have a city', () => {
         assert.isDefined(task.city)
       })
