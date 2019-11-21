@@ -16,8 +16,8 @@ exports.getAll = async (req, res) => {
 
 // creates a new user (register)
 exports.create = async (req, res) => {
-  const _firstname = req.body.firstname
-  const _lastname = req.body.lastname
+  const _firstname = req.body.firstname.charAt(0).toUpperCase() + req.body.firstname.toLowerCase().slice(1)
+  const _lastname = req.body.lastname.charAt(0).toUpperCase() + req.body.lastname.toLowerCase().slice(1)
   const _email = req.body.email
   const _password = req.body.password
   const _grade = req.body.grade
