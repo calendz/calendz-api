@@ -17,7 +17,7 @@ exports.findOne = async (search) => {
 exports.getAllFrom = async (userId) => {
   const user = await UserService.findOne({ _id: userId })
 
-  const tasks1 = await Task.find({
+  const tasks = await Task.find({
     $or: [
       { 'school': user.school, 'city': user.city, 'grade': user.grade, 'group': user.group },
       { 'targets': { '$in': [user._id] } }
@@ -27,14 +27,7 @@ exports.getAllFrom = async (userId) => {
     .populate('targets', '_id email firstname lastname avatarUrl')
     .lean()
 
-  const tasks2 = await Task.find({
-    targets: { '$in': [user._id] }
-  })
-    .populate('author', '_id email firstname lastname avatarUrl')
-    .populate('targets', '_id email firstname lastname avatarUrl')
-    .lean()
-
-  return [...tasks1, ...tasks2] || []
+  return tasks
 }
 
 // ================================================
