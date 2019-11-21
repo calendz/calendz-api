@@ -296,8 +296,19 @@ module.exports.seedData = async function seedData () {
       group: null,
       targets: [user2._id, user1._id]
     })
+    const task6 = new Task({
+      author: user2._id,
+      date: '1570307529',
+      type: 'DS',
+      title: 'DS de PHP',
+      subject: 'PHP',
+      school: 'EPSI',
+      city: 'Lyon',
+      grade: 'B3',
+      group: 'G1 (dev)'
+    })
 
-    await TaskModel.insertMany([task1, task2, task3, task4, task5ToDelete])
+    await TaskModel.insertMany([task1, task2, task3, task4, task5ToDelete, task6])
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
