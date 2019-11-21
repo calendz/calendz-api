@@ -21,7 +21,17 @@ exports.getStats = async (req, res) => {
         total: _users.length,
         inactive: _users.filter(u => !u.isActive).length,
         mailing: _users.filter(u => u.hasInformationMails).length,
-        bts: _users.filter(u => u.bts).length
+        bts: _users.filter(u => u.bts).length,
+        activeAccount: {
+          lastDay: _users.filter(u => this.isDateEquals(u.lastActiveDate)).length,
+          lastThreeDays: _users.filter(u => this.isDateEquals(u.lastActiveDate, 3)).length,
+          lastWeek: _users.filter(u => this.isDateEquals(u.lastActiveDate, 7)).length
+        },
+        creationAccount: {
+          lastDay: _users.filter(u => this.isDateEquals(u.creationDate)).length,
+          lastThreeDays: _users.filter(u => this.isDateEquals(u.creationDate, 3)).length,
+          lastWeek: _users.filter(u => this.isDateEquals(u.creationDate, 7)).length
+        }
       },
       grades: {
         b1: _users.filter(u => u.grade === 'B1').length,
@@ -111,6 +121,21 @@ exports.getStats = async (req, res) => {
       }
     }
   })
+}
+
+exports.isDateEquals = (date, days = 0) => {
+  let dateUser = new Date(date * 1000 / 1000)
+  dateUser.setHours(0, 0, 0, 0)
+  let dateCompare = new Date()
+
+  dateCompare.setDate(dateCompare.getDate() - days)
+  dateCompare.setHours(0, 0, 0, 0)
+
+  if (dateUser >= dateCompare) {
+    return true
+  } else {
+    return false
+  }
 }
 
 // toggle login state
