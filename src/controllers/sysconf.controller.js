@@ -1,5 +1,6 @@
 const UserService = require('../services/user.service')
 const SysconfService = require('../services/sysconf.service')
+const DateUtil = require('../utils/dateUtil')
 
 // get all system settings
 exports.getSettings = async (req, res) => {
@@ -23,14 +24,14 @@ exports.getStats = async (req, res) => {
         mailing: _users.filter(u => u.hasInformationMails).length,
         bts: _users.filter(u => u.bts).length,
         activeAccount: {
-          lastDay: _users.filter(u => this.isDateEquals(u.lastActiveDate)).length,
-          lastThreeDays: _users.filter(u => this.isDateEquals(u.lastActiveDate, 3)).length,
-          lastWeek: _users.filter(u => this.isDateEquals(u.lastActiveDate, 7)).length
+          lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate)).length,
+          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 3)).length,
+          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 7)).length
         },
         creationAccount: {
-          lastDay: _users.filter(u => this.isDateEquals(u.creationDate)).length,
-          lastThreeDays: _users.filter(u => this.isDateEquals(u.creationDate, 3)).length,
-          lastWeek: _users.filter(u => this.isDateEquals(u.creationDate, 7)).length
+          lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate)).length,
+          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 3)).length,
+          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 7)).length
         }
       },
       grades: {
@@ -121,21 +122,6 @@ exports.getStats = async (req, res) => {
       }
     }
   })
-}
-
-exports.isDateEquals = (date, days = 0) => {
-  let dateUser = new Date(date * 1000 / 1000)
-  dateUser.setHours(0, 0, 0, 0)
-  let dateCompare = new Date()
-
-  dateCompare.setDate(dateCompare.getDate() - days)
-  dateCompare.setHours(0, 0, 0, 0)
-
-  if (dateUser >= dateCompare) {
-    return true
-  } else {
-    return false
-  }
 }
 
 // toggle login state
