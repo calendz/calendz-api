@@ -1,5 +1,6 @@
 const UserService = require('../services/user.service')
 const SysconfService = require('../services/sysconf.service')
+const DateUtil = require('../utils/dateUtil')
 
 // get all system settings
 exports.getSettings = async (req, res) => {
@@ -21,7 +22,17 @@ exports.getStats = async (req, res) => {
         total: _users.length,
         inactive: _users.filter(u => !u.isActive).length,
         mailing: _users.filter(u => u.hasInformationMails).length,
-        bts: _users.filter(u => u.bts).length
+        bts: _users.filter(u => u.bts).length,
+        activeAccount: {
+          lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate)).length,
+          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 3)).length,
+          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 7)).length
+        },
+        creationAccount: {
+          lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate)).length,
+          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 3)).length,
+          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 7)).length
+        }
       },
       grades: {
         b1: _users.filter(u => u.grade === 'B1').length,

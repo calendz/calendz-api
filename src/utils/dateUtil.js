@@ -56,5 +56,17 @@ module.exports = {
   timestampToDate (timestamp) {
     const date = new Date(timestamp * 1000 / 1000)
     return date
+  },
+
+  // ??
+  isDateInDaysRange (date, days = 0) {
+    let dateUser = new Date(date * 1000 / 1000)
+    dateUser.setHours(0, 0, 0, 0)
+
+    let dateCompare = new Date()
+    dateCompare.setDate(dateCompare.getDate() - days)
+    dateCompare.setHours(0, 0, 0, 0)
+
+    return (dateUser >= dateCompare)
   }
 }
