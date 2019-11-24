@@ -55,6 +55,7 @@ describe('./routes/tasks.route', () => {
     const title = 'Un titre de tâche'
     const description = 'Description de ma tâche de test'
     const subject = 'Une matière'
+    const targets = [{ email: 'arthur.dufour@epsi.fr' }, { email: 'alexandre.tuet@epsi.fr' }]
 
     authHelper.requireAuth('post', '/v1/tasks', { title, type, subject, date, description })
 
@@ -190,9 +191,33 @@ describe('./routes/tasks.route', () => {
         })
     })
 
+    it('should fail (412) : invalid targets', (done) => {
+      request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject, type, date, description, targets: [{ email: 'some.nonexistent.user@epsi.fr' }, { email: 'someUnvalidEmailAddress.fr' }] })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, `L'email "someUnvalidEmailAddress.fr" n'est pas valide`)
+          helper.hasBodyErrorsThatContains(res.body, `L'email "some.nonexistent.user@epsi.fr" ne correspond à aucun utilisateur`)
+          done()
+        })
+    })
+
     it('should success (200) : task created (today)', (done) => {
       request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
         .send({ title, subject, type, date: DateUtil.dateToDayMonthYear(new Date()), description })
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.task)
+          done()
+        })
+    })
+
+    it('should success (200) : task created with targets', (done) => {
+      request(app).post('/v1/tasks').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ title, subject, type, date, description, targets })
         .expect(201)
         .end((err, res) => {
           if (err) return done(err)

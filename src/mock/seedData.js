@@ -171,6 +171,21 @@ module.exports.seedData = async function seedData () {
     })
     await user7.save()
 
+    const user8 = new UserModel({
+      firstname: 'Wanda',
+      lastname: 'Schiller',
+      email: 'wanda.schiller@wis.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'WIS',
+      grade: 'I2',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true
+    })
+    await user8.save()
+
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
@@ -241,6 +256,7 @@ module.exports.seedData = async function seedData () {
       title: 'Exercices de maths',
       description: 'Faire les exercices 1 & 2 page 23.',
       subject: 'Mathématiques',
+      school: 'EPSI',
       city: 'Lyon',
       grade: 'B3',
       group: 'G1 (dev)'
@@ -252,6 +268,7 @@ module.exports.seedData = async function seedData () {
       title: 'DS de Java',
       subject: '',
       description: `Réviser tout depuis le début de l'année, surtout les threads et la gestion des exceptions + lecture & écriture de fichiers.`,
+      school: 'EPSI',
       city: 'Lyon',
       grade: 'B3',
       group: 'G1 (dev)'
@@ -279,8 +296,19 @@ module.exports.seedData = async function seedData () {
       group: null,
       targets: [user2._id, user1._id]
     })
+    const task6 = new Task({
+      author: user2._id,
+      date: '1570307529',
+      type: 'DS',
+      title: 'DS de PHP',
+      subject: 'PHP',
+      school: 'EPSI',
+      city: 'Lyon',
+      grade: 'B3',
+      group: 'G1 (dev)'
+    })
 
-    await TaskModel.insertMany([task1, task2, task3, task4, task5ToDelete])
+    await TaskModel.insertMany([task1, task2, task3, task4, task5ToDelete, task6])
 
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))

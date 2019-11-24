@@ -1,10 +1,10 @@
 const express = require('express')
-const authRoutes = require('./auth.route')
-const userRoutes = require('./user.route')
-const notificationsRoutes = require('./notifications.route')
-const sysconfRoutes = require('./sysconf.route')
-const miscRoutes = require('./misc.route')
-const tasksRoutes = require('./tasks.route')
+const authRoutes = require('./routes/auth.route')
+const userRoutes = require('./routes/user.route')
+const notificationsRoutes = require('./routes/notifications.route')
+const sysconfRoutes = require('./routes/sysconf.route')
+const miscRoutes = require('./routes/misc.route')
+const tasksRoutes = require('./routes/tasks.route')
 
 const router = express.Router()
 

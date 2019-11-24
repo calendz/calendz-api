@@ -9,11 +9,17 @@ const Token = require('../models/token.model')
 // ================================================
 
 exports.create = async (firstname, lastname, email, password, grade, group, city) => {
+  // guess user's school from its email
+  let school
+  if (email.includes('@epsi.fr')) school = 'EPSI'
+  else if (email.includes('@wis.fr')) school = 'WIS'
+
   const user = new User({
     firstname,
     lastname,
     email,
     password: bcrypt.hashSync(password, 10),
+    school,
     grade,
     group,
     city

@@ -23,13 +23,14 @@ exports.create = async (req, res) => {
   const title = req.body.title
   const description = req.body.description
   const subject = req.body.subject
+  const school = _user.school
   const city = _user.city
   const grade = _user.grade
   const group = _user.group
-  const targets = []
+  const targets = req.body.targets || []
 
   // create the task
-  const task = await TasksService.create(author, date, type, title, description, subject, city, grade, group, targets)
+  const task = await TasksService.create(author, date, type, title, description, subject, school, city, grade, group, targets)
 
   // push notifications to every user affected by the task
   let notifDate = dateUtil.dateToFullString(dateUtil.timestampToDate(date))
@@ -53,8 +54,9 @@ exports.create = async (req, res) => {
       break
   }
 
-  if (!targets.length && city && grade && group) {
-    const users = await UserService.findAll({ city: city, grade: grade, group: group })
+  // task for whole class
+  if (!targets.length && school && city && grade && group) {
+    const users = await UserService.findAll({ school, city, grade, group })
 
     for (const user of users) {
       // don't push notification / mail to self
@@ -69,9 +71,24 @@ exports.create = async (req, res) => {
       // create notification
       targets.push(user._id)
     }
-  }
 
-  await NotificationsService.createMany(targets, notifTitle, notifMsg, notifIcon, notifType)
+  // task for targets
+  } else {
+    // avoid self-sending notifications & emails
+    const targetsToNotify = targets.filter(target => target.toString() !== req.decodedUserId.toString())
+
+    // send notifications
+    await NotificationsService.createMany(targetsToNotify, notifTitle, notifMsg, notifIcon, notifType)
+
+    // send mail
+    for (const target of targetsToNotify) {
+      const user = await UserService.findOne({ _id: target })
+      /* istanbul ignore if */
+      if (user && user.settings.mail.taskCreate) {
+        await mailer.sendTaskCreate(user.email, user.firstname, title, `${_user.firstname} ${_user.lastname}`, notifDate)
+      }
+    }
+  }
 
   return res.status(201).json({
     task
@@ -95,8 +112,11 @@ exports.modify = async (req, res) => {
   const _subject = req.body.subject
   const _date = new Date(req.body.date).getTime()
   const _description = req.body.description
+  const _targets = req.body.targets
 
-  const task = await TasksService.modify(_taskId, _title, _type, _subject, _date, _description)
+  await TasksService.modify(_taskId, _title, _type, _subject, _date, _description, _targets)
+  const task = await TasksService.findOne({ _id: _taskId })
+
   return res.status(200).json({
     task
   })
