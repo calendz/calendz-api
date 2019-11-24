@@ -15,7 +15,7 @@ exports.createAccess = (user) => {
 // create a refresh token and store it in mongo
 exports.createRefresh = async (user) => {
   // create the token
-  const refreshToken = jwt.sign(user, config.jwt.secret, { expiresIn: config.jwt.expiration_refresh * 1000 * 3600 * 24 })
+  const refreshToken = jwt.sign({ _id: user._id }, config.jwt.secret, { expiresIn: config.jwt.expiration_refresh * 1000 * 3600 * 24 })
 
   // store it in the database
   const refresh = new Refresh({
