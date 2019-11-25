@@ -20,6 +20,12 @@ router.post('/', [
   UserController.create
 ])
 
+// Fetch current user's data
+router.get('/fetch', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  UserController.fetch
+])
+
 // Get all users
 router.get('/all', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,

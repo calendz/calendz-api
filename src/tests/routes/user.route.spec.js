@@ -341,6 +341,27 @@ describe('./routes/user.route', () => {
   })
 
   // ===============================================
+  // == GET /v1/user/fetch - get user's data
+  // ===============================================
+  describe(`GET /v1/user/fetch - get user's data`, () => {
+    authHelper.requireAuth('get', '/v1/user/fetch')
+
+    it(`should success (200) : got user's informations`, (done) => {
+      request(app).get('/v1/user/fetch').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.user)
+          assert.isDefined(res.body.tasks)
+          assert.isArray(res.body.tasks)
+          assert.isDefined(res.body.notifications)
+          assert.isArray(res.body.notifications)
+          done()
+        })
+    })
+  })
+
+  // ===============================================
   // == GET /v1/user/all - get all users
   // ===============================================
   describe('GET /v1/user/all - get all users', () => {
