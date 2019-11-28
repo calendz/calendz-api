@@ -1,6 +1,6 @@
 {
   "name": "calendz-api",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "calendz's backend api",
   "private": true,
   "main": "app.js",
