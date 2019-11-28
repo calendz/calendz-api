@@ -25,13 +25,13 @@ exports.getStats = async (req, res) => {
         bts: _users.filter(u => u.bts).length,
         activeAccount: {
           lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate)).length,
-          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 3)).length,
-          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 7)).length
+          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 2)).length,
+          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 6)).length
         },
         creationAccount: {
           lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate)).length,
-          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 3)).length,
-          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 7)).length
+          lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 2)).length,
+          lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 6)).length
         }
       },
       grades: {
