@@ -30,6 +30,13 @@ exports.getAllFrom = async (userId) => {
   return tasks
 }
 
+exports.findAll = async (search = {}) => {
+  const tasks = await Task.find(search)
+    .populate('author', '_id grade city')
+    .lean()
+  return tasks
+}
+
 // ================================================
 // == Methods
 // ================================================
