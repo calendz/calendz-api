@@ -4,6 +4,7 @@ const app = require('../../app')
 
 const helper = require('../helpers/test.helper')
 const authHelper = require('../helpers/auth.helper')
+const userHelper = require('../helpers/user.helper')
 const DateUtil = require('../../utils/dateUtil')
 
 describe('./routes/tasks.route', () => {
@@ -13,16 +14,7 @@ describe('./routes/tasks.route', () => {
   describe(`GET /v1/tasks/:userId - get user's tasks`, () => {
     authHelper.requireAuth('get', '/v1/tasks/5d4f26aa046ad506f9583bd3')
     authHelper.requireAdminOrSameUser('get', '/v1/tasks/5d4f26aa046ad506f9583bd3')
-
-    it('should fail (404) : user not found', (done) => {
-      request(app).get('/v1/tasks/5d4f26aa046ad506f9583bc9').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
-          done()
-        })
-    })
+    userHelper.userNotFound('get', '/v1/tasks/5d4f26aa046ad506f9583bc9')
 
     it('should fail (422) : ID is not an ObjectID', (done) => {
       request(app).get('/v1/tasks/azeazeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -489,16 +481,7 @@ describe('./routes/tasks.route', () => {
   describe(`PATCH /v1/tasks/:userId/done/:taskId - set task as done`, () => {
     authHelper.requireAuth('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/done/5d4f26bb346ad506f9583bd3')
     authHelper.requireAdminOrSameUser('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/done/5d4f26bb346ad506f9583bd3')
-
-    it('should fail (404) : user not found', (done) => {
-      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bc9/done/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
-          done()
-        })
-    })
+    userHelper.userNotFound('patch', '/v1/tasks/5d4f26aa046ad506f9583bc9/done/5d4f26bb346ad506f9583bd3')
 
     it('should fail (422) : ID is not an ObjectID', (done) => {
       request(app).patch('/v1/tasks/azeazeaze/done/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -546,16 +529,7 @@ describe('./routes/tasks.route', () => {
   describe(`PATCH /v1/tasks/:userId/notdone/:taskId - set task as notdone`, () => {
     authHelper.requireAuth('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/notdone/5d4f26bb346ad506f9583bd3')
     authHelper.requireAdminOrSameUser('patch', '/v1/tasks/5d4f26aa046ad506f9583bd3/notdone/5d4f26bb346ad506f9583bd3')
-
-    it('should fail (404) : user not found', (done) => {
-      request(app).patch('/v1/tasks/5d4f26aa046ad506f9583bc9/notdone/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
-          done()
-        })
-    })
+    userHelper.userNotFound('patch', '/v1/tasks/5d4f26aa046ad506f9583bc9/notdone/5d4f26bb346ad506f9583bd3')
 
     it('should fail (422) : ID is not an ObjectID', (done) => {
       request(app).patch('/v1/tasks/azeazeaze/notdone/5d4f26bb346ad506f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)

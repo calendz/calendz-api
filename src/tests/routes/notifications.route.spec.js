@@ -4,6 +4,7 @@ const app = require('../../app')
 
 const helper = require('../helpers/test.helper')
 const authHelper = require('../helpers/auth.helper')
+const userHelper = require('../helpers/user.helper')
 
 describe('./routes/notifications.route', () => {
   // ===================================================================
@@ -12,16 +13,7 @@ describe('./routes/notifications.route', () => {
   describe(`GET /v1/notifications/:userId - get user's notifications`, () => {
     authHelper.requireAuth('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
     authHelper.requireAdminOrSameUser('get', '/v1/notifications/5d4f26aa046ad506f9583bd3')
-
-    it('should fail (404) : user not found', (done) => {
-      request(app).get('/v1/notifications/5d4f26aa046ad506f9583bc9').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
-          done()
-        })
-    })
+    userHelper.userNotFound('get', '/v1/notifications/5d4f26aa046ad506f9583bc9')
 
     it('should fail (422) : ID is not an ObjectID', (done) => {
       request(app).get('/v1/notifications/azeazeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -51,16 +43,7 @@ describe('./routes/notifications.route', () => {
   describe(`PATCH /v1/notifications/:userId/read/all - read all notifications`, () => {
     authHelper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
     authHelper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/read/all')
-
-    it('should fail (404) : user not found', (done) => {
-      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
-          done()
-        })
-    })
+    userHelper.userNotFound('patch', '/v1/notifications/5d4f26aa046ad506f9583bc9/read/all')
 
     it('should success (200) : notifications lues', (done) => {
       request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/read/all').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -89,15 +72,7 @@ describe('./routes/notifications.route', () => {
         })
     })
 
-    it('should fail (404) : user not found', (done) => {
-      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/read/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
-          done()
-        })
-    })
+    userHelper.userNotFound('patch', '/v1/notifications/5d4f26aa046ad506f9583bc9/read/5d4f26aa246ad506f9583bd1')
 
     it('should fail (422) : invalid notification id', (done) => {
       request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/read/invalidid').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
@@ -135,16 +110,7 @@ describe('./routes/notifications.route', () => {
   describe(`PATCH /v1/notifications/:userId/read/:notificationId - unread a notification`, () => {
     authHelper.requireAuth('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
     authHelper.requireAdminOrSameUser('patch', '/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583bd1')
-
-    it('should fail (404) : user not found', (done) => {
-      request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bc9/unread/5d4f26aa246ad506f9583bd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Aucun utilisateur correspondant')
-          done()
-        })
-    })
+    userHelper.userNotFound('patch', '/v1/notifications/5d4f26aa046ad506f9583bc9/unread/5d4f26aa246ad506f9583bd1')
 
     it('should fail (404) : notification not found', (done) => {
       request(app).patch('/v1/notifications/5d4f26aa046ad506f9583bd3/unread/5d4f26aa246ad506f9583cd1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
