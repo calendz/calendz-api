@@ -12,7 +12,7 @@ exports.create = async (firstname, lastname, email, password, grade, group, city
   // guess user's school from its email
   let school
   if (email.includes('@epsi.fr')) school = 'EPSI'
-  else if (email.includes('@wis.fr')) school = 'WIS'
+  else if (email.includes('@wis.fr') || email.includes('@etudes-wis.net')) school = 'WIS'
 
   const user = new User({
     firstname,
