@@ -51,6 +51,22 @@ describe('./services/user.service', () => {
         done(err)
       })
     })
+
+    it('should create a user (wis)', (done) => {
+      UserService.create(firstname, lastname, 'john.doe2@etudes-wis.net', password, grade, group, city).then((user) => {
+        assert.strictEqual(user.firstname, firstname)
+        assert.strictEqual(user.lastname, lastname)
+        assert.strictEqual(user.email, 'john.doe2@etudes-wis.net')
+        assert.strictEqual(user.school, 'WIS')
+        assert.strictEqual(user.grade, grade)
+        assert.strictEqual(user.group, group)
+        assert.strictEqual(user.city, city)
+        assert.isTrue(user._id instanceof mongoose.mongo.ObjectID)
+        done()
+      }, (err) => {
+        done(err)
+      })
+    })
   })
 
   describe('#findOne', () => {
