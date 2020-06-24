@@ -78,7 +78,7 @@ exports.hasValidRegisterFields = (req, res, next) => {
   if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
   const groups = ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)']
   if (groups.indexOf(_group) === -1) errors.push('Veuillez indiquer un groupe valide')
-  const cities = ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Paris', 'Dakar']
+  const cities = ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Rennes', 'Paris', 'Dakar']
   if (cities.indexOf(_city) === -1) errors.push('Veuillez indiquer une ville valide')
 
   if (errors.length) {
@@ -299,7 +299,7 @@ exports.hasValidModifyFields = (req, res, next) => {
   if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
   const groups = ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)']
   if (groups.indexOf(_group) === -1) errors.push('Veuillez indiquer un groupe valide')
-  const cities = ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Paris', 'Dakar']
+  const cities = ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Rennes', 'Paris', 'Dakar']
   if (cities.indexOf(_city) === -1) errors.push('Veuillez indiquer une ville valide')
 
   const permissionsLevel = ['ADMIN', 'MEMBER']
