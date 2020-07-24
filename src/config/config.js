@@ -1,4 +1,7 @@
 const convict = require('convict')
+const convictFormatWithValidator = require('convict-format-with-validator')
+convict.addFormats(convictFormatWithValidator)
+
 require('dotenv').config()
 
 const config = convict({
