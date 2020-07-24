@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
   const task = await TasksService.create(author, date, type, title, description, subject, school, city, grade, group, targets)
 
   // push notifications to every user affected by the task
-  let notifDate = dateUtil.dateToFullString(dateUtil.timestampToDate(date))
+  const notifDate = dateUtil.dateToFullString(dateUtil.timestampToDate(date))
   let notifTitle = `Une tâche vient d'être ajoutée !`
   let notifMsg = `La tâche ${title} vient d'être ajoutée pour le <b>${notifDate}</b>.`
   let notifIcon = `fas fa-tasks`
