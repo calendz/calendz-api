@@ -4,7 +4,7 @@ notifications:
   email: false
 
 node_js:
-  - "10.15.3"
+  - "12.18.2"
 
 services:
   - mongodb
