@@ -27,6 +27,8 @@ exports.getStats = async (req, res) => {
           inactive: _users.filter(u => !u.isActive).length,
           mailing: _users.filter(u => u.hasInformationMails).length,
           bts: _users.filter(u => u.bts).length,
+          epsi: _users.filter(u => u.school === 'EPSI').length,
+          wis: _users.filter(u => u.school === 'WIS').length,
           activeAccount: {
             lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate)).length,
             lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 2)).length,
