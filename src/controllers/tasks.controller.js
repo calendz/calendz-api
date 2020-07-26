@@ -56,6 +56,7 @@ exports.create = async (req, res) => {
 
   // task for whole class
   if (!targets.length && school && city && grade && group) {
+    const targetsToNotify = []
     const users = await UserService.findAll({ school, city, grade, group })
 
     for (const user of users) {
@@ -68,9 +69,12 @@ exports.create = async (req, res) => {
         await mailer.sendTaskCreate(user.email, user.firstname, title, `${_user.firstname} ${_user.lastname}`, notifDate)
       }
 
-      // create notification
-      targets.push(user._id)
+      // add to notification list
+      targetsToNotify.push(user._id)
     }
+
+    // send notifications
+    await NotificationsService.createMany(targetsToNotify, notifTitle, notifMsg, notifIcon, notifType)
 
   // task for targets
   } else {
