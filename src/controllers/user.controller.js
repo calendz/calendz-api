@@ -8,6 +8,17 @@ const TasksService = require('../services/tasks.service')
 const NotificationsService = require('../services/notifications.service')
 const NotificationModel = require('../models/notification.model')
 
+// fetch user by its id
+exports.getById = async (req, res) => {
+  const userId = req.params.userId
+
+  const user = await UserService.findOne({ _id: userId })
+
+  return res.status(200).json({
+    user
+  })
+}
+
 // get all users
 exports.getAll = async (req, res) => {
   const users = await UserService.findAll()
@@ -179,9 +190,10 @@ exports.updateUserInformations = async (req, res) => {
   const _group = req.body.group
   const _city = req.body.city
   const _bts = req.body.bts
+  const _hasInformationMails = req.body.hasInformationMails
   const _isActive = req.body.isActive
 
-  await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _isActive)
+  await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _hasInformationMails, _isActive)
 
   await UserService.deleteRefreshToken(_userId)
 

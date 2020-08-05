@@ -85,6 +85,13 @@ router.delete('/:userId', [
   UserController.deleteAccount
 ])
 
+// Fetch user by its id
+router.get('/:userId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserController.getById
+])
+
 // ===========================================
 // == Paramètres =============================
 // ===========================================
