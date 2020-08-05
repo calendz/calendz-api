@@ -281,6 +281,7 @@ exports.hasValidModifyFields = (req, res, next) => {
   const _group = req.body.group
   const _city = req.body.city
   const _bts = req.body.bts
+  const _hasInformationMails = req.body.hasInformationMails
   const _isActive = req.body.isActive
 
   const errors = []
@@ -306,8 +307,8 @@ exports.hasValidModifyFields = (req, res, next) => {
   if (permissionsLevel.indexOf(_permissionLevel) === -1) errors.push('Veuillez indiquer un role valide')
 
   if (_bts !== true && _bts !== false) errors.push('Veuillez indiquer une option BTS valide')
-
-  if (_isActive !== true && _isActive !== false) errors.push('Veuillez indiquer une activité valide')
+  if (_hasInformationMails !== true && _hasInformationMails !== false) errors.push('Veuillez indiquer une valeur "hasInformationMails" valide')
+  if (_isActive !== true && _isActive !== false) errors.push('Veuillez indiquer une valeur "isActive" valide')
 
   if (errors.length) {
     return res.status(412).json({
