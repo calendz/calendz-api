@@ -211,6 +211,23 @@ module.exports.seedData = async function seedData () {
     })
     await user9.save()
 
+    // account use to test non-migrated i2 login
+    const user10 = new UserModel({
+      firstname: 'Landen',
+      lastname: 'S',
+      email: 'landen.s@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'B3',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user10.save()
+
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
