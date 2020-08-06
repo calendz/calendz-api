@@ -14,6 +14,7 @@ const userSchema = new Schema({
   city: { type: String, enum: ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Rennes', 'Toulouse', 'Paris', 'Dakar'], required: true },
   bts: { type: Boolean, default: false, required: false },
   isActive: { type: Boolean, default: false, required: true },
+  isMigrated: { type: Boolean, default: false, required: true },
   hasInformationMails: { type: Boolean, default: true, required: true },
   creationDate: { type: String, required: true, default: () => Date.now() },
   lastActiveDate: { type: String, required: false, default: () => Date.now() },
