@@ -17,6 +17,7 @@ router.post('/', [
   SysconfVerificationMiddleware.isLoginEnabled,
   UserVerificationMiddleware.isPasswordAndUserMatch,
   UserVerificationMiddleware.isActive,
+  UserVerificationMiddleware.isMigrated,
   AuthController.login
 ])
 

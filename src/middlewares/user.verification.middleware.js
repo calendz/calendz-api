@@ -184,6 +184,33 @@ exports.isActive = async (req, res, next) => {
   return next()
 }
 
+// checks if the user is already migrated
+exports.isMigrated = async (req, res, next) => {
+  const _email = req.body.email
+  const user = req.user || await UserService.findOne({ email: _email })
+
+  // cancel login for old i2
+  if (user.grade === 'I2' && !user.isMigrated) {
+    return res.status(403).json({
+      message: 'Il semblerait que vous ne soyez plus étudiant',
+      code: 'OLD_STUDENT',
+      userId: user._id
+    })
+  }
+
+  // cancel login and indicate that user needs to update its profile
+  if (!user.isMigrated) {
+    return res.status(403).json({
+      message: 'Vous devez mettre votre profil à jour',
+      code: 'REQUIRE_MIGRATION',
+      userId: user._id
+    })
+  }
+
+  req.user = user
+  return next()
+}
+
 // checks if the user is not active
 exports.isNotActive = async (req, res, next) => {
   const user = req.user
