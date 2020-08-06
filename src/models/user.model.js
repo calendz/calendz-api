@@ -11,7 +11,7 @@ const userSchema = new Schema({
   school: { type: String, enum: ['EPSI', 'WIS'], default: 'EPSI', required: true },
   grade: { type: String, enum: ['B1', 'B2', 'B3', 'I1', 'I2', 'WIS1', 'WIS2', 'WIS3', 'WIS4', 'WIS5'], required: true },
   group: { type: String, enum: ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)'], required: true },
-  city: { type: String, enum: ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Rennes', 'Paris', 'Dakar'], required: true },
+  city: { type: String, enum: ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Rennes', 'Toulouse', 'Paris', 'Dakar'], required: true },
   bts: { type: Boolean, default: false, required: false },
   isActive: { type: Boolean, default: false, required: true },
   hasInformationMails: { type: Boolean, default: true, required: true },
