@@ -211,7 +211,7 @@ module.exports.seedData = async function seedData () {
     })
     await user9.save()
 
-    // account use to test non-migrated i2 login
+    // account use to test account migration
     const user10 = new UserModel({
       firstname: 'Landen',
       lastname: 'S',
@@ -227,6 +227,23 @@ module.exports.seedData = async function seedData () {
       isMigrated: false
     })
     await user10.save()
+
+    // TESTS: test account migration
+    const user11 = new UserModel({
+      firstname: 'LandenTest',
+      lastname: 'S',
+      email: 'landenTest.s@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'B3',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user11.save()
 
     const token1 = new TokenModel({
       user: user3._id,
@@ -255,6 +272,13 @@ module.exports.seedData = async function seedData () {
       type: 'EMAIL_VERIFICATION'
     })
     await token4.save()
+
+    const token5 = new TokenModel({
+      user: user11._id,
+      value: 'aValidToken5',
+      type: 'ACCOUNT_MIGRATION'
+    })
+    await token5.save()
 
     const refreshToken1 = new RefreshModel({
       user: '5d45c90b0a7827069971e116',

@@ -362,6 +362,71 @@ describe('./routes/user.route', () => {
   })
 
   // ===============================================
+  // == POST /v1/user/migrate - migrate user account
+  // ===============================================
+  describe(`POST /v1/user/migrate - migrate user account`, () => {
+    it('should fail (412) : aucun token transmit', (done) => {
+      request(app).post('/v1/user/migrate').set(helper.defaultSets).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucun token transmit')
+          done()
+        })
+    })
+
+    it('should fail (404) : le lien actuel est invalide', (done) => {
+      request(app).post('/v1/user/migrate').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'notAValidToken' })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Le lien actuel est invalide')
+          done()
+        })
+    })
+
+    it('should fail (412) : missing fields', (done) => {
+      request(app).post('/v1/user/migrate').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken5' })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer votre classe')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer votre groupe')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer votre ville')
+          done()
+        })
+    })
+
+    it('should fail (412) : invalid fields', (done) => {
+      request(app).post('/v1/user/migrate').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken5', grade: 'notValid', group: 'notValid', city: 'notValid', bts: false })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une classe valide')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer un groupe valide')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer une ville valide')
+          done()
+        })
+    })
+
+    it('should success (200) : migration complete', (done) => {
+      request(app).post('/v1/user/migrate').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ token: 'aValidToken5', grade: 'I1', group: 'G1 (dev)', city: 'Lyon', bts: false })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Migration effectuée avec succès')
+          done()
+        })
+    })
+  })
+
+  // ===============================================
   // == GET /v1/user/all - get all users
   // ===============================================
   describe('GET /v1/user/all - get all users', () => {
