@@ -125,23 +125,51 @@ describe('./routes/auth.route', () => {
       })
     })
 
-    it('should success (201) : connexion réussie (avec rememberMe)', (done) => {
+    it('should fail (403) : compte "expiré" (ancien i2 non migré)', (done) => {
       Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.loginEnabled': true }).then(() => {
         request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
-          .send({ email: 'arthur.dufour@epsi.fr', password: 'password', rememberMe: true })
-          .expect(201)
+          .send({ email: 'alda.z@epsi.fr', password: 'password' })
+          .expect(403)
           .end((err, res) => {
             if (err) return done(err)
-            assert.property(res.body, 'user')
-            assert.isDefined(res.body.user)
-            assert.isDefined(res.header['set-cookie'][0])
-            assert.isTrue(res.header['set-cookie'][0].includes('accessToken'))
-            assert.isDefined(res.header['set-cookie'][1])
-            assert.isTrue(res.header['set-cookie'][1].includes('refreshToken'))
-            helper.hasBodyMessage(res.body, 'Connexion réussie')
+            assert.propertyVal(res.body, 'code', 'OLD_STUDENT')
+            helper.hasBodyMessage(res.body, 'Il semblerait que vous ne soyez plus étudiant')
             done()
           })
       })
+    })
+
+    it('should fail (403) : compte non migré (besoin migration', (done) => {
+      request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ email: 'landen.s@epsi.fr', password: 'password' })
+        .expect(403)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.propertyVal(res.body, 'code', 'REQUIRE_MIGRATION')
+          helper.hasBodyMessage(res.body, 'Vous devez mettre votre profil à jour')
+          assert.isDefined(res.body.info.token)
+          assert.isDefined(res.body.info.email)
+          assert.isDefined(res.body.info.city)
+          assert.isDefined(res.body.info.grade)
+          done()
+        })
+    })
+
+    it('should success (201) : connexion réussie (avec rememberMe)', (done) => {
+      request(app).post('/v1/auth').set(helper.defaultSets).expect('Content-Type', /json/)
+        .send({ email: 'arthur.dufour@epsi.fr', password: 'password', rememberMe: true })
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.property(res.body, 'user')
+          assert.isDefined(res.body.user)
+          assert.isDefined(res.header['set-cookie'][0])
+          assert.isTrue(res.header['set-cookie'][0].includes('accessToken'))
+          assert.isDefined(res.header['set-cookie'][1])
+          assert.isTrue(res.header['set-cookie'][1].includes('refreshToken'))
+          helper.hasBodyMessage(res.body, 'Connexion réussie')
+          done()
+        })
     })
   })
 

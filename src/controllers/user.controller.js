@@ -42,6 +42,27 @@ exports.fetch = async (req, res) => {
   })
 }
 
+// migrate account
+exports.migrate = async (req, res) => {
+  const _tokenValue = req.body.token
+  const token = await TokenService.findOne({ value: _tokenValue })
+
+  const _grade = req.body.grade
+  const _group = req.body.group
+  const _city = req.body.city
+  const _bts = req.body.bts
+
+  // migrate user data
+  await UserService.migrate(token.user, _grade, _group, _city, _bts)
+
+  // delete the token
+  await TokenService.deleteOne(_tokenValue)
+
+  return res.status(200).json({
+    message: 'Migration effectuée avec succès'
+  })
+}
+
 // creates a new user (register)
 exports.create = async (req, res) => {
   const _firstname = req.body.firstname.charAt(0).toUpperCase() + req.body.firstname.toLowerCase().slice(1)

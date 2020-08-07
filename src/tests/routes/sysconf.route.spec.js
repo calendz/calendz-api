@@ -48,6 +48,8 @@ describe('./routes/sysconf.route', () => {
           assert.isDefined(res.body.stats.users.users.bts)
           assert.isDefined(res.body.stats.users.users.epsi)
           assert.isDefined(res.body.stats.users.users.wis)
+          assert.isDefined(res.body.stats.users.users.migrated)
+          assert.isDefined(res.body.stats.users.users.neverMigrated)
           assert.isDefined(res.body.stats.users.grades)
           assert.isDefined(res.body.stats.users.cities)
           done()
@@ -136,6 +138,23 @@ describe('./routes/sysconf.route', () => {
 
     it('shoud success (200) : deleted all refresh tokens', (done) => {
       request(app).delete('/v1/sysconf/refresh-tokens/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
+  // ==========================================================================
+  // == PATCH /v1/sysconf/migrate/all - migrate all users account
+  // ==========================================================================
+  describe('PATCH /v1/sysconf/migrate/all - migrate all users account', async () => {
+    authHelper.requireAuth('patch', '/v1/sysconf/migrate/all')
+    authHelper.requireAdmin('patch', '/v1/sysconf/migrate/all')
+
+    it('shoud success (200) : deleted all refresh tokens', (done) => {
+      request(app).patch('/v1/sysconf/migrate/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)

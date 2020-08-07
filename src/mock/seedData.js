@@ -65,7 +65,8 @@ module.exports.seedData = async function seedData () {
       group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: true
+      isActive: true,
+      isMigrated: true
     })
     const task4 = new Task({
       _id: '5d43c90b0a7827069971e627',
@@ -93,7 +94,8 @@ module.exports.seedData = async function seedData () {
       group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: true
+      isActive: true,
+      isMigrated: true
     })
     await user2.save()
 
@@ -108,7 +110,8 @@ module.exports.seedData = async function seedData () {
       group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: false
+      isActive: false,
+      isMigrated: true
     })
     await user3.save()
 
@@ -123,7 +126,8 @@ module.exports.seedData = async function seedData () {
       group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: true
+      isActive: true,
+      isMigrated: true
     })
     await user4.save()
 
@@ -138,7 +142,8 @@ module.exports.seedData = async function seedData () {
       group: 'G2 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: false
+      isActive: false,
+      isMigrated: true
     })
     await user5.save()
 
@@ -153,7 +158,8 @@ module.exports.seedData = async function seedData () {
       group: 'G2 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: false
+      isActive: false,
+      isMigrated: true
     })
     await user6.save()
 
@@ -167,7 +173,8 @@ module.exports.seedData = async function seedData () {
       group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: true
+      isActive: true,
+      isMigrated: true
     })
     await user7.save()
 
@@ -182,9 +189,61 @@ module.exports.seedData = async function seedData () {
       group: 'G1 (dev)',
       city: 'Lyon',
       bts: false,
-      isActive: true
+      isActive: true,
+      isMigrated: true
     })
     await user8.save()
+
+    // account use to test non-migrated i2 login
+    const user9 = new UserModel({
+      firstname: 'Alda',
+      lastname: 'Z',
+      email: 'alda.z@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'I2',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user9.save()
+
+    // account use to test account migration
+    const user10 = new UserModel({
+      firstname: 'Landen',
+      lastname: 'S',
+      email: 'landen.s@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'B3',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user10.save()
+
+    // TESTS: test account migration
+    const user11 = new UserModel({
+      firstname: 'LandenTest',
+      lastname: 'S',
+      email: 'landenTest.s@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'B3',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user11.save()
 
     const token1 = new TokenModel({
       user: user3._id,
@@ -213,6 +272,13 @@ module.exports.seedData = async function seedData () {
       type: 'EMAIL_VERIFICATION'
     })
     await token4.save()
+
+    const token5 = new TokenModel({
+      user: user11._id,
+      value: 'aValidToken5',
+      type: 'ACCOUNT_MIGRATION'
+    })
+    await token5.save()
 
     const refreshToken1 = new RefreshModel({
       user: '5d45c90b0a7827069971e116',

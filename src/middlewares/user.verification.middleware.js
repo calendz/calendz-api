@@ -1,8 +1,10 @@
+const uuidv4 = require('uuid/v4')
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
 const logger = require('../config/winston')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
+const schoolUtil = require('../utils/schoolUtil')
 
 // ============================================
 // == check if body contains required infos
@@ -47,6 +49,42 @@ exports.hasRegisterFields = (req, res, next) => {
   if (errors.length) {
     return res.status(412).json({
       message: 'Certains champs requis sont manquant',
+      errors: errors
+    })
+  }
+
+  return next()
+}
+
+exports.hasValidMigrationFields = (req, res, next) => {
+  const _grade = req.body.grade
+  const _group = req.body.group
+  const _city = req.body.city
+  // const _bts = req.body.bts
+
+  let errors = []
+  if (!_grade) errors.push('Veuillez indiquer votre classe')
+  if (!_group) errors.push('Veuillez indiquer votre groupe')
+  if (!_city) errors.push('Veuillez indiquer votre ville')
+
+  if (errors.length) {
+    return res.status(412).json({
+      message: 'Certains champs requis sont manquant',
+      errors: errors
+    })
+  }
+
+  errors = []
+  const grades = ['B1', 'B2', 'B3', 'I1', 'I2', 'WIS1', 'WIS2', 'WIS3', 'WIS4', 'WIS5']
+  if (grades.indexOf(_grade) === -1) errors.push('Veuillez indiquer une classe valide')
+  const groups = ['G1', 'G2', 'G3', 'G1 (dev)', 'G2 (dev)', 'G3 (dev)', 'G1 (infra-réseau)', 'G2 (infra-réseau)', 'G3 (infra-réseau)', 'G1 (ERP)', 'G2 (ERP)']
+  if (groups.indexOf(_group) === -1) errors.push('Veuillez indiquer un groupe valide')
+  const cities = ['Arras', 'Auxerre', 'Bordeaux', 'Brest', 'Grenoble', 'Lille', 'Lyon', 'Montpellier', 'Nantes', 'Rennes', 'Toulouse', 'Paris', 'Dakar']
+  if (cities.indexOf(_city) === -1) errors.push('Veuillez indiquer une ville valide')
+
+  if (errors.length) {
+    return res.status(412).json({
+      message: 'Certains champs requis sont invalides',
       errors: errors
     })
   }
@@ -177,6 +215,45 @@ exports.isActive = async (req, res, next) => {
     return res.status(403).json({
       message: 'Veuillez confirmer votre email afin de pouvoir vous connecter',
       userId: user._id
+    })
+  }
+
+  req.user = user
+  return next()
+}
+
+// checks if the user is already migrated
+exports.isMigrated = async (req, res, next) => {
+  const _email = req.body.email
+  const user = req.user || await UserService.findOne({ email: _email })
+
+  // cancel login for old i2
+  if (user.grade === 'I2' && !user.isMigrated) {
+    return res.status(403).json({
+      message: 'Il semblerait que vous ne soyez plus étudiant',
+      code: 'OLD_STUDENT'
+    })
+  }
+
+  // cancel login and indicate that user needs to update its profile
+  if (!user.isMigrated) {
+    // if user already has an ACCOUNT_MIGRATION token
+    const exists = await TokenService.findOne({ user: user._id, type: 'ACCOUNT_MIGRATION' })
+    if (exists) await TokenService.deleteOne(exists.value)
+
+    // generate a security token
+    const token = await TokenService.create(user._id, uuidv4(), 'ACCOUNT_MIGRATION')
+
+    // return error w/ security token
+    return res.status(403).json({
+      message: 'Vous devez mettre votre profil à jour',
+      code: 'REQUIRE_MIGRATION',
+      info: {
+        token: token.value,
+        email: user.email,
+        city: user.city,
+        grade: schoolUtil.nextGrade(user.grade)
+      }
     })
   }
 

@@ -20,6 +20,13 @@ router.post('/', [
   UserController.create
 ])
 
+// Account migration
+router.post('/migrate', [
+  TokenValidationMiddleware.hasValidToken('ACCOUNT_MIGRATION'),
+  UserVerificationMiddleware.hasValidMigrationFields,
+  UserController.migrate
+])
+
 // Fetch current user's data
 router.get('/fetch', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,

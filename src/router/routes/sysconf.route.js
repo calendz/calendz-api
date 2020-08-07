@@ -44,4 +44,11 @@ router.delete('/refresh-tokens/all', [
   SysconfController.deleteAllRefreshTokens
 ])
 
+// Start accounts migration
+router.patch('/migrate/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  SysconfController.migrateAllAccounts
+])
+
 module.exports = router

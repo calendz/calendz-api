@@ -5,7 +5,7 @@ module.exports = class Token {
   constructor ({
     user = mongoose.Types.ObjectId(),
     value = faker.random.uuid(),
-    type = faker.random.arrayElement(['EMAIL_VERIFICATION', 'PASSWORD_RESET'])
+    type = faker.random.arrayElement(['EMAIL_VERIFICATION', 'PASSWORD_RESET', 'ACCOUNT_MIGRATION'])
   }) {
     this.user = user
     this.value = value

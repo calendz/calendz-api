@@ -1,5 +1,6 @@
 const Sysconf = require('../models/sysconf.model')
 const Refresh = require('../models/refresh.model')
+const User = require('../models/user.model')
 
 // ================================================
 //  == Methods
@@ -29,6 +30,10 @@ exports.updateRegisterEnabled = async (value) => {
 
 exports.deleteAllRefreshTokens = async () => {
   await Refresh.deleteMany({})
+}
+
+exports.migrateAllAccounts = async () => {
+  await User.updateMany({}, { isMigrated: false })
 }
 
 // ================================================
