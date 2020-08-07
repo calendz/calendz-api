@@ -143,4 +143,21 @@ describe('./routes/sysconf.route', () => {
         })
     })
   })
+
+  // ==========================================================================
+  // == PATCH /v1/sysconf/migrate/all - migrate all users account
+  // ==========================================================================
+  describe('PATCH /v1/sysconf/migrate/all - migrate all users account', async () => {
+    authHelper.requireAuth('patch', '/v1/sysconf/migrate/all')
+    authHelper.requireAdmin('patch', '/v1/sysconf/migrate/all')
+
+    it('shoud success (200) : deleted all refresh tokens', (done) => {
+      request(app).patch('/v1/sysconf/migrate/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
 })

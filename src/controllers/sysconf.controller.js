@@ -270,3 +270,8 @@ exports.deleteAllRefreshTokens = async (req, res) => {
   await SysconfService.deleteAllRefreshTokens()
   return res.status(200).json({})
 }
+
+exports.migrateAllAccounts = async (req, res) => {
+  await SysconfService.migrateAllAccounts()
+  return res.status(200).json({})
+}
