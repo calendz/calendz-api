@@ -48,6 +48,8 @@ describe('./routes/sysconf.route', () => {
           assert.isDefined(res.body.stats.users.users.bts)
           assert.isDefined(res.body.stats.users.users.epsi)
           assert.isDefined(res.body.stats.users.users.wis)
+          assert.isDefined(res.body.stats.users.users.migrated)
+          assert.isDefined(res.body.stats.users.users.neverMigrated)
           assert.isDefined(res.body.stats.users.grades)
           assert.isDefined(res.body.stats.users.cities)
           done()

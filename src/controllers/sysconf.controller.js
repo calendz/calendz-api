@@ -29,6 +29,8 @@ exports.getStats = async (req, res) => {
           bts: _users.filter(u => u.bts).length,
           epsi: _users.filter(u => u.school === 'EPSI').length,
           wis: _users.filter(u => u.school === 'WIS').length,
+          migrated: _users.filter(u => u.isMigrated).length,
+          neverMigrated: _users.filter(u => !u.isMigrated && (u.grade === 'I2' || u.grade === 'WIS5')).length,
           activeAccount: {
             lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate)).length,
             lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 2)).length,
