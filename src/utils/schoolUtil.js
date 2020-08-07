@@ -12,6 +12,7 @@ module.exports = {
       case 'WIS3': return 'WIS4'
       case 'WIS4': return 'WIS5'
       case 'WIS5': return null
+      default: return null
     }
   }
 }
