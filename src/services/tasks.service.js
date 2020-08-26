@@ -19,8 +19,8 @@ exports.getAllFrom = async (userId) => {
 
   const tasks = await Task.find({
     $or: [
-      { 'school': user.school, 'city': user.city, 'grade': user.grade, 'group': user.group },
-      { 'targets': { '$in': [user._id] } }
+      { school: user.school, city: user.city, grade: user.grade, group: user.group },
+      { targets: { $in: [user._id] } }
     ]
   })
     .populate('author', '_id email firstname lastname avatarUrl')

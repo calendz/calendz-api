@@ -210,7 +210,7 @@ describe('./services/user.service', () => {
 
   describe('#updateUserInformations', () => {
     it('should update user\'s informations', done => {
-      UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'B1', 'G2', 'Paris', true, true).then(() => {
+      UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'B1', 'G2', 'Paris', true, true, true).then(() => {
         User.findById(userId).then(user => {
           assert.strictEqual(user.firstname, 'test_firstname')
           assert.strictEqual(user.lastname, 'test_lastname')
@@ -220,6 +220,7 @@ describe('./services/user.service', () => {
           assert.strictEqual(user.group, 'G2')
           assert.strictEqual(user.city, 'Paris')
           assert.strictEqual(user.isActive, true)
+          assert.strictEqual(user.hasInformationMails, true)
           assert.strictEqual(user.bts, true)
           done()
         })

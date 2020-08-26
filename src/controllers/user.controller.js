@@ -8,6 +8,17 @@ const TasksService = require('../services/tasks.service')
 const NotificationsService = require('../services/notifications.service')
 const NotificationModel = require('../models/notification.model')
 
+// fetch user by its id
+exports.getById = async (req, res) => {
+  const userId = req.params.userId
+
+  const user = await UserService.findOne({ _id: userId })
+
+  return res.status(200).json({
+    user
+  })
+}
+
 // get all users
 exports.getAll = async (req, res) => {
   const users = await UserService.findAll()
@@ -28,6 +39,27 @@ exports.fetch = async (req, res) => {
     user,
     notifications,
     tasks
+  })
+}
+
+// migrate account
+exports.migrate = async (req, res) => {
+  const _tokenValue = req.body.token
+  const token = await TokenService.findOne({ value: _tokenValue })
+
+  const _grade = req.body.grade
+  const _group = req.body.group
+  const _city = req.body.city
+  const _bts = req.body.bts
+
+  // migrate user data
+  await UserService.migrate(token.user, _grade, _group, _city, _bts)
+
+  // delete the token
+  await TokenService.deleteOne(_tokenValue)
+
+  return res.status(200).json({
+    message: 'Migration effectuée avec succès'
   })
 }
 
@@ -179,9 +211,10 @@ exports.updateUserInformations = async (req, res) => {
   const _group = req.body.group
   const _city = req.body.city
   const _bts = req.body.bts
+  const _hasInformationMails = req.body.hasInformationMails
   const _isActive = req.body.isActive
 
-  await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _isActive)
+  await UserService.updateUserInformations(_userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _hasInformationMails, _isActive)
 
   await UserService.deleteRefreshToken(_userId)
 

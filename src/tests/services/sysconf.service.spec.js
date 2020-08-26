@@ -2,6 +2,7 @@ const assert = require('chai').assert
 const Refresh = require('../../models/refresh.model')
 const Sysconf = require('../../models/sysconf.model')
 const SysconfService = require('../../services/sysconf.service')
+const UserService = require('../../services/user.service')
 
 describe('./services/sysconf.service', () => {
   // ===============================================
@@ -70,6 +71,18 @@ describe('./services/sysconf.service', () => {
       SysconfService.deleteAllRefreshTokens().then(async () => {
         const refreshes = await Refresh.find({})
         assert.isEmpty(refreshes)
+        done()
+      }, (err) => {
+        done(err)
+      })
+    })
+  })
+
+  describe('#migrateAllAccounts', () => {
+    it('shoud set all accounts to isMigrated false', (done) => {
+      SysconfService.migrateAllAccounts().then(async () => {
+        const alexandre = await UserService.findOne({ email: 'alexandre.tuet@epsi.fr' })
+        assert.strictEqual(alexandre.isMigrated, false)
         done()
       }, (err) => {
         done(err)

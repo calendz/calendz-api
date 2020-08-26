@@ -17,5 +17,6 @@
         "mocha"
     ],
     "rules": {
+        "quotes": [2, "single", { "allowTemplateLiterals": true }]
     }
 }

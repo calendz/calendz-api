@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
   const task = await TasksService.create(author, date, type, title, description, subject, school, city, grade, group, targets)
 
   // push notifications to every user affected by the task
-  let notifDate = dateUtil.dateToFullString(dateUtil.timestampToDate(date))
+  const notifDate = dateUtil.dateToFullString(dateUtil.timestampToDate(date))
   let notifTitle = `Une tâche vient d'être ajoutée !`
   let notifMsg = `La tâche ${title} vient d'être ajoutée pour le <b>${notifDate}</b>.`
   let notifIcon = `fas fa-tasks`
@@ -56,6 +56,7 @@ exports.create = async (req, res) => {
 
   // task for whole class
   if (!targets.length && school && city && grade && group) {
+    const targetsToNotify = []
     const users = await UserService.findAll({ school, city, grade, group })
 
     for (const user of users) {
@@ -68,9 +69,12 @@ exports.create = async (req, res) => {
         await mailer.sendTaskCreate(user.email, user.firstname, title, `${_user.firstname} ${_user.lastname}`, notifDate)
       }
 
-      // create notification
-      targets.push(user._id)
+      // add to notification list
+      targetsToNotify.push(user._id)
     }
+
+    // send notifications
+    await NotificationsService.createMany(targetsToNotify, notifTitle, notifMsg, notifIcon, notifType)
 
   // task for targets
   } else {

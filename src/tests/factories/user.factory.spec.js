@@ -57,6 +57,10 @@ describe('./mock/factories/user.factory', () => {
         assert.isDefined(user.isActive)
       })
 
+      it('should have a isMigrated', () => {
+        assert.isDefined(user.isMigrated)
+      })
+
       it('should have a hasInformationMails', () => {
         assert.isDefined(user.hasInformationMails)
       })
@@ -98,6 +102,7 @@ describe('./mock/factories/user.factory', () => {
         bts: true,
         permissionLevel: 'MEMBER',
         isActive: true,
+        isMigrated: true,
         hasInformationMails: false,
         creationDate: '1565791447',
         lastActiveDate: '1565494877',
@@ -155,6 +160,10 @@ describe('./mock/factories/user.factory', () => {
 
       it('should have a isActive', () => {
         assert.strictEqual(user.isActive, true)
+      })
+
+      it('should have a isMigrated', () => {
+        assert.strictEqual(user.isMigrated, true)
       })
 
       it('should have a hasInformationMails', () => {

@@ -29,7 +29,17 @@ exports.create = async (firstname, lastname, email, password, grade, group, city
   return user
 }
 
-exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _isActive) => {
+exports.migrate = async (userId, _grade, _group, _city, _bts) => {
+  const user = await User.findById(userId)
+  user.grade = _grade
+  user.group = _group
+  user.bts = _bts
+  user.city = _city
+  user.isMigrated = true
+  await user.save()
+}
+
+exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _permissionLevel, _grade, _group, _city, _bts, _hasInformationMails, _isActive) => {
   const user = await User.findById(userId)
   user.firstname = _firstname
   user.lastname = _lastname
@@ -39,6 +49,7 @@ exports.updateUserInformations = async (userId, _firstname, _lastname, _email, _
   user.group = _group
   user.bts = _bts
   user.city = _city
+  user.hasInformationMails = _hasInformationMails
   user.isActive = _isActive
   await user.save()
 }

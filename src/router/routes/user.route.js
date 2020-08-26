@@ -20,6 +20,13 @@ router.post('/', [
   UserController.create
 ])
 
+// Account migration
+router.post('/migrate', [
+  TokenValidationMiddleware.hasValidToken('ACCOUNT_MIGRATION'),
+  UserVerificationMiddleware.hasValidMigrationFields,
+  UserController.migrate
+])
+
 // Fetch current user's data
 router.get('/fetch', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
@@ -83,6 +90,13 @@ router.delete('/:userId', [
   UserVerificationMiddleware.hasValidId,
   UserVerificationMiddleware.isNotSelf,
   UserController.deleteAccount
+])
+
+// Fetch user by its id
+router.get('/:userId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  UserController.getById
 ])
 
 // ===========================================

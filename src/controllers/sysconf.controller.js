@@ -27,6 +27,10 @@ exports.getStats = async (req, res) => {
           inactive: _users.filter(u => !u.isActive).length,
           mailing: _users.filter(u => u.hasInformationMails).length,
           bts: _users.filter(u => u.bts).length,
+          epsi: _users.filter(u => u.school === 'EPSI').length,
+          wis: _users.filter(u => u.school === 'WIS').length,
+          migrated: _users.filter(u => u.isMigrated).length,
+          neverMigrated: _users.filter(u => !u.isMigrated && (u.grade === 'I2' || u.grade === 'WIS5')).length,
           activeAccount: {
             lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate)).length,
             lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.lastActiveDate, 2)).length,
@@ -108,6 +112,20 @@ exports.getStats = async (req, res) => {
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Nantes').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Nantes').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Nantes').length
+          },
+          rennes: {
+            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Rennes').length,
+            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Rennes').length,
+            b3: _users.filter(u => u.grade === 'B3' && u.city === 'Rennes').length,
+            i1: _users.filter(u => u.grade === 'I1' && u.city === 'Rennes').length,
+            i2: _users.filter(u => u.grade === 'I2' && u.city === 'Rennes').length
+          },
+          toulouse: {
+            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Toulouse').length,
+            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Toulouse').length,
+            b3: _users.filter(u => u.grade === 'B3' && u.city === 'Toulouse').length,
+            i1: _users.filter(u => u.grade === 'I1' && u.city === 'Toulouse').length,
+            i2: _users.filter(u => u.grade === 'I2' && u.city === 'Toulouse').length
           },
           paris: {
             b1: _users.filter(u => u.grade === 'B1' && u.city === 'Paris').length,
@@ -201,6 +219,20 @@ exports.getStats = async (req, res) => {
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Nantes').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Nantes').length
           },
+          rennes: {
+            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Rennes').length,
+            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Rennes').length,
+            b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Rennes').length,
+            i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Rennes').length,
+            i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Rennes').length
+          },
+          toulouse: {
+            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Toulouse').length,
+            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Toulouse').length,
+            b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Toulouse').length,
+            i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Toulouse').length,
+            i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Toulouse').length
+          },
           paris: {
             b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Paris').length,
             b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Paris').length,
@@ -238,5 +270,10 @@ exports.toggleRegister = async (req, res) => {
 // delete all refresh tokens (disconnects all users)
 exports.deleteAllRefreshTokens = async (req, res) => {
   await SysconfService.deleteAllRefreshTokens()
+  return res.status(200).json({})
+}
+
+exports.migrateAllAccounts = async (req, res) => {
+  await SysconfService.migrateAllAccounts()
   return res.status(200).json({})
 }
