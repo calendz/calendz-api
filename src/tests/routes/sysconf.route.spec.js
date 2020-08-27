@@ -129,6 +129,42 @@ describe('./routes/sysconf.route', () => {
     })
   })
 
+  // ====================================================================================
+  // == PATCH /v1/sysconf/settings/edit-group-enabled/:value - update edit-group-enabled
+  // ====================================================================================
+  describe('PATCH /v1/sysconf/settings/edit-group-enabled/:value - update edit-group-enabled', async () => {
+    authHelper.requireAuth('patch', '/v1/sysconf/settings/edit-group-enabled/false')
+    authHelper.requireAdmin('patch', '/v1/sysconf/settings/edit-group-enabled/false')
+
+    it('should fail (412) : value is not a boolean', (done) => {
+      request(app).patch('/v1/sysconf/settings/edit-group-enabled/azeaze').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Veuillez spécifier une valeur`)
+          done()
+        })
+    })
+
+    it('shoud success (200) : edit-group-enabled is now false', (done) => {
+      request(app).patch('/v1/sysconf/settings/edit-group-enabled/false').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('shoud success (200) : edit-group-enabled is now true', (done) => {
+      request(app).patch('/v1/sysconf/settings/edit-group-enabled/true').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
   // ==========================================================================
   // == DELETE /v1/sysconf/refresh-tokens/all - delete all refresh tokens
   // ==========================================================================

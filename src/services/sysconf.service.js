@@ -14,7 +14,8 @@ exports.initSettings = async () => {
       env: 'production',
       settings: {
         loginEnabled: true,
-        registerEnabled: true
+        registerEnabled: true,
+        updateEditGroupEnabled: false
       }
     })
   }
@@ -26,6 +27,10 @@ exports.updateLoginEnabled = async (value) => {
 
 exports.updateRegisterEnabled = async (value) => {
   await Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.registerEnabled': value })
+}
+
+exports.updateEditGroupEnabled = async (value) => {
+  await Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.editGroupEnabled': value })
 }
 
 exports.deleteAllRefreshTokens = async () => {

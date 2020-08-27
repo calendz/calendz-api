@@ -37,6 +37,14 @@ router.patch('/settings/register-enabled/:value', [
   SysconfController.toggleRegister
 ])
 
+// Toggle register state
+router.patch('/settings/edit-group-enabled/:value', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  ValueVerificationMiddleware.isBoolean,
+  SysconfController.toggleEditGroup
+])
+
 // Delete all refresh tokens (disconnects all users)
 router.delete('/refresh-tokens/all', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
