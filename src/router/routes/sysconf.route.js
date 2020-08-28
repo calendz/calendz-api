@@ -10,7 +10,6 @@ const router = express.Router()
 // Get all system settings
 router.get('/settings', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
-  PermissionVerificationMiddleware.isAdmin,
   SysconfController.getSettings
 ])
 

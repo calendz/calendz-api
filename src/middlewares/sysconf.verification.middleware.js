@@ -30,3 +30,15 @@ exports.isLoginEnabled = async (req, res, next) => {
 
   return next()
 }
+
+exports.isEditGroupEnabled = async (req, res, next) => {
+  const settings = await SysconfService.getSettings()
+
+  if (!settings.editGroupEnabled) {
+    return res.status(403).json({
+      message: `Vous ne pouvez pas modifier votre groupe ! Contactez un administrateur.`
+    })
+  }
+
+  return next()
+}

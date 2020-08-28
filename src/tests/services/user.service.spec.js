@@ -115,20 +115,22 @@ describe('./services/user.service', () => {
     })
   })
 
-  describe('#setBts', () => {
-    it('should set user\'s bts to true', (done) => {
-      UserService.setBts(userId, true).then(() => {
+  describe('#updateProfile', () => {
+    it('should update both user\'s bts and group', (done) => {
+      UserService.updateProfile(userId, { bts: true, group: 'G3' }).then(() => {
         User.findById(userId).then((user) => {
           assert.isTrue(user.bts)
+          assert.equal(user.group, 'G3')
           done()
         })
       })
     })
 
-    it('should set user\'s bts to false', (done) => {
-      UserService.setBts(userId, false).then(() => {
+    it('should update both user\'s bts and group', (done) => {
+      UserService.updateProfile(userId, { bts: false, group: 'G1' }).then(() => {
         User.findById(userId).then((user) => {
           assert.isFalse(user.bts)
+          assert.equal(user.group, 'G1')
           done()
         })
       })

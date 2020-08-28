@@ -11,7 +11,6 @@ describe('./routes/sysconf.route', () => {
   // ===============================================
   describe('GET /v1/sysconf/settings - get settings', async () => {
     authHelper.requireAuth('get', '/v1/sysconf/settings')
-    authHelper.requireAdmin('get', '/v1/sysconf/settings')
 
     it('shoud success (200) : got settings', (done) => {
       request(app).get('/v1/sysconf/settings').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
