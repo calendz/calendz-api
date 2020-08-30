@@ -95,11 +95,12 @@ exports.create = async (req, res) => {
   })
 }
 
-exports.changeBts = async (req, res) => {
-  const _value = req.params.value
+exports.updateProfile = async (req, res) => {
   const _userId = req.decodedUserId
+  const _bts = req.body.bts
+  const _group = req.body.group
 
-  await UserService.setBts(_userId, _value)
+  await UserService.updateProfile(_userId, { bts: _bts, group: _group })
 
   return res.status(200).json({
     message: 'Modification effectué avec succès'

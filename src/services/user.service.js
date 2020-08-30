@@ -60,6 +60,13 @@ exports.updateLastActiveDate = async (userId) => {
   await user.save()
 }
 
+exports.updateProfile = async (userId, { bts = null, group = null }) => {
+  const user = await User.findOne({ _id: userId })
+  if (bts !== null) user.bts = bts
+  if (group !== null) user.group = group
+  await user.save()
+}
+
 exports.deleteAccount = async (userId) => {
   await User.findByIdAndDelete(userId)
   await Notification.deleteMany({
@@ -101,12 +108,6 @@ exports.findAll = async (search = {}) => {
 exports.setActive = async (userId, value) => {
   const user = await User.findById(userId)
   user.isActive = value
-  await user.save()
-}
-
-exports.setBts = async (userId, value) => {
-  const user = await User.findOne({ _id: userId })
-  user.bts = value
   await user.save()
 }
 

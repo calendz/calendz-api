@@ -48,10 +48,10 @@ router.post('/password-reset', [
 ])
 
 // Changement champ bts utilisateur
-router.patch('/bts/:value', [
+router.patch('/profile', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
-  ValueVerificationMiddleware.isBoolean,
-  UserController.changeBts
+  SysconfVerificationMiddleware.isEditGroupEnabled,
+  UserController.updateProfile
 ])
 
 // Changement du mot de passe utilisateur

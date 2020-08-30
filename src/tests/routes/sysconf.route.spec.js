@@ -11,7 +11,6 @@ describe('./routes/sysconf.route', () => {
   // ===============================================
   describe('GET /v1/sysconf/settings - get settings', async () => {
     authHelper.requireAuth('get', '/v1/sysconf/settings')
-    authHelper.requireAdmin('get', '/v1/sysconf/settings')
 
     it('shoud success (200) : got settings', (done) => {
       request(app).get('/v1/sysconf/settings').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
@@ -121,6 +120,42 @@ describe('./routes/sysconf.route', () => {
 
     it('shoud success (200) : register-enabled is now true', (done) => {
       request(app).patch('/v1/sysconf/settings/register-enabled/true').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
+
+  // ====================================================================================
+  // == PATCH /v1/sysconf/settings/edit-group-enabled/:value - update edit-group-enabled
+  // ====================================================================================
+  describe('PATCH /v1/sysconf/settings/edit-group-enabled/:value - update edit-group-enabled', async () => {
+    authHelper.requireAuth('patch', '/v1/sysconf/settings/edit-group-enabled/false')
+    authHelper.requireAdmin('patch', '/v1/sysconf/settings/edit-group-enabled/false')
+
+    it('should fail (412) : value is not a boolean', (done) => {
+      request(app).patch('/v1/sysconf/settings/edit-group-enabled/azeaze').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `Veuillez spécifier une valeur`)
+          done()
+        })
+    })
+
+    it('shoud success (200) : edit-group-enabled is now false', (done) => {
+      request(app).patch('/v1/sysconf/settings/edit-group-enabled/false').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+
+    it('shoud success (200) : edit-group-enabled is now true', (done) => {
+      request(app).patch('/v1/sysconf/settings/edit-group-enabled/true').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
