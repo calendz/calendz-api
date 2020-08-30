@@ -26,9 +26,9 @@ L'API de calendz est développée avec les frameworks et outils suivants* :
 
 | Librairie        | Version | Description                                                                                      |
 | ---------------- | ------- | ------------------------------------------------------------------------------------------------ |
-| [Node.js]        | 10.15.3 | Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.                         |
-| [Express]        | 4.17.1  | Fast, unopinionated, minimalist web framework for Node.js                                        |
-| [Mongoose]       | 5.6.0   | Elegant MongoDB object modeling for Node.js                                                      |
+| [Node.js]        | 12.18.3 | Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.                         |
+| [Express]        | 4.16.4  | Fast, unopinionated, minimalist web framework for Node.js                                        |
+| [Mongoose]       | 5.10.0  | Elegant MongoDB object modeling for Node.js                                                      |
 | [JsonWebToken]   | 8.5.1   | Industry standard RFC 7519 method for representing claims securely between two parties.          |
 | [Mailgun-js]     | 0.22.0  | A simple Node.js helper module for Mailgun API.                                                  |
 
@@ -38,12 +38,12 @@ L'API de calendz est développée avec les frameworks et outils suivants* :
 
 ### Pré-requis
 
-* Installer Node 10.15.3 et MongoDB 3.6
+* Installer Node 12.18.3 et MongoDB 3.6
 * Créer un fichier `.env` à la source de ce repository contenant les valeurs suivantes (modifiables selon vos besoins)
 
       NODE_ENV=development
 
-      FRONT_URL=http://localhost:8080/#/
+      FRONT_URL=http://localhost:8080
 
       APP_PORT=3001
       APP_PORT_TEST=3002
