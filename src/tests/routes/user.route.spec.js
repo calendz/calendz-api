@@ -739,32 +739,39 @@ describe('./routes/user.route', () => {
   })
 
   // ==============================================================================
-  // == PATCH /v1/user/bts/:value - toggle bts
+  // == PATCH /v1/user/profile - update user's profile
   // ==============================================================================
-  describe('PATCH /v1/user/bts/:value - changement valeur bts', () => {
-    authHelper.requireAuth('patch', '/v1/user/bts/true')
+  describe('PATCH /v1/user/profile - mise à jour profil', () => {
+    authHelper.requireAuth('patch', '/v1/user/profile')
 
-    it('should fail (412) : invalid value', (done) => {
-      request(app).patch('/v1/user/bts/someInvalidValue').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(412)
-        .end((err, res) => {
-          if (err) return done(err)
-          helper.hasBodyMessage(res.body, 'Veuillez spécifier une valeur')
-          done()
-        })
+    it('should fail (403) : edit group disabled', (done) => {
+      Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.editGroupEnabled': false }).then(() => {
+        request(app).patch('/v1/user/profile').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+          .send({ bts: true, group: 'G3' })
+          .expect(403)
+          .end((err, res) => {
+            if (err) return done(err)
+            helper.hasBodyMessage(res.body, `Vous ne pouvez pas modifier votre groupe ! Contactez un administrateur.`)
+            done()
+          })
+      })
     })
 
-    it('should success (200) : bts true', (done) => {
-      request(app).patch('/v1/user/bts/true').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          done()
-        })
+    it('should success (200) : bts true, group G3', (done) => {
+      Sysconf.findOneAndUpdate({ env: 'production' }, { 'settings.editGroupEnabled': true }).then(() => {
+        request(app).patch('/v1/user/profile').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+          .send({ bts: true, group: 'G3' })
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err)
+            done()
+          })
+      })
     })
 
-    it('should success (200) : bts false', (done) => {
-      request(app).patch('/v1/user/bts/false').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+    it('should success (200) : bts false, group G1', (done) => {
+      request(app).patch('/v1/user/profile').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ bts: false, group: 'G1' })
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)

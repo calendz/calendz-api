@@ -9,7 +9,8 @@ exports.getSettings = async (req, res) => {
 
   return res.status(200).json({
     loginEnabled: settings.loginEnabled,
-    registerEnabled: settings.registerEnabled
+    registerEnabled: settings.registerEnabled,
+    editGroupEnabled: settings.editGroupEnabled
   })
 }
 
@@ -264,6 +265,13 @@ exports.toggleLogin = async (req, res) => {
 exports.toggleRegister = async (req, res) => {
   const _value = req.params.value
   await SysconfService.updateRegisterEnabled(_value)
+  return res.status(200).json({})
+}
+
+// toggle editGroup state
+exports.toggleEditGroup = async (req, res) => {
+  const _value = req.params.value
+  await SysconfService.updateEditGroupEnabled(_value)
   return res.status(200).json({})
 }
 

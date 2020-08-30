@@ -10,7 +10,6 @@ const router = express.Router()
 // Get all system settings
 router.get('/settings', [
   JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
-  PermissionVerificationMiddleware.isAdmin,
   SysconfController.getSettings
 ])
 
@@ -35,6 +34,14 @@ router.patch('/settings/register-enabled/:value', [
   PermissionVerificationMiddleware.isAdmin,
   ValueVerificationMiddleware.isBoolean,
   SysconfController.toggleRegister
+])
+
+// Toggle register state
+router.patch('/settings/edit-group-enabled/:value', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  ValueVerificationMiddleware.isBoolean,
+  SysconfController.toggleEditGroup
 ])
 
 // Delete all refresh tokens (disconnects all users)
