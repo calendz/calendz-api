@@ -10,11 +10,13 @@ const RefreshModel = require('../models/refresh.model')
 const NotificationModel = require('../models/notification.model')
 const SysconfModel = require('../models/sysconf.model')
 const TaskModel = require('../models/task.model')
+const GradeModel = require('../models/grade.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
 const Notification = require('../mock/factories/notification.factory')
 const Task = require('../mock/factories/task.factory')
+const Grade = require('../mock/factories/grade.factory')
 
 if (config.node_env === 'mock') {
   initMongo(async () => {
@@ -42,6 +44,7 @@ module.exports.removeAllData = async function removeAllData () {
     await NotificationModel.deleteMany({})
     await SysconfModel.deleteMany({})
     await TaskModel.deleteMany({})
+    await GradeModel.deleteMany({})
     logger.warn('POPULATE: successfully removed all data')
   } catch (err) {
     logger.error(err)
@@ -379,6 +382,8 @@ module.exports.seedData = async function seedData () {
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
     await NotificationModel.insertMany(generateNotifications(10, user2._id))
+    await GradeModel.insertMany(generateGrades(15, user1._id))
+    await GradeModel.insertMany(generateGrades(15, user2._id))
   } catch (err) {
     logger.error(err)
   }
@@ -404,6 +409,14 @@ function generateNotifications (amount, userId) {
   const array = []
   for (let i = 0; i < amount; i++) {
     array.push(new Notification({ user: userId }))
+  }
+  return array
+}
+
+function generateGrades (amount, userId) {
+  const array = []
+  for (let i = 0; i < amount; i++) {
+    array.push(new Grade({ user: userId }))
   }
   return array
 }
