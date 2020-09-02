@@ -379,6 +379,27 @@ module.exports.seedData = async function seedData () {
 
     await TaskModel.insertMany([task1, task2, task3, task4, task5ToDelete, task6])
 
+    const grade1 = new GradeModel({
+      _id: '1b2c45bb352ad495f9583bd3',
+      user: user2._id,
+      value: 19.5,
+      coefficient: 2,
+      subject: 'Anglais',
+      date: '1590357529',
+      description: 'DS fait en cours'
+    })
+    await grade1.save()
+
+    const grade2 = new GradeModel({
+      user: user2._id,
+      value: 18.5,
+      coefficient: 1,
+      subject: 'Anglais',
+      // default date
+      description: 'Présentation orale'
+    })
+    await grade2.save()
+
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
     await NotificationModel.insertMany(generateNotifications(10, user2._id))
