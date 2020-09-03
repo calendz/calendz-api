@@ -395,7 +395,7 @@ module.exports.seedData = async function seedData () {
       value: 18.5,
       coefficient: 1,
       subject: 'Anglais',
-      // default date
+      date: Date.now(),
       description: 'Présentation orale'
     })
     await grade2.save()
