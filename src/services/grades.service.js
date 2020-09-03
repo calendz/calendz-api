@@ -18,3 +18,21 @@ exports.getAllFrom = async (userId) => {
 
   return grades
 }
+
+// ================================================
+// == Methods
+// ================================================
+
+exports.create = async (user, value, coefficient, subject, date, description) => {
+  const grade = new Grade({
+    user,
+    value,
+    coefficient,
+    subject,
+    date,
+    description
+  })
+
+  await grade.save()
+  return grade
+}
