@@ -69,4 +69,12 @@ describe('./services/grades.service', () => {
       }).catch(err => done(err))
     })
   })
+
+  describe('#delete', () => {
+    it('should delete a task', (done) => {
+      GradesService.delete(gradeId).then(() => {
+        done()
+      }).catch(err => done(err))
+    })
+  })
 })

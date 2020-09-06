@@ -347,4 +347,40 @@ describe('./routes/grades.route', () => {
         })
     })
   })
+
+  // ===================================================================
+  // == DELETE /v1/grades/:gradeId - delete a grade
+  // ===================================================================
+  describe(`DELETE /v1/grades/:gradeId - delete a grade`, () => {
+    authHelper.requireAuth('delete', '/v1/grades/2a2c45bb452ad495f9583bd3')
+
+    it('should fail (404) : grade not found', (done) => {
+      request(app).delete('/v1/grades/2a2c45bb452ad495f9583bc1').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucune note correspondante')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).delete('/v1/grades/azeaze').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
+    it('should success (200) : grade deleted', (done) => {
+      request(app).delete('/v1/grades/2a2c45bb452ad495f9583bd3').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          done()
+        })
+    })
+  })
 })
