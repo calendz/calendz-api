@@ -6,7 +6,7 @@ module.exports = class Grade {
     user = mongoose.Types.ObjectId(),
     value = faker.random.number(20),
     coefficient = faker.random.arrayElement([1, 2, 3, 4]),
-    subject = faker.random.word(),
+    subject = faker.random.arrayElement(['Français', 'Anglais', 'Communication', 'Mathématiques', 'C++', 'Gestion de projet']),
     date = new Date(faker.date.recent(-30)).getTime(),
     description = faker.random.words(6)
   }) {
