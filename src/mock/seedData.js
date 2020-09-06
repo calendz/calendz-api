@@ -400,6 +400,18 @@ module.exports.seedData = async function seedData () {
     })
     await grade2.save()
 
+    // test modify grade
+    const grade3 = new GradeModel({
+      _id: '2a2c45bb452ad495f9583bd3',
+      user: user2._id,
+      value: 18.5,
+      coefficient: 1,
+      subject: 'Anglais',
+      date: Date.now(),
+      description: 'Présentation orale'
+    })
+    await grade3.save()
+
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
     await NotificationModel.insertMany(generateNotifications(10, user2._id))

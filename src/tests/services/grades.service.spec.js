@@ -55,4 +55,18 @@ describe('./services/grades.service', () => {
       }).catch(err => done(err))
     })
   })
+
+  describe('#modify', () => {
+    it('should modify a grade', (done) => {
+      GradesService.modify(gradeId, user, 0.5, coefficient, date, 'Une nouvelle description').then(grade => {
+        assert.strictEqual(grade.value, 0.5)
+        assert.strictEqual(grade.coefficient, coefficient)
+        assert.strictEqual(grade.date, date.toString())
+        assert.strictEqual(grade.description, 'Une nouvelle description')
+        assert.isTrue(grade._id instanceof mongoose.mongo.ObjectID)
+        assert.isTrue(grade.user instanceof mongoose.mongo.ObjectID)
+        done()
+      }).catch(err => done(err))
+    })
+  })
 })
