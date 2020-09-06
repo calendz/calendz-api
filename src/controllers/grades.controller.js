@@ -29,3 +29,11 @@ exports.modify = async (req, res) => {
     grade
   })
 }
+
+exports.delete = async (req, res) => {
+  const _gradeId = req.params.gradeId
+  await GradesService.delete(_gradeId)
+  return res.status(200).json({
+    message: 'La note a bien été supprimée'
+  })
+}

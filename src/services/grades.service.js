@@ -47,3 +47,7 @@ exports.modify = async (gradeId, user, value, coefficient, date, description) =>
   grade = await grade.save()
   return grade
 }
+
+exports.delete = async (gradeId) => {
+  await Grade.deleteOne({ _id: gradeId })
+}

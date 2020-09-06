@@ -21,4 +21,11 @@ router.patch('/:gradeId', [
   GradesController.modify
 ])
 
+// Suppression d'une note
+router.delete('/:gradeId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  GradesVerificationMiddleware.hasValidId,
+  GradesController.delete
+])
+
 module.exports = router
