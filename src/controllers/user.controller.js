@@ -5,6 +5,7 @@ const mailer = require('../config/mailgun')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
 const TasksService = require('../services/tasks.service')
+const GradesService = require('../services/grades.service')
 const NotificationsService = require('../services/notifications.service')
 const NotificationModel = require('../models/notification.model')
 
@@ -34,11 +35,13 @@ exports.fetch = async (req, res) => {
   const user = await UserService.findOne({ _id: _userId })
   const notifications = await NotificationsService.getAllFrom(_userId)
   const tasks = await TasksService.getAllFrom(_userId)
+  const grades = await GradesService.getAllFrom(_userId)
 
   return res.status(200).json({
     user,
     notifications,
-    tasks
+    tasks,
+    grades
   })
 }
 

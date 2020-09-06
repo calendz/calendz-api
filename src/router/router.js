@@ -5,6 +5,7 @@ const notificationsRoutes = require('./routes/notifications.route')
 const sysconfRoutes = require('./routes/sysconf.route')
 const miscRoutes = require('./routes/misc.route')
 const tasksRoutes = require('./routes/tasks.route')
+const gradesRoutes = require('./routes/grades.route')
 
 const router = express.Router()
 
@@ -14,6 +15,7 @@ router.use('/user', userRoutes)
 router.use('/notifications', notificationsRoutes)
 router.use('/sysconf', sysconfRoutes)
 router.use('/tasks', tasksRoutes)
+router.use('/grades', gradesRoutes)
 
 // Other routes
 router.use('/', miscRoutes)

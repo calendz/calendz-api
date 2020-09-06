@@ -356,6 +356,8 @@ describe('./routes/user.route', () => {
           assert.isArray(res.body.tasks)
           assert.isDefined(res.body.notifications)
           assert.isArray(res.body.notifications)
+          assert.isDefined(res.body.grades)
+          assert.isArray(res.body.grades)
           done()
         })
     })
