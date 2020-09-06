@@ -14,3 +14,18 @@ exports.create = async (req, res) => {
     grade
   })
 }
+
+exports.modify = async (req, res) => {
+  const _gradeId = req.params.gradeId
+  const _user = req.decodedUserId
+  const _value = req.body.value
+  const _coefficient = req.body.coefficient
+  const _date = req.body.date
+  const _description = req.body.description
+
+  const grade = await GradesService.modify(_gradeId, _user, _value, _coefficient, _date, _description)
+
+  return res.status(200).json({
+    grade
+  })
+}

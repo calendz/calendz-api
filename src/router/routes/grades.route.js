@@ -13,4 +13,12 @@ router.post('/', [
   GradesController.create
 ])
 
+// Mise à jour d'une note
+router.patch('/:gradeId', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  GradesVerificationMiddleware.hasValidId,
+  GradesVerificationMiddleware.hasUpdateFields,
+  GradesController.modify
+])
+
 module.exports = router

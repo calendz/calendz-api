@@ -36,3 +36,14 @@ exports.create = async (user, value, coefficient, subject, date, description) =>
   await grade.save()
   return grade
 }
+
+exports.modify = async (gradeId, user, value, coefficient, date, description) => {
+  let grade = await Grade.findOne({ _id: gradeId, user })
+  grade.value = value
+  grade.coefficient = coefficient
+  grade.date = date
+  grade.description = description
+
+  grade = await grade.save()
+  return grade
+}
