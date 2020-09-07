@@ -29,7 +29,7 @@ exports.create = async (user, value, coefficient, subject, date, description) =>
     value,
     coefficient,
     subject,
-    date,
+    date: new Date(date).getTime(),
     description
   })
 
@@ -41,7 +41,7 @@ exports.modify = async (gradeId, user, value, coefficient, date, description) =>
   let grade = await Grade.findOne({ _id: gradeId, user })
   grade.value = value
   grade.coefficient = coefficient
-  grade.date = date
+  grade.date = new Date(date).getTime()
   grade.description = description
 
   grade = await grade.save()
