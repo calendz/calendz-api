@@ -21,7 +21,6 @@ describe('./services/grades.service', () => {
         assert.strictEqual(grade.value, value)
         assert.strictEqual(grade.coefficient, coefficient)
         assert.strictEqual(grade.subject, subject)
-        assert.strictEqual(grade.date, '1600380000000')
         assert.strictEqual(grade.description, description)
         assert.isTrue(grade._id instanceof mongoose.mongo.ObjectID)
         assert.isTrue(grade.user instanceof mongoose.mongo.ObjectID)
@@ -37,7 +36,6 @@ describe('./services/grades.service', () => {
         assert.strictEqual(grade.value, value)
         assert.strictEqual(grade.coefficient, coefficient)
         assert.strictEqual(grade.subject, subject)
-        assert.strictEqual(grade.date, '1600380000000')
         assert.strictEqual(grade.description, description)
         assert.isTrue(grade._id instanceof mongoose.mongo.ObjectID)
         assert.isTrue(grade.user instanceof mongoose.mongo.ObjectID)
@@ -61,7 +59,6 @@ describe('./services/grades.service', () => {
       GradesService.modify(gradeId, user, 0.5, coefficient, date, 'Une nouvelle description').then(grade => {
         assert.strictEqual(grade.value, 0.5)
         assert.strictEqual(grade.coefficient, coefficient)
-        assert.strictEqual(grade.date, '1600380000000')
         assert.strictEqual(grade.description, 'Une nouvelle description')
         assert.isTrue(grade._id instanceof mongoose.mongo.ObjectID)
         assert.isTrue(grade.user instanceof mongoose.mongo.ObjectID)
