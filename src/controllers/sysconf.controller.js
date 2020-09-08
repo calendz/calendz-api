@@ -41,7 +41,8 @@ exports.getStats = async (req, res) => {
             lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate)).length,
             lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 2)).length,
             lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 6)).length
-          }
+          },
+          lastRegisters: _users.sort((a, b) => (a.creationDate > b.creationDate) ? 1 : -1).slice(Math.max(_users.length - 12, 0))
         },
         grades: {
           b1: _users.filter(u => u.grade === 'B1').length,
