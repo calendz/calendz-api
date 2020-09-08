@@ -178,7 +178,7 @@ describe('./routes/grades.route', () => {
     const value = 1.5
     const coefficient = 2
     const description = 'Description test modify'
-    const date = '04-04-2099'
+    const date = '04-04-2035'
 
     authHelper.requireAuth('patch', '/v1/grades/2a2c45bb452ad495f9583bd3', { value, coefficient, description, date })
 
@@ -297,7 +297,6 @@ describe('./routes/grades.route', () => {
           assert.isDefined(res.body.grade)
           assert.strictEqual(res.body.grade.value, value)
           assert.strictEqual(res.body.grade.coefficient, coefficient)
-          assert.strictEqual(res.body.grade.date, '4078936800000')
           assert.strictEqual(res.body.grade.description, description)
           done()
         })
@@ -312,7 +311,6 @@ describe('./routes/grades.route', () => {
           assert.isDefined(res.body.grade)
           assert.notStrictEqual(res.body.grade.value, value)
           assert.strictEqual(res.body.grade.coefficient, coefficient)
-          assert.strictEqual(res.body.grade.date, '4078936800000')
           assert.strictEqual(res.body.grade.description, description)
           done()
         })
@@ -326,7 +324,6 @@ describe('./routes/grades.route', () => {
           if (err) return done(err)
           assert.strictEqual(res.body.grade.value, value)
           assert.notStrictEqual(res.body.grade.coefficient, coefficient)
-          assert.strictEqual(res.body.grade.date, '4078936800000')
           assert.strictEqual(res.body.grade.description, description)
           done()
         })
@@ -341,7 +338,6 @@ describe('./routes/grades.route', () => {
           assert.isDefined(res.body.grade)
           assert.strictEqual(res.body.grade.value, value)
           assert.strictEqual(res.body.grade.coefficient, coefficient)
-          assert.strictEqual(res.body.grade.date, '4078936800000')
           assert.notStrictEqual(res.body.grade.description, description)
           done()
         })
