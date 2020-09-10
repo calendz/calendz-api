@@ -51,3 +51,10 @@ exports.modify = async (gradeId, user, value, coefficient, date, description) =>
 exports.delete = async (gradeId) => {
   await Grade.deleteOne({ _id: gradeId })
 }
+
+exports.fill = async (gradeId, value) => {
+  let grade = await Grade.findOne({ _id: gradeId })
+  grade.value = value
+  grade = await grade.save()
+  return grade
+}

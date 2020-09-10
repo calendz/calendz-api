@@ -82,6 +82,32 @@ exports.hasUpdateFields = async (req, res, next) => {
   return next()
 }
 
+exports.hasValue = async (req, res, next) => {
+  const _value = req.body.value
+
+  let errors = []
+  if (!_value && _value !== 0) errors.push('Veuillez indiquer la note')
+
+  if (errors.length) {
+    return res.status(412).json({
+      message: 'Certains champs requis sont manquant',
+      errors: errors
+    })
+  }
+
+  errors = []
+  if (_value && (_value < 0 || _value > 20)) errors.push('La note indiquée n\'est pas valide')
+
+  if (errors.length) {
+    return res.status(412).json({
+      message: 'Certains champs requis sont invalides',
+      errors: errors
+    })
+  }
+
+  return next()
+}
+
 // ============================================
 // == database operations
 // ============================================

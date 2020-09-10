@@ -67,6 +67,15 @@ describe('./services/grades.service', () => {
     })
   })
 
+  describe('#fill', () => {
+    it('should fill a grade', (done) => {
+      GradesService.fill(gradeId, 19.5).then(grade => {
+        assert.strictEqual(grade.value, 19.5)
+        done()
+      }).catch(err => done(err))
+    })
+  })
+
   describe('#delete', () => {
     it('should delete a task', (done) => {
       GradesService.delete(gradeId).then(() => {

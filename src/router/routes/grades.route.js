@@ -28,4 +28,12 @@ router.delete('/:gradeId', [
   GradesController.delete
 ])
 
+// Complétion d'une note
+router.patch('/:gradeId/fill', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  GradesVerificationMiddleware.hasValidId,
+  GradesVerificationMiddleware.hasValue,
+  GradesController.fill
+])
+
 module.exports = router

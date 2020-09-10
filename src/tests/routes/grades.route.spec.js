@@ -345,6 +345,85 @@ describe('./routes/grades.route', () => {
   })
 
   // ===================================================================
+  // == PATCH /v1/grades/:gradeId/fill - fill a grade
+  // ===================================================================
+  describe(`PATCH /v1/grades/:gradeId/fill - fill a grade`, () => {
+    const value = 10.25
+
+    authHelper.requireAuth('patch', '/v1/grades/2a2c45bb452ad495f9583bd3/fill', { value })
+
+    it('should fail (404) : grade not found', (done) => {
+      request(app).patch('/v1/grades/1b2c45bb346ba506f9583cc4/fill').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ value })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Aucune note correspondante')
+          done()
+        })
+    })
+
+    it('should fail (422) : ID is not an ObjectID', (done) => {
+      request(app).patch('/v1/grades/azeazeaze/fill').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ value })
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, `ID is not a valid ObjectID`)
+          done()
+        })
+    })
+
+    it('should fail (412) : missing value', (done) => {
+      request(app).patch('/v1/grades/2a2c45bb452ad495f9583bd3/fill').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont manquant')
+          helper.hasBodyErrorsThatContains(res.body, 'Veuillez indiquer la note')
+          done()
+        })
+    })
+
+    it('should fail (412) : invalid value', (done) => {
+      request(app).patch('/v1/grades/2a2c45bb452ad495f9583bd3/fill').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ value: -1 })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La note indiquée n\'est pas valide')
+          done()
+        })
+    })
+
+    it('should fail (412) : invalid value', (done) => {
+      request(app).patch('/v1/grades/2a2c45bb452ad495f9583bd3/fill').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ value: 21 })
+        .expect(412)
+        .end((err, res) => {
+          if (err) return done(err)
+          helper.hasBodyMessage(res.body, 'Certains champs requis sont invalides')
+          helper.hasBodyErrorsThatContains(res.body, 'La note indiquée n\'est pas valide')
+          done()
+        })
+    })
+
+    it('should success (200) : grade modified', (done) => {
+      request(app).patch('/v1/grades/2a2c45bb452ad495f9583bd3/fill').set(helper.defaultSetsWithAccess).expect('Content-Type', /json/)
+        .send({ value })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          assert.isDefined(res.body.grade)
+          assert.strictEqual(res.body.grade.value, value)
+          done()
+        })
+    })
+  })
+
+  // ===================================================================
   // == DELETE /v1/grades/:gradeId - delete a grade
   // ===================================================================
   describe(`DELETE /v1/grades/:gradeId - delete a grade`, () => {
