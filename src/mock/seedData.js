@@ -248,6 +248,56 @@ module.exports.seedData = async function seedData () {
     })
     await user11.save()
 
+    // TESTS: test emails
+    const user12 = new UserModel({
+      firstname: 'Lambert',
+      lastname: 'Ondricka',
+      email: 'lambert.ondricka@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'WIS5',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user12.save()
+    // TESTS: test emails
+    const user13 = new UserModel({
+      firstname: 'Madalyn',
+      lastname: 'Schroeder',
+      email: 'madalyn.schroeder@ecoles-wis.net',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'WIS',
+      grade: 'WIS5',
+      group: 'G1',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user13.save()
+    // TESTS: test emails
+    const user14 = new UserModel({
+      firstname: 'Elbert',
+      lastname: 'Hermiston',
+      email: 'elbert.hermiston@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'I2',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: true,
+      hasInformationMails: true
+    })
+    await user14.save()
+
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',

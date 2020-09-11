@@ -1,4 +1,5 @@
 const assert = require('chai').assert
+const User = require('../../models/user.model')
 const Refresh = require('../../models/refresh.model')
 const Sysconf = require('../../models/sysconf.model')
 const SysconfService = require('../../services/sysconf.service')
@@ -8,6 +9,19 @@ describe('./services/sysconf.service', () => {
   // ===============================================
   // == Methods
   // ===============================================
+  describe('#getMailRecipients', () => {
+    it(`should get emails from all eligible users`, done => {
+      User.findOneAndUpdate({ email: 'elbert.hermiston@epsi.fr' }, { isMigrated: true }).then(() => {
+        SysconfService.getMailRecipients().then(users => {
+          assert.notInclude(users, 'lambert.ondricka@epsi.fr')
+          assert.notInclude(users, 'madalyn.schroeder@ecoles-wis.net')
+          assert.include(users, 'elbert.hermiston@epsi.fr')
+          done()
+        })
+      })
+    })
+  })
+
   describe('#initSettings', () => {
     it('should initialize all settings', (done) => {
       SysconfService.initSettings().then(async () => {
