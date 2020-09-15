@@ -12,7 +12,7 @@ describe('./routes/sysconf.route', () => {
   describe('GET /v1/sysconf/settings - get settings', async () => {
     authHelper.requireAuth('get', '/v1/sysconf/settings')
 
-    it('shoud success (200) : got settings', (done) => {
+    it('should success (200) : got settings', (done) => {
       request(app).get('/v1/sysconf/settings').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -33,7 +33,7 @@ describe('./routes/sysconf.route', () => {
     authHelper.requireAuth('get', '/v1/sysconf/stats')
     authHelper.requireAdmin('get', '/v1/sysconf/stats')
 
-    it('shoud success (200) : got stats', (done) => {
+    it('should success (200) : got stats', (done) => {
       request(app).get('/v1/sysconf/stats').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -49,6 +49,7 @@ describe('./routes/sysconf.route', () => {
           assert.isDefined(res.body.stats.users.users.wis)
           assert.isDefined(res.body.stats.users.users.migrated)
           assert.isDefined(res.body.stats.users.users.neverMigrated)
+          assert.isDefined(res.body.stats.users.users.lastRegisters)
           assert.isDefined(res.body.stats.users.grades)
           assert.isDefined(res.body.stats.users.cities)
           done()
@@ -73,7 +74,7 @@ describe('./routes/sysconf.route', () => {
         })
     })
 
-    it('shoud success (200) : login-enabled is now false', (done) => {
+    it('should success (200) : login-enabled is now false', (done) => {
       request(app).patch('/v1/sysconf/settings/login-enabled/false').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -82,7 +83,7 @@ describe('./routes/sysconf.route', () => {
         })
     })
 
-    it('shoud success (200) : login-enabled is now true', (done) => {
+    it('should success (200) : login-enabled is now true', (done) => {
       request(app).patch('/v1/sysconf/settings/login-enabled/true').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -109,7 +110,7 @@ describe('./routes/sysconf.route', () => {
         })
     })
 
-    it('shoud success (200) : register-enabled is now false', (done) => {
+    it('should success (200) : register-enabled is now false', (done) => {
       request(app).patch('/v1/sysconf/settings/register-enabled/false').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -118,7 +119,7 @@ describe('./routes/sysconf.route', () => {
         })
     })
 
-    it('shoud success (200) : register-enabled is now true', (done) => {
+    it('should success (200) : register-enabled is now true', (done) => {
       request(app).patch('/v1/sysconf/settings/register-enabled/true').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -145,7 +146,7 @@ describe('./routes/sysconf.route', () => {
         })
     })
 
-    it('shoud success (200) : edit-group-enabled is now false', (done) => {
+    it('should success (200) : edit-group-enabled is now false', (done) => {
       request(app).patch('/v1/sysconf/settings/edit-group-enabled/false').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -154,7 +155,7 @@ describe('./routes/sysconf.route', () => {
         })
     })
 
-    it('shoud success (200) : edit-group-enabled is now true', (done) => {
+    it('should success (200) : edit-group-enabled is now true', (done) => {
       request(app).patch('/v1/sysconf/settings/edit-group-enabled/true').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -171,7 +172,7 @@ describe('./routes/sysconf.route', () => {
     authHelper.requireAuth('delete', '/v1/sysconf/refresh-tokens/all')
     authHelper.requireAdmin('delete', '/v1/sysconf/refresh-tokens/all')
 
-    it('shoud success (200) : deleted all refresh tokens', (done) => {
+    it('should success (200) : deleted all refresh tokens', (done) => {
       request(app).delete('/v1/sysconf/refresh-tokens/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -188,7 +189,7 @@ describe('./routes/sysconf.route', () => {
     authHelper.requireAuth('patch', '/v1/sysconf/migrate/all')
     authHelper.requireAdmin('patch', '/v1/sysconf/migrate/all')
 
-    it('shoud success (200) : deleted all refresh tokens', (done) => {
+    it('should success (200) : deleted all refresh tokens', (done) => {
       request(app).patch('/v1/sysconf/migrate/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {

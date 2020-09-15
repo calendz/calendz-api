@@ -227,8 +227,8 @@ exports.isMigrated = async (req, res, next) => {
   const _email = req.body.email
   const user = req.user || await UserService.findOne({ email: _email })
 
-  // cancel login for old i2
-  if (user.grade === 'I2' && !user.isMigrated) {
+  // cancel login for old students
+  if ((user.grade === 'I2' || user.grade === 'WIS5') && !user.isMigrated) {
     return res.status(403).json({
       message: 'Il semblerait que vous ne soyez plus étudiant',
       code: 'OLD_STUDENT'

@@ -1,4 +1,5 @@
 const assert = require('chai').assert
+const User = require('../../models/user.model')
 const Refresh = require('../../models/refresh.model')
 const Sysconf = require('../../models/sysconf.model')
 const SysconfService = require('../../services/sysconf.service')
@@ -8,6 +9,19 @@ describe('./services/sysconf.service', () => {
   // ===============================================
   // == Methods
   // ===============================================
+  describe('#getMailRecipients', () => {
+    it(`should get emails from all eligible users`, done => {
+      User.findOneAndUpdate({ email: 'elbert.hermiston@epsi.fr' }, { isMigrated: true }).then(() => {
+        SysconfService.getMailRecipients().then(users => {
+          assert.notInclude(users, 'lambert.ondricka@epsi.fr')
+          assert.notInclude(users, 'madalyn.schroeder@ecoles-wis.net')
+          assert.include(users, 'elbert.hermiston@epsi.fr')
+          done()
+        })
+      })
+    })
+  })
+
   describe('#initSettings', () => {
     it('should initialize all settings', (done) => {
       SysconfService.initSettings().then(async () => {
@@ -23,7 +37,7 @@ describe('./services/sysconf.service', () => {
   })
 
   describe('#updateLoginEnabled', () => {
-    it('shoud set loginEnabled to false', (done) => {
+    it('should set loginEnabled to false', (done) => {
       SysconfService.updateLoginEnabled(false).then(async () => {
         const system = await Sysconf.findOne({ env: 'production' })
         assert.strictEqual(system.settings.loginEnabled, false)
@@ -33,7 +47,7 @@ describe('./services/sysconf.service', () => {
       })
     })
 
-    it('shoud set loginEnabled to true', (done) => {
+    it('should set loginEnabled to true', (done) => {
       SysconfService.updateLoginEnabled(true).then(async () => {
         const system = await Sysconf.findOne({ env: 'production' })
         assert.strictEqual(system.settings.loginEnabled, true)
@@ -45,7 +59,7 @@ describe('./services/sysconf.service', () => {
   })
 
   describe('#updateRegisterEnabled', () => {
-    it('shoud set registerEnabled to false', (done) => {
+    it('should set registerEnabled to false', (done) => {
       SysconfService.updateRegisterEnabled(false).then(async () => {
         const system = await Sysconf.findOne({ env: 'production' })
         assert.strictEqual(system.settings.registerEnabled, false)
@@ -55,7 +69,7 @@ describe('./services/sysconf.service', () => {
       })
     })
 
-    it('shoud set registerEnabled to true', (done) => {
+    it('should set registerEnabled to true', (done) => {
       SysconfService.updateRegisterEnabled(true).then(async () => {
         const system = await Sysconf.findOne({ env: 'production' })
         assert.strictEqual(system.settings.loginEnabled, true)
@@ -67,7 +81,7 @@ describe('./services/sysconf.service', () => {
   })
 
   describe('#deleteAllRefreshTokens', () => {
-    it('shoud delete all refresh tokens', (done) => {
+    it('should delete all refresh tokens', (done) => {
       SysconfService.deleteAllRefreshTokens().then(async () => {
         const refreshes = await Refresh.find({})
         assert.isEmpty(refreshes)
@@ -79,7 +93,7 @@ describe('./services/sysconf.service', () => {
   })
 
   describe('#migrateAllAccounts', () => {
-    it('shoud set all accounts to isMigrated false', (done) => {
+    it('should set all accounts to isMigrated false', (done) => {
       SysconfService.migrateAllAccounts().then(async () => {
         const alexandre = await UserService.findOne({ email: 'alexandre.tuet@epsi.fr' })
         assert.strictEqual(alexandre.isMigrated, false)
@@ -94,7 +108,7 @@ describe('./services/sysconf.service', () => {
   // == Getters
   // ===============================================
   describe('#getSettings', () => {
-    it('shoud return settings', (done) => {
+    it('should return settings', (done) => {
       SysconfService.getSettings().then(settings => {
         assert.isDefined(settings)
         assert.isDefined(settings.loginEnabled)

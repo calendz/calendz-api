@@ -51,3 +51,15 @@ exports.getSettings = async () => {
     .lean()
   return system ? system.settings : null
 }
+
+exports.getMailRecipients = async () => {
+  const users = await User.find({
+    isActive: true,
+    hasInformationMails: true
+  }).select('-_id grade isMigrated email').lean()
+
+  const emails = []
+  const result = users.filter(user => user.isMigrated || (user.grade !== 'WIS5' && user.grade !== 'I2'))
+  result.forEach(user => { emails.push(user.email) })
+  return emails
+}

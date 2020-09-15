@@ -58,4 +58,10 @@ router.patch('/migrate/all', [
   SysconfController.migrateAllAccounts
 ])
 
+router.post('/mail', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  SysconfController.sendMail
+])
+
 module.exports = router

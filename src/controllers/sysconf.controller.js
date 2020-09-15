@@ -2,6 +2,9 @@ const UserService = require('../services/user.service')
 const TaskService = require('../services/tasks.service')
 const SysconfService = require('../services/sysconf.service')
 const DateUtil = require('../utils/dateUtil')
+const mailer = require('../config/mailgun')
+const config = require('../config/config')
+const logger = require('../config/winston')
 
 // get all system settings
 exports.getSettings = async (req, res) => {
@@ -41,7 +44,8 @@ exports.getStats = async (req, res) => {
             lastDay: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate)).length,
             lastThreeDays: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 2)).length,
             lastWeek: _users.filter(u => DateUtil.isDateInDaysRange(u.creationDate, 6)).length
-          }
+          },
+          lastRegisters: _users.sort((a, b) => (a.creationDate > b.creationDate) ? 1 : -1).slice(Math.max(_users.length - 12, 0))
         },
         grades: {
           b1: _users.filter(u => u.grade === 'B1').length,
@@ -283,5 +287,26 @@ exports.deleteAllRefreshTokens = async (req, res) => {
 
 exports.migrateAllAccounts = async (req, res) => {
   await SysconfService.migrateAllAccounts()
+  return res.status(200).json({})
+}
+
+/* istanbul ignore next */
+exports.sendMail = async (req, res) => {
+  const subject = req.body.subject
+  const title = req.body.title
+  const content = req.body.content
+  const ctaLabel = req.body.ctaLabel
+  const ctaUrl = req.body.ctaUrl
+
+  let recipients = []
+  if (config.node_env === 'production') {
+    recipients = await UserService.getMailRecipients()
+  } else {
+    recipients = ['arthur.dufour@epsi.fr', 'alexandre.tuet@epsi.fr']
+    logger.warn(`recipiends override: ['arthur.dufour@epsi.fr', 'alexandre.tuet@epsi.fr']`)
+  }
+
+  await mailer.sendMail(recipients, subject, title, content, ctaLabel, ctaUrl)
+
   return res.status(200).json({})
 }

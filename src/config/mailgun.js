@@ -96,3 +96,28 @@ exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
     logger.debug(body)
   })
 }
+
+exports.sendMail = async (bcc, subject, title, content, ctaLabel, ctaUrl) => {
+  const to = config.node_env === 'production'
+    ? 'users@calendz.app'
+    : 'arthur.dufour@epsi.fr'
+
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+
+  const data = {
+    from: 'Calendz <no-reply@calendz.app>',
+    to,
+    bcc,
+    subject,
+    template: 'custom',
+    'v:title': title,
+    'v:content': content,
+    'v:ctaLabel': ctaLabel,
+    'v:ctaUrl': ctaUrl
+  }
+
+  mg.messages().send(data, (error, body) => {
+    if (error) logger.error(error)
+    logger.debug(body)
+  })
+}

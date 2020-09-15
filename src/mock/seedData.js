@@ -10,11 +10,13 @@ const RefreshModel = require('../models/refresh.model')
 const NotificationModel = require('../models/notification.model')
 const SysconfModel = require('../models/sysconf.model')
 const TaskModel = require('../models/task.model')
+const GradeModel = require('../models/grade.model')
 
 const User = require('../mock/factories/user.factory')
 const Token = require('../mock/factories/token.factory')
 const Notification = require('../mock/factories/notification.factory')
 const Task = require('../mock/factories/task.factory')
+const Grade = require('../mock/factories/grade.factory')
 
 if (config.node_env === 'mock') {
   initMongo(async () => {
@@ -42,6 +44,7 @@ module.exports.removeAllData = async function removeAllData () {
     await NotificationModel.deleteMany({})
     await SysconfModel.deleteMany({})
     await TaskModel.deleteMany({})
+    await GradeModel.deleteMany({})
     logger.warn('POPULATE: successfully removed all data')
   } catch (err) {
     logger.error(err)
@@ -245,6 +248,56 @@ module.exports.seedData = async function seedData () {
     })
     await user11.save()
 
+    // TESTS: test emails
+    const user12 = new UserModel({
+      firstname: 'Lambert',
+      lastname: 'Ondricka',
+      email: 'lambert.ondricka@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'WIS5',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user12.save()
+    // TESTS: test emails
+    const user13 = new UserModel({
+      firstname: 'Madalyn',
+      lastname: 'Schroeder',
+      email: 'madalyn.schroeder@ecoles-wis.net',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'WIS',
+      grade: 'WIS5',
+      group: 'G1',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: false
+    })
+    await user13.save()
+    // TESTS: test emails
+    const user14 = new UserModel({
+      firstname: 'Elbert',
+      lastname: 'Hermiston',
+      email: 'elbert.hermiston@epsi.fr',
+      password: bcrypt.hashSync('password', 10),
+      permissionLevel: 'MEMBER',
+      school: 'EPSI',
+      grade: 'I2',
+      group: 'G1 (dev)',
+      city: 'Lyon',
+      bts: false,
+      isActive: true,
+      isMigrated: true,
+      hasInformationMails: true
+    })
+    await user14.save()
+
     const token1 = new TokenModel({
       user: user3._id,
       value: 'aValidToken',
@@ -376,9 +429,44 @@ module.exports.seedData = async function seedData () {
 
     await TaskModel.insertMany([task1, task2, task3, task4, task5ToDelete, task6])
 
+    const grade1 = new GradeModel({
+      _id: '1b2c45bb352ad495f9583bd3',
+      user: user2._id,
+      value: 19.5,
+      coefficient: 2,
+      subject: 'Anglais',
+      date: '1590357529',
+      description: 'DS fait en cours'
+    })
+    await grade1.save()
+
+    const grade2 = new GradeModel({
+      user: user2._id,
+      value: 18.5,
+      coefficient: 1,
+      subject: 'Anglais',
+      date: Date.now(),
+      description: 'Présentation orale'
+    })
+    await grade2.save()
+
+    // test modify grade
+    const grade3 = new GradeModel({
+      _id: '2a2c45bb452ad495f9583bd3',
+      user: user2._id,
+      value: 18.5,
+      coefficient: 1,
+      subject: 'Anglais',
+      date: Date.now(),
+      description: 'Présentation orale'
+    })
+    await grade3.save()
+
     await UserModel.insertMany(generateUsers(200))
     await TokenModel.insertMany(generateTokens(200))
     await NotificationModel.insertMany(generateNotifications(10, user2._id))
+    await GradeModel.insertMany(generateGrades(15, user1._id))
+    await GradeModel.insertMany(generateGrades(15, user2._id))
   } catch (err) {
     logger.error(err)
   }
@@ -404,6 +492,14 @@ function generateNotifications (amount, userId) {
   const array = []
   for (let i = 0; i < amount; i++) {
     array.push(new Notification({ user: userId }))
+  }
+  return array
+}
+
+function generateGrades (amount, userId) {
+  const array = []
+  for (let i = 0; i < amount; i++) {
+    array.push(new Grade({ user: userId }))
   }
   return array
 }
