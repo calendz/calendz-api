@@ -64,4 +64,18 @@ router.post('/mail', [
   SysconfController.sendMail
 ])
 
+// Delete all tasks
+router.delete('/tasks/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  SysconfController.deleteAllTasks
+])
+
+// Delete all grades
+router.delete('/grades/all', [
+  JwtVerificationMiddleware.hasValidAccessOrRefreshToken,
+  PermissionVerificationMiddleware.isAdmin,
+  SysconfController.deleteAllGrades
+])
+
 module.exports = router
