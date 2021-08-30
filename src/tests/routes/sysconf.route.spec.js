@@ -198,4 +198,38 @@ describe('./routes/sysconf.route', () => {
         })
     })
   })
+
+  // ==========================================================================
+  // == DELETE /v1/sysconf/grades/all - delete all grades
+  // ==========================================================================
+  // describe('DELETE /v1/sysconf/grades/all - delete all grades', async () => {
+  //   authHelper.requireAuth('delete', '/v1/sysconf/grades/all')
+  //   authHelper.requireAdmin('delete', '/v1/sysconf/grades/all')
+
+  //   it('should success (200) : deleted all grades', (done) => {
+  //     request(app).delete('/v1/sysconf/grades/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+  //       .expect(200)
+  //       .end((err, res) => {
+  //         if (err) return done(err)
+  //         done()
+  //       })
+  //   })
+  // })
+
+  // ==========================================================================
+  // == DELETE /v1/sysconf/tasks/all - delete all tasks
+  // ==========================================================================
+  // describe('DELETE /v1/sysconf/tasks/all - delete all tasks', async () => {
+  //   authHelper.requireAuth('delete', '/v1/sysconf/tasks/all')
+  //   authHelper.requireAdmin('delete', '/v1/sysconf/tasks/all')
+
+  //   it('should success (200) : deleted all tasks', (done) => {
+  //     request(app).delete('/v1/sysconf/tasks/all').set(helper.defaultSetsWithAccessAdmin).expect('Content-Type', /json/)
+  //       .expect(200)
+  //       .end((err, res) => {
+  //         if (err) return done(err)
+  //         done()
+  //       })
+  //   })
+  // })
 })
