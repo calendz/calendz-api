@@ -310,3 +310,15 @@ exports.sendMail = async (req, res) => {
 
   return res.status(200).json({})
 }
+
+// delete all grades
+exports.deleteAllGrades = async (req, res) => {
+  await SysconfService.deleteAllGrades()
+  return res.status(200).json({})
+}
+
+// delete all tasks
+exports.deleteAllTasks = async (req, res) => {
+  await SysconfService.deleteAllTasks()
+  return res.status(200).json({})
+}

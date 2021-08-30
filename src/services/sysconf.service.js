@@ -1,6 +1,8 @@
 const Sysconf = require('../models/sysconf.model')
 const Refresh = require('../models/refresh.model')
 const User = require('../models/user.model')
+const Task = require('../models/task.model')
+const Grade = require('../models/grade.model')
 
 // ================================================
 //  == Methods
@@ -39,6 +41,14 @@ exports.deleteAllRefreshTokens = async () => {
 
 exports.migrateAllAccounts = async () => {
   await User.updateMany({}, { isMigrated: false })
+}
+
+exports.deleteAllTasks = async () => {
+  await Task.deleteMany({})
+}
+
+exports.deleteAllGrades = async () => {
+  await Grade.deleteMany({})
 }
 
 // ================================================
