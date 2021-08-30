@@ -2,6 +2,8 @@ const assert = require('chai').assert
 const User = require('../../models/user.model')
 const Refresh = require('../../models/refresh.model')
 const Sysconf = require('../../models/sysconf.model')
+// const Grade = require('../../models/grade.model')
+// const Task = require('../../models/task.model')
 const SysconfService = require('../../services/sysconf.service')
 const UserService = require('../../services/user.service')
 
@@ -103,6 +105,30 @@ describe('./services/sysconf.service', () => {
       })
     })
   })
+
+  // describe('#deleteAllGrades', () => {
+  //   it('should delete all grades', (done) => {
+  //     SysconfService.deleteAllGrades().then(async () => {
+  //       const grades = await Grade.find({})
+  //       assert.isEmpty(grades)
+  //       done()
+  //     }, (err) => {
+  //       done(err)
+  //     })
+  //   })
+  // })
+
+  // describe('#deleteAllTasks', () => {
+  //   it('should delete all tasks', (done) => {
+  //     SysconfService.deleteAllTasks().then(async () => {
+  //       const tasks = await Task.find({})
+  //       assert.isEmpty(tasks)
+  //       done()
+  //     }, (err) => {
+  //       done(err)
+  //     })
+  //   })
+  // })
 
   // ===============================================
   // == Getters
