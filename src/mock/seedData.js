@@ -78,9 +78,9 @@ module.exports.seedData = async function seedData () {
       type: 'task',
       subject: 'LANGAGE PROGRAMMATION JAVA',
       title: 'A task with a subject',
-      city: null,
-      grade: null,
-      group: null,
+      grade: 'B3',
+      group: 'G1 (dev)',
+      city: 'Lyon',
       targets: [user1._id]
     })
     user1.tasks.done = [task4._id]
@@ -389,8 +389,8 @@ module.exports.seedData = async function seedData () {
       description: `Réviser tout depuis le début de l'année, surtout les threads et la gestion des exceptions + lecture & écriture de fichiers.`,
       school: 'EPSI',
       city: 'Lyon',
-      grade: 'B3',
-      group: 'G1 (dev)'
+      grade: 'SN1',
+      group: 'G1'
     })
     const task3 = new Task({
       author: user2._id,
@@ -398,9 +398,9 @@ module.exports.seedData = async function seedData () {
       type: 'task',
       title: 'Some task title',
       subject: '',
-      city: null,
-      grade: null,
-      group: null,
+      grade: 'SN2',
+      group: 'G1',
+      city: 'Lyon',
       targets: [user2._id, user1._id]
     })
     const task5ToDelete = new Task({
@@ -410,9 +410,9 @@ module.exports.seedData = async function seedData () {
       type: 'task',
       title: 'Un autre exemple de tâche',
       subject: '',
-      city: null,
-      grade: null,
-      group: null,
+      grade: 'B3',
+      group: 'G1 (dev)',
+      city: 'Lyon',
       targets: [user2._id, user1._id]
     })
     const task6 = new Task({

@@ -96,7 +96,7 @@ describe('./mock/factories/user.factory', () => {
         password: 'password',
         avatarUrl: 'https://cdn.discordapp.com/avatars/255065617705467912/b4b7413f8c24e7a5f5fcdee5c2f626da.png?size=2048',
         school: 'EPSI',
-        grade: 'B1',
+        grade: 'SN1',
         group: 'G1',
         city: 'Lyon',
         bts: true,
@@ -139,7 +139,7 @@ describe('./mock/factories/user.factory', () => {
       })
 
       it('should have a grade', () => {
-        assert.strictEqual(user.grade, 'B1')
+        assert.strictEqual(user.grade, 'SN1')
       })
 
       it('should have a group', () => {
