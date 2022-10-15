@@ -1,6 +1,6 @@
 const UserService = require('./user.service')
 const Task = require('../models/task.model')
-const User = require("../models/user.model");
+const User = require('../models/user.model')
 
 // ================================================
 // == Getters
@@ -8,9 +8,9 @@ const User = require("../models/user.model");
 
 exports.findOne = async (search) => {
   const task = await Task.findOne(search)
-      .populate('author', '_id email firstname lastname avatarUrl')
-      .populate('targets', '_id email firstname lastname avatarUrl')
-      .lean()
+    .populate('author', '_id email firstname lastname avatarUrl')
+    .populate('targets', '_id email firstname lastname avatarUrl')
+    .lean()
 
   return task
 }
@@ -24,18 +24,18 @@ exports.getAllFrom = async (userId) => {
       { targets: { $in: [user._id] } }
     ]
   })
-      .populate('author', '_id email firstname lastname avatarUrl')
-      .populate('targets', '_id email firstname lastname avatarUrl')
-      .lean()
+    .populate('author', '_id email firstname lastname avatarUrl')
+    .populate('targets', '_id email firstname lastname avatarUrl')
+    .lean()
 
   return tasks
 }
 
 exports.findAll = async (search = {}) => {
   const tasks = await Task.find(search)
-      .populate('author', '_id grade city')
-      .lean()
-  //console.log(tasks.filter(t => t.author.grade == null))
+    .populate('author', '_id grade city')
+    .lean()
+  // console.log(tasks.filter(t => t.author.grade == null))
   return tasks
 }
 
