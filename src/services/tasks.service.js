@@ -1,6 +1,5 @@
 const UserService = require('./user.service')
 const Task = require('../models/task.model')
-const User = require('../models/user.model')
 
 // ================================================
 // == Getters

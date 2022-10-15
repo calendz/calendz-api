@@ -3,7 +3,6 @@ const User = require('../models/user.model')
 const Notification = require('../models/notification.model')
 const Refresh = require('../models/refresh.model')
 const Token = require('../models/token.model')
-const { forEach } = require('mongoose/lib/statemachine')
 
 // ================================================
 //  == Methods
