@@ -2,8 +2,8 @@ module.exports = {
   // TODO: implement tests
   nextGrade (current) {
     switch (current) {
-      case 'B1': return 'B2'
-      case 'B2': return 'B3'
+      case 'SN1': return 'SN2'
+      case 'SN2': return 'B3'
       case 'B3': return 'I1'
       case 'I1': return 'I2'
       case 'I2': return null
