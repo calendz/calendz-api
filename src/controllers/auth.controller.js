@@ -1,6 +1,6 @@
 const cookie = require('../config/cookie')
 const config = require('../config/config')
-const mailer = require('../config/mailgun')
+const mailer = require('../config/sendinblue')
 const JwtService = require('../services/jwt.service')
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')

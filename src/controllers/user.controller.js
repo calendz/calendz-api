@@ -1,6 +1,6 @@
 const uuidv4 = require('uuid/v4')
 const config = require('../config/config')
-const mailer = require('../config/mailgun')
+const mailer = require('../config/sendinblue')
 
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')

@@ -1,5 +1,5 @@
 const config = require('../config/config')
-const mailer = require('../config/mailgun')
+const mailer = require('../config/sendinblue')
 
 // send email from calendz-front's contact form
 exports.sendContactMail = async (req, res) => {
