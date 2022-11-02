@@ -2,7 +2,7 @@ const TasksService = require('../services/tasks.service')
 const UserService = require('../services/user.service')
 const NotificationsService = require('../services/notifications.service')
 const dateUtil = require('../utils/dateUtil')
-const mailer = require('../config/mailgun')
+const mailer = require('../config/sendinblue')
 
 // return all user's tasks
 exports.getAll = async (req, res) => {
