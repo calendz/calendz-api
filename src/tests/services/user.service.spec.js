@@ -9,7 +9,7 @@ describe('./services/user.service', () => {
   const lastname = 'Doe'
   const email = 'john.doe123@epsi.fr'
   const password = 'password'
-  const grade = 'B1'
+  const grade = 'SN1'
   const group = 'G1'
   const city = 'Lyon'
   let userId
@@ -212,13 +212,13 @@ describe('./services/user.service', () => {
 
   describe('#updateUserInformations', () => {
     it('should update user\'s informations', done => {
-      UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'B1', 'G2', 'Paris', true, true, true).then(() => {
+      UserService.updateUserInformations(userId, 'test_firstname', 'test_lastname', 'test.email@epsi.fr', 'MEMBER', 'SN1', 'G2', 'Paris', true, true, true).then(() => {
         User.findById(userId).then(user => {
           assert.strictEqual(user.firstname, 'test_firstname')
           assert.strictEqual(user.lastname, 'test_lastname')
           assert.strictEqual(user.email, 'test.email@epsi.fr')
           assert.strictEqual(user.permissionLevel, 'MEMBER')
-          assert.strictEqual(user.grade, 'B1')
+          assert.strictEqual(user.grade, 'SN1')
           assert.strictEqual(user.group, 'G2')
           assert.strictEqual(user.city, 'Paris')
           assert.strictEqual(user.isActive, true)

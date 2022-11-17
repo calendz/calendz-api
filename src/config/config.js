@@ -86,30 +86,23 @@ const config = convict({
       env: 'MAILER_ENABLED'
     },
     api_key: {
-      doc: `Mailgun's API key`,
+      doc: `Sendinblue API key`,
       format: String,
       default: 'notAnApiKey',
-      arg: 'mailer_api_key',
+      arg: 'api_key',
       env: 'MAILER_API_KEY'
-    },
-    domain: {
-      doc: `Mailgun domain`,
-      format: String,
-      default: 'notADomain',
-      arg: 'mailer_domain',
-      env: 'MAILER_DOMAIN'
     },
     host: {
       doc: `Mailgun host`,
-      format: ['api.eu.mailgun.net', 'api.mailgun.net'],
-      default: 'api.eu.mailgun.net',
+      format: String,
+      default: 'api.sendinblue.com',
       arg: 'mailer_host',
       env: 'MAILER_HOST'
     },
     contact: {
       doc: `Email adress`,
       format: 'email',
-      default: 'arthur.dufour@epsi.fr',
+      default: 'doryan.chaigneau@epsi.fr',
       arg: 'mailer_contact',
       env: 'MAILER_CONTACT'
     }

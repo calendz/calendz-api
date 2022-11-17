@@ -1,6 +1,6 @@
 {
   "name": "calendz-api",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "calendz's backend api",
   "private": true,
   "main": "app.js",
@@ -55,6 +55,8 @@
     "mongoose": "^5.10.9",
     "morgan": "^1.10.0",
     "multer": "^1.4.1",
+    "npm": "^8.19.2",
+    "sib-api-v3-sdk": "^8.4.2",
     "util": "^0.12.3",
     "uuid": "^3.4.0",
     "winston": "^3.3.3"

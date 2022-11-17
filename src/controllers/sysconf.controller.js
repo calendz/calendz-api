@@ -2,7 +2,7 @@ const UserService = require('../services/user.service')
 const TaskService = require('../services/tasks.service')
 const SysconfService = require('../services/sysconf.service')
 const DateUtil = require('../utils/dateUtil')
-const mailer = require('../config/mailgun')
+const mailer = require('../config/sendinblue')
 const config = require('../config/config')
 const logger = require('../config/winston')
 
@@ -48,100 +48,100 @@ exports.getStats = async (req, res) => {
           lastRegisters: _users.sort((a, b) => (a.creationDate > b.creationDate) ? 1 : -1).slice(Math.max(_users.length - 12, 0))
         },
         grades: {
-          b1: _users.filter(u => u.grade === 'B1').length,
-          b2: _users.filter(u => u.grade === 'B2').length,
+          sn1: _users.filter(u => u.grade === 'SN1').length,
+          sn2: _users.filter(u => u.grade === 'SN2').length,
           b3: _users.filter(u => u.grade === 'B3').length,
           i1: _users.filter(u => u.grade === 'I1').length,
           i2: _users.filter(u => u.grade === 'I2').length
         },
         cities: {
           arras: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Arras').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Arras').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Arras').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Arras').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Arras').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Arras').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Arras').length
           },
           auxerre: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Auxerre').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Auxerre').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Auxerre').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Auxerre').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Auxerre').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Auxerre').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Auxerre').length
           },
           bordeaux: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Bordeaux').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Bordeaux').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Bordeaux').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Bordeaux').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Bordeaux').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Bordeaux').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Bordeaux').length
           },
           brest: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Brest').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Brest').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Brest').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Brest').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Brest').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Brest').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Brest').length
           },
           grenoble: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Grenoble').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Grenoble').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Grenoble').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Grenoble').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Grenoble').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Grenoble').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Grenoble').length
           },
           lille: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Lille').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Lille').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Lille').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Lille').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Lille').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Lille').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Lille').length
           },
           lyon: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Lyon').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Lyon').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Lyon').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Lyon').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Lyon').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Lyon').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Lyon').length
           },
           montpellier: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Montpellier').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Montpellier').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Montpellier').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Montpellier').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Montpellier').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Montpellier').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Montpellier').length
           },
           nantes: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Nantes').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Nantes').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Nantes').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Nantes').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Nantes').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Nantes').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Nantes').length
           },
           rennes: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Rennes').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Rennes').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Rennes').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Rennes').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Rennes').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Rennes').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Rennes').length
           },
           toulouse: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Toulouse').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Toulouse').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Toulouse').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Toulouse').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Toulouse').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Toulouse').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Toulouse').length
           },
           paris: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Paris').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Paris').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Paris').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Paris').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Paris').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Paris').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Paris').length
           },
           dakar: {
-            b1: _users.filter(u => u.grade === 'B1' && u.city === 'Dakar').length,
-            b2: _users.filter(u => u.grade === 'B2' && u.city === 'Dakar').length,
+            sn1: _users.filter(u => u.grade === 'SN1' && u.city === 'Dakar').length,
+            sn2: _users.filter(u => u.grade === 'SN2' && u.city === 'Dakar').length,
             b3: _users.filter(u => u.grade === 'B3' && u.city === 'Dakar').length,
             i1: _users.filter(u => u.grade === 'I1' && u.city === 'Dakar').length,
             i2: _users.filter(u => u.grade === 'I2' && u.city === 'Dakar').length
@@ -154,100 +154,100 @@ exports.getStats = async (req, res) => {
           upcoming: [..._tasks].filter(task => now < parseInt(task.date) + 3600000 * 24).length
         },
         grades: {
-          b1: _tasks.filter(t => t.author.grade === 'B1').length,
-          b2: _tasks.filter(t => t.author.grade === 'B2').length,
+          sn1: _tasks.filter(t => t.author.grade === 'SN1').length,
+          sn2: _tasks.filter(t => t.author.grade === 'SN2').length,
           b3: _tasks.filter(t => t.author.grade === 'B3').length,
           i1: _tasks.filter(t => t.author.grade === 'I1').length,
           i2: _tasks.filter(t => t.author.grade === 'I2').length
         },
         cities: {
           arras: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Arras').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Arras').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Arras').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Arras').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Arras').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Arras').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Arras').length
           },
           auxerre: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Auxerre').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Auxerre').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Auxerre').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Auxerre').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Auxerre').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Auxerre').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Auxerre').length
           },
           bordeaux: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Bordeaux').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Bordeaux').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Bordeaux').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Bordeaux').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Bordeaux').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Bordeaux').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Bordeaux').length
           },
           brest: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Brest').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Brest').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Brest').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Brest').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Brest').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Brest').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Brest').length
           },
           grenoble: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Grenoble').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Grenoble').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Grenoble').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Grenoble').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Grenoble').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Grenoble').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Grenoble').length
           },
           lille: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Lille').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Lille').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Lille').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Lille').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Lille').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Lille').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Lille').length
           },
           lyon: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Lyon').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Lyon').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Lyon').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Lyon').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Lyon').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Lyon').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Lyon').length
           },
           montpellier: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Montpellier').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Montpellier').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Montpellier').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Montpellier').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Montpellier').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Montpellier').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Montpellier').length
           },
           nantes: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Nantes').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Nantes').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Nantes').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Nantes').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Nantes').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Nantes').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Nantes').length
           },
           rennes: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Rennes').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Rennes').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Rennes').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Rennes').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Rennes').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Rennes').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Rennes').length
           },
           toulouse: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Toulouse').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Toulouse').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Toulouse').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Toulouse').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Toulouse').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Toulouse').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Toulouse').length
           },
           paris: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Paris').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Paris').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Paris').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Paris').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Paris').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Paris').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Paris').length
           },
           dakar: {
-            b1: _tasks.filter(t => t.author.grade === 'B1' && t.author.city === 'Dakar').length,
-            b2: _tasks.filter(t => t.author.grade === 'B2' && t.author.city === 'Dakar').length,
+            sn1: _tasks.filter(t => t.author.grade === 'SN1' && t.author.city === 'Dakar').length,
+            sn2: _tasks.filter(t => t.author.grade === 'SN2' && t.author.city === 'Dakar').length,
             b3: _tasks.filter(t => t.author.grade === 'B3' && t.author.city === 'Dakar').length,
             i1: _tasks.filter(t => t.author.grade === 'I1' && t.author.city === 'Dakar').length,
             i2: _tasks.filter(t => t.author.grade === 'I2' && t.author.city === 'Dakar').length

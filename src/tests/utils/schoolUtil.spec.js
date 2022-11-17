@@ -6,13 +6,13 @@ describe('./utils/schoolUtil', () => {
   // == Methods
   // ===============================================
   describe('#nextGrade', () => {
-    it('should return "B2"', () => {
-      const test = schoolUtil.nextGrade('B1')
-      assert.strictEqual(test, 'B2')
+    it('should return "SN2"', () => {
+      const test = schoolUtil.nextGrade('SN1')
+      assert.strictEqual(test, 'SN2')
     })
 
     it('should return "B3"', () => {
-      const test = schoolUtil.nextGrade('B2')
+      const test = schoolUtil.nextGrade('SN2')
       assert.strictEqual(test, 'B3')
     })
 
