@@ -78,10 +78,6 @@ exports.create = async (req, res) => {
 
   // création utilisateur et création token confirmation mail
   const user = await UserService.create(_firstname, _lastname, _email, _password, _grade, _group, _city)
-  const token = await TokenService.create(user._id, uuidv4(), 'EMAIL_VERIFICATION')
-
-  // envoie mail de confirmation
-  await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)
 
   const notificationRegister = new NotificationModel({
     user: user._id,

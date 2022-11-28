@@ -12,11 +12,6 @@ const router = express.Router()
 
 // Inscription d'un utilisateur
 router.post('/', [
-  SysconfVerificationMiddleware.isRegisterEnabled,
-  UserVerificationMiddleware.hasRegisterFields,
-  UserVerificationMiddleware.hasValidRegisterFields,
-  UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
-  UserVerificationMiddleware.isEmailNotUsed,
   UserController.create
 ])
 
@@ -40,12 +35,6 @@ router.get('/all', [
   UserController.getAll
 ])
 
-// Réinitialisation du mot de passe de l'utilisateur
-router.post('/password-reset', [
-  TokenValidationMiddleware.hasValidToken('PASSWORD_RESET'),
-  UserVerificationMiddleware.hasValidPasswordAndPasswordConfirmation,
-  UserController.changePassword
-])
 
 // Changement champ bts utilisateur
 router.patch('/profile', [
