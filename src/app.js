@@ -2,7 +2,7 @@ const logger = require('./config/winston')
 const config = require('./config/config')
 const app = require('./config/express')
 const initMongo = require('./config/mongoose')
-const seedData = require('./mock/seedData')
+//const seedData = require('./mock/seedData')
 const SysconfService = require('./services/sysconf.service')
 
 // if running unit tests, disable logs
