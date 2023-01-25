@@ -1,4 +1,4 @@
-const uuidv4 = require('uuid/v4')
+const uuid = require('crypto');
 const config = require('../config/config')
 const mailer = require('../config/mailgun')
 
@@ -78,7 +78,7 @@ exports.create = async (req, res) => {
 
   // création utilisateur et création token confirmation mail
   const user = await UserService.create(_firstname, _lastname, _email, _password, _grade, _group, _city)
-  const token = await TokenService.create(user._id, uuidv4(), 'EMAIL_VERIFICATION')
+  const token = await TokenService.create(user._id, uuid.randomUUID(), 'EMAIL_VERIFICATION')
 
   // envoie mail de confirmation
   await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)
@@ -141,7 +141,7 @@ exports.sendResetPasswordEmail = async (req, res) => {
   const _user = req.user
 
   // création token page de réinitialisation du mot de passe
-  const token = await TokenService.create(_user._id, uuidv4(), 'PASSWORD_RESET')
+  const token = await TokenService.create(_user._id, uuid.randomUUID(), 'PASSWORD_RESET')
 
   // envoie mail reset
   await mailer.sendPasswordResetEmail(_user.email, _user.firstname, _user.lastname, `${config.front_url}/password-reset/${token.value}`)
