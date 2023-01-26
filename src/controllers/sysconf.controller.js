@@ -2,7 +2,7 @@ const UserService = require('../services/user.service')
 const TaskService = require('../services/tasks.service')
 const SysconfService = require('../services/sysconf.service')
 const DateUtil = require('../utils/dateUtil')
-const mailer = require('../config/mailgun')
+const mailer = require('../config/mail')
 const config = require('../config/config')
 const logger = require('../config/winston')
 

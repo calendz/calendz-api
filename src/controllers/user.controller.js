@@ -1,6 +1,6 @@
 const uuid = require('crypto');
 const config = require('../config/config')
-const mailer = require('../config/mailgun')
+const mailer = require('../config/mail')
 
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
@@ -79,6 +79,8 @@ exports.create = async (req, res) => {
   // création utilisateur et création token confirmation mail
   const user = await UserService.create(_firstname, _lastname, _email, _password, _grade, _group, _city)
   const token = await TokenService.create(user._id, uuid.randomUUID(), 'EMAIL_VERIFICATION')
+
+  console.log(token.value)
 
   // envoie mail de confirmation
   await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)

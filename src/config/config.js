@@ -85,26 +85,40 @@ const config = convict({
       arg: 'mailer_enabled',
       env: 'MAILER_ENABLED'
     },
-    api_key: {
-      doc: `Mailgun's API key`,
+    port: {
+      doc: `nodemailer smpt port`,
       format: String,
-      default: 'notAnApiKey',
-      arg: 'mailer_api_key',
-      env: 'MAILER_API_KEY'
-    },
-    domain: {
-      doc: `Mailgun domain`,
-      format: String,
-      default: 'notADomain',
-      arg: 'mailer_domain',
-      env: 'MAILER_DOMAIN'
+      default: 'notAnMailPort',
+      arg: 'mailer_port',
+      env: 'MAILER_PORT'
     },
     host: {
-      doc: `Mailgun host`,
-      format: ['api.eu.mailgun.net', 'api.mailgun.net'],
-      default: 'api.eu.mailgun.net',
+      doc: `nodemailter smtp host`,
+      format: String,
+      default: 'notAHost',
       arg: 'mailer_host',
       env: 'MAILER_HOST'
+    },
+    user:{
+      doc: `nodemailter smtp user`,
+      format: String,
+      default: 'notAUser',
+      arg: 'mailer_user',
+      env: 'MAILER_USER'
+    },
+    passwd:{
+      doc: `nodemailter smtp passwd`,
+      format: String,
+      default: 'notAPasswd',
+      arg: 'mailer_passwd',
+      env: 'MAILER_PASSWD'
+    },
+    ssl: {
+      doc: `nodemailter use tls`,
+      format: Boolean,
+      default: true,
+      arg: 'mailer_use_tls',
+      env: 'MAILER_USE_TLS'
     },
     contact: {
       doc: `Email adress`,
