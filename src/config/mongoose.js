@@ -12,7 +12,7 @@ module.exports = async function initConnection (callback) {
   const mongoHost = config.node_env === 'test' || config.node_env === 'mock' ? 'localhost' : config.db.host
   const mongoUri = `mongodb://${config.db.user}:${config.db.password}@${mongoHost}:${config.db.port}/${config.db.name}${config.travis ? '' : '?authSource=admin'}`
   const mongooseOpt = {
-    keepAlive: 1,
+    keepAlive: true,
     useNewUrlParser: true
   }
 
