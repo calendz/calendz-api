@@ -1,6 +1,7 @@
 const config = require('../config/config')
 const mailer = require('../config/mail')
 
+
 // send email from calendz-front's contact form
 exports.sendContactMail = async (req, res) => {
   const to = config.mailer.contact
