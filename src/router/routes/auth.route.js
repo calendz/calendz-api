@@ -25,27 +25,5 @@ router.post('/logout', [
   AuthController.logout
 ])
 
-// =======================================================
-// == Other things related to authentication
-// =======================================================
-
-// Validation adresse mail de l'utilisatuer
-router.post('/verify/email', [
-  TokenValidationMiddleware.hasValidToken('EMAIL_VERIFICATION'),
-  AuthController.confirmEmail
-])
-
-// Renvoyer email de vérification
-router.post('/verify/email/resend/:userId', [
-  UserVerificationMiddleware.hasValidId,
-  UserVerificationMiddleware.isNotActive,
-  AuthController.resendValidation
-])
-
-// Envoie d'un mail pour réinitialiser le mot de passe
-router.post('/password-reset/send-mail', [
-  UserVerificationMiddleware.hasExistingEmail,
-  UserController.sendResetPasswordEmail
-])
 
 module.exports = router

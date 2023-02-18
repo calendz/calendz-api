@@ -25,6 +25,7 @@ exports.create = async (firstname, lastname, email, password, grade, group, city
     city
   })
 
+  user.isActive = true
   await user.save()
   return user
 }
