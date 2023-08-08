@@ -1,49 +1,83 @@
 /* istanbul ignore file */
 const config = require('./config')
 const logger = require('./winston')
-const mailgun = require('mailgun-js')
-const mg = mailgun({ apiKey: config.mailer.api_key, domain: config.mailer.domain, host: config.mailer.host })
+
+const hbs = require('nodemailer-express-handlebars')
+const mailer = require('nodemailer')
+const path = require('path')
+
+
+// create reusable transporter object using the default SMTP transport
+const transporter = mailer.createTransport({
+  port: config.mailer.port,
+  host: config.mailer.host,
+  auth: {
+    user: config.mailer.user,
+    pass: config.mailer.passwd,
+  }
+});
+
+// point to the template folder
+const handlebarOptions = {
+  viewEngine: {
+    partialsDir: path.resolve('./src/views/'),
+    defaultLayout: false,
+  },
+  viewPath: path.resolve('./src/views/'),
+};
 
 exports.sendVerificationEmail = async (to, firstname, lastname, link) => {
-  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
-  const data = {
+  // use a template file with nodemailer
+  transporter.use('compile', hbs(handlebarOptions))
+
+  const mailOptions  = {
     from: 'Calendz <no-reply@calendz.app>',
     to: to,
     subject: 'Calendz - Confirmation adresse mail',
     template: 'email-confirmation',
-    'v:firstname': firstname,
-    'v:lastname': lastname,
-    'v:link': link
+    context: {
+      'title': 'Calendz - Confirmation adresse mail',
+      'firstname': firstname,
+      'lastname': lastname,
+      'link': link
+    }
   }
 
-  mg.messages().send(data, (error, body) => {
+  transporter.sendMail(mailOptions , (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
 }
 
 exports.sendPasswordResetEmail = async (to, firstname, lastname, link) => {
-  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
+
+  // use a template file with nodemailer
+  transporter.use('compile', hbs(handlebarOptions))
 
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
     to: to,
     subject: 'Calendz - Réinitialisation du mot de passe',
-    template: 'password-reset',
-    'v:firstname': firstname,
-    'v:lastname': lastname,
-    'v:link': link
+    template: 'email-reset',
+    context: {
+      'title': 'Calendz - Réinitialisation du mot de passe',
+      'firstname': firstname,
+      'lastname': lastname,
+      'link': link
+    }
   }
 
-  mg.messages().send(data, (error, body) => {
+  transporter.sendMail(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
 }
 
 exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
-  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
@@ -54,14 +88,14 @@ exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
     'v:lastname': lastname
   }
 
-  mg.messages().send(data, (error, body) => {
+  transporter.sendMail(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
 }
 
 exports.sendContactEmail = async (to, from, subject, message) => {
-  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
   const data = {
     from,
@@ -71,14 +105,14 @@ exports.sendContactEmail = async (to, from, subject, message) => {
     'v:message': message
   }
 
-  mg.messages().send(data, (error, body) => {
+  transporter.sendMail(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
 }
 
 exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
-  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
@@ -91,7 +125,7 @@ exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
     'v:due_date': dueDate
   }
 
-  mg.messages().send(data, (error, body) => {
+  transporter.sendMail(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })
@@ -102,7 +136,7 @@ exports.sendMail = async (bcc, subject, title, content, ctaLabel, ctaUrl) => {
     ? 'users@calendz.app'
     : 'arthur.dufour@epsi.fr'
 
-  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
+  if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
   const data = {
     from: 'Calendz <no-reply@calendz.app>',
@@ -116,7 +150,7 @@ exports.sendMail = async (bcc, subject, title, content, ctaLabel, ctaUrl) => {
     'v:ctaUrl': ctaUrl
   }
 
-  mg.messages().send(data, (error, body) => {
+  transporter.sendMail(data, (error, body) => {
     if (error) logger.error(error)
     logger.debug(body)
   })

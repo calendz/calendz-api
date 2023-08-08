@@ -1,11 +1,11 @@
-# Node latest LTS 12.18.2 with alpine
+# Node latest LTS 18.13.0 with alpine
 # (a lightweight distribution)
-FROM node:12.18.2-alpine
+FROM node:18.13.0-alpine
 LABEL maintainer="Calendz. <https://calendz.app/>"
 
 # add some required packages
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh python make g++
+    apk add --no-cache bash git openssh python3 make g++
 
 # creates a directory for the app
 RUN mkdir -p /usr/src/app

@@ -1,4 +1,4 @@
-const uuidv4 = require('uuid/v4')
+const uuid = require('crypto');
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
 const logger = require('../config/winston')
@@ -242,7 +242,7 @@ exports.isMigrated = async (req, res, next) => {
     if (exists) await TokenService.deleteOne(exists.value)
 
     // generate a security token
-    const token = await TokenService.create(user._id, uuidv4(), 'ACCOUNT_MIGRATION')
+    const token = await TokenService.create(user._id, uuid.randomUUID(), 'ACCOUNT_MIGRATION')
 
     // return error w/ security token
     return res.status(403).json({
