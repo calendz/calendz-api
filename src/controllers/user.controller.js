@@ -1,7 +1,6 @@
 const uuid = require('crypto');
 const config = require('../config/config')
-const mailer = require('../config/sendinblue')
-
+const mailer = require("../services/mailer.service");
 const UserService = require('../services/user.service')
 const TokenService = require('../services/token.service')
 const TasksService = require('../services/tasks.service')
@@ -81,6 +80,7 @@ exports.create = async (req, res) => {
   const token = await TokenService.create(user._id, uuid.randomUUID(), 'EMAIL_VERIFICATION')
 
   // envoie mail de confirmation
+
   await mailer.sendVerificationEmail(user.email, user.firstname, user.lastname, `${config.front_url}/email-confirmation/${token.value}`)
 
   const notificationRegister = new NotificationModel({

@@ -2,8 +2,7 @@ const TasksService = require('../services/tasks.service')
 const UserService = require('../services/user.service')
 const NotificationsService = require('../services/notifications.service')
 const dateUtil = require('../utils/dateUtil')
-const mailer = require('../config/sendinblue')
-
+const mailer = require("../services/mailer.service");
 // return all user's tasks
 exports.getAll = async (req, res) => {
   const _userId = req.params.userId

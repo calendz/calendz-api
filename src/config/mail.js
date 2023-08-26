@@ -6,6 +6,8 @@ const hbs = require('nodemailer-express-handlebars')
 const mailer = require('nodemailer')
 const path = require('path')
 
+const from  = config.mailer.user
+
 
 // create reusable transporter object using the default SMTP transport
 const transporter = mailer.createTransport({
@@ -33,7 +35,7 @@ exports.sendVerificationEmail = async (to, firstname, lastname, link) => {
   transporter.use('compile', hbs(handlebarOptions))
 
   const mailOptions  = {
-    from: 'Calendz <no-reply@calendz.app>',
+    from: from,
     to: to,
     subject: 'Calendz - Confirmation adresse mail',
     template: 'email-confirmation',
@@ -58,7 +60,7 @@ exports.sendPasswordResetEmail = async (to, firstname, lastname, link) => {
   transporter.use('compile', hbs(handlebarOptions))
 
   const data = {
-    from: 'Calendz <no-reply@calendz.app>',
+    from: from,
     to: to,
     subject: 'Calendz - Réinitialisation du mot de passe',
     template: 'email-reset',
@@ -80,7 +82,7 @@ exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
   if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
   const data = {
-    from: 'Calendz <no-reply@calendz.app>',
+    from: from,
     to: to,
     subject: 'Calendz - Modification de votre mot de passe',
     template: 'password-changed',
@@ -115,7 +117,7 @@ exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
   if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
   const data = {
-    from: 'Calendz <no-reply@calendz.app>',
+    from: from,
     to,
     subject: `Calendz - Une tâche vient d'être ajoutée !`,
     template: 'new-task',
@@ -133,13 +135,13 @@ exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
 
 exports.sendMail = async (bcc, subject, title, content, ctaLabel, ctaUrl) => {
   const to = config.node_env === 'production'
-    ? 'users@calendz.app'
-    : 'arthur.dufour@epsi.fr'
+      ? 'users@calendz.app'
+      : 'arthur.dufour@epsi.fr'
 
   if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to})`)
 
   const data = {
-    from: 'Calendz <no-reply@calendz.app>',
+    from: from,
     to,
     bcc,
     subject,
