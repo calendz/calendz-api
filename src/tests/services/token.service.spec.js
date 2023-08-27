@@ -1,12 +1,12 @@
 const assert = require('chai').assert
-const uuidv4 = require('uuid/v4')
+const uuid = require('crypto');
 const mongoose = require('mongoose')
 const Token = require('../../models/token.model')
 const TokenService = require('../../services/token.service')
 
 describe('./services/token.service', () => {
   const user = mongoose.Types.ObjectId()
-  const value = uuidv4()
+  const value = uuid.randomUUID()
   const type = 'EMAIL_VERIFICATION'
 
   // ===============================================

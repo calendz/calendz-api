@@ -7,13 +7,15 @@ const client = Sib.ApiClient.instance
 const apiKey = client.authentications['api-key']
 apiKey.apiKey = process.env.MAILER_API_KEY
 
+const from = config.mailer.contact
+
 exports.sendVerificationEmail = async (to, firstname, lastname, link) => {
   if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
 
   const tranEmailApi = new Sib.TransactionalEmailsApi()
 
   const sender = {
-    email: 'no-reply@calendz.app'
+    email: from
   }
 
   const receivers = [
@@ -45,7 +47,7 @@ exports.sendPasswordResetEmail = async (to, firstname, lastname, link) => {
   const tranEmailApi = new Sib.TransactionalEmailsApi()
 
   const sender = {
-    email: 'no-reply@calendz.app'
+    email: from
   }
 
   const receivers = [
@@ -77,7 +79,7 @@ exports.sendPasswordChangedEmail = async (to, firstname, lastname) => {
   const tranEmailApi = new Sib.TransactionalEmailsApi()
 
   const sender = {
-    email: 'no-reply@calendz.app'
+    email: from
   }
 
   const receivers = [
@@ -138,7 +140,7 @@ exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
   const tranEmailApi = new Sib.TransactionalEmailsApi()
 
   const sender = {
-    email: 'no-reply@calendz.app'
+    email: from
   }
 
   const receivers = [
@@ -167,15 +169,15 @@ exports.sendTaskCreate = async (to, firstname, title, createdBy, dueDate) => {
 
 exports.sendMail = async (bcc, subject, title, content, ctaLabel, ctaUrl) => {
   const to = config.node_env === 'production'
-    ? 'users@calendz.app'
-    : 'doryan.chaigneau@epsi.fr'
+      ? 'users@calendz.app'
+      : 'doryan.chaigneau@epsi.fr'
 
   if (!config.mailer.enabled || config.node_env === 'test') return logger.warn(`Mail not send (to: ${to}`)
 
   const tranEmailApi = new Sib.TransactionalEmailsApi()
 
   const sender = {
-    email: 'no-reply@calendz.app'
+    email: from
   }
 
   const receivers = [

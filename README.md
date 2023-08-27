@@ -3,9 +3,7 @@
 <p align="center">
   <a href="https://travis-ci.com/calendz/calendz-api"><img src="https://travis-ci.com/calendz/calendz-api.svg?branch=develop" alt="Build status of develop branch"></a>
   <a href='https://coveralls.io/github/calendz/calendz-api?branch=develop'><img src='https://coveralls.io/repos/github/calendz/calendz-api/badge.svg?branch=develop' alt='Coverage Status' /></a>
-  <a href="https://www.codacy.com/app/calendz/calendz-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=calendz/calendz-api&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/7d1894968c994cab8e0852e54aa5463f"/></a>
   <br>
-  <a href="https://dependabot.com/"><img src="https://api.dependabot.com/badges/status?host=github&amp;repo=calendz/calendz-api" alt="Dependabot status"></a>
   <a href="https://dependabot.com/"><img src="https://img.shields.io/david/calendz/calendz-api.svg?maxAge=3600" alt="Dependencies status"></a>
   <br>
 </p>
@@ -24,13 +22,13 @@ Ces données étant évidement privées, la (quasi) totalité des routes nécess
 
 L'API de calendz est développée avec les frameworks et outils suivants* :
 
-| Librairie        | Version | Description                                                                                      |
-| ---------------- | ------- | ------------------------------------------------------------------------------------------------ |
-| [Node.js]        | 12.18.3 | Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.                         |
-| [Express]        | 4.16.4  | Fast, unopinionated, minimalist web framework for Node.js                                        |
-| [Mongoose]       | 5.10.0  | Elegant MongoDB object modeling for Node.js                                                      |
-| [JsonWebToken]   | 8.5.1   | Industry standard RFC 7519 method for representing claims securely between two parties.          |
-| [Mailgun-js]     | 0.22.0  | A simple Node.js helper module for Mailgun API.                                                  |
+| Librairie      | Version | Description                                                                             |
+|----------------|---------|-----------------------------------------------------------------------------------------|
+| [Node.js]      | 18.13.0 | Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.                |
+| [Express]      | 4.18.2  | Fast, unopinionated, minimalist web framework for Node.js                               |
+| [Mongoose]     | 6.8.4   | Elegant MongoDB object modeling for Node.js                                             |
+| [JsonWebToken] | 9.0.0   | Industry standard RFC 7519 method for representing claims securely between two parties. |
+| [Nodemailer]   | 6.9.0   | Nodemailer is a module for Node.js applications to allow easy as cake email sending.    |
 
 **(Liste non exhaustive, uniquement les librairies principales sont présentées)*
 
@@ -38,36 +36,38 @@ L'API de calendz est développée avec les frameworks et outils suivants* :
 
 ### Pré-requis
 
-* Installer Node 12.18.3 et MongoDB 3.6
-* Créer un fichier `.env` à la source de ce repository contenant les valeurs suivantes (modifiables selon vos besoins)
+* Installer Node 18.13.0 et MongoDB 6.0.3
+  * Créer un fichier `.env` à la source de ce repository contenant les valeurs suivantes (modifiables selon vos besoins)
 
-      NODE_ENV=development
+        NODE_ENV=development
 
-      FRONT_URL=http://localhost:8080
+        FRONT_URL=http://localhost:8080
 
-      APP_PORT=3001
-      APP_PORT_TEST=3002
+        APP_PORT=3001
+        APP_PORT_TEST=3002
 
-      POPULATE=true
+        POPULATE=true
 
-      DB_HOST=calendz-database
-      DB_PORT=27017
-      DB_NAME=calendz
-      DB_USER=username
-      DB_PASSWORD=password
+        DB_HOST=calendz-database
+        DB_PORT=27017
+        DB_NAME=calendz
+        DB_USER=username
+        DB_PASSWORD=password
 
-      COOKIE_SECRET=imasecret
-      COOKIE_SECURE=false
+        COOKIE_SECRET=imasecret
+        COOKIE_SECURE=false
 
-      JWT_SECRET=imasecret
-      JWT_EXPIRATION=900
-      JWT_EXPIRATION_REFRESH=30
-      JWT_RAW_TOKEN=imasecret
+        JWT_SECRET=imasecret
+        JWT_EXPIRATION=900
+        JWT_EXPIRATION_REFRESH=30
+        JWT_RAW_TOKEN=imasecret
 
-      MAILER_ENABLED=true
-      MAILER_API_KEY=aValidKey
-      MAILER_DOMAIN=aValidDomain
-      MAILER_HOST=api.mailgun.net
+        MAILER_ENABLED=true
+        MAILER_USE_TLS=true
+        MAILER_PORT=4221
+        MAILER_HOST=example.com
+        MAILER_USER=my@email.com
+        MAILER_PASSWD=password
 
 ### Lancement
 
@@ -83,4 +83,4 @@ L'API de calendz est développée avec les frameworks et outils suivants* :
 [Express]: https://github.com/expressjs/express
 [Mongoose]: https://github.com/Automattic/mongoose/
 [JsonWebToken]: https://github.com/auth0/node-jsonwebtoken
-[Mailgun-js]: https://github.com/bojand/mailgun-js
+[Nodemailer]: https://github.com/nodemailer/nodemailer

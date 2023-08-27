@@ -13,11 +13,14 @@ if (config.node_env === 'test') {
 // 1st: establish mongodb connection
 initMongo(async () => {
   /* istanbul ignore if */
+
   // 2nd: if needed: populate db w/ fake dataset
-  if (config.populate && config.node_env !== 'test') {
+  if (config.populate && config.node_env === 'development') {
     logger.warn('POPULATE: started dataset')
     await seedData.removeAllData().then(async () => {
       await seedData.seedData().then(() => {
+        logger.info('Default admin account is admin@epsi.fr / password')
+        logger.info('Default user account is user@epsi.fr / password')
         logger.warn('POPULATE: dataset completed')
       })
     })

@@ -88,9 +88,22 @@ const config = convict({
     api_key: {
       doc: `Sendinblue API key`,
       format: String,
-      default: 'notAnApiKey',
+      default: undefined,
       arg: 'api_key',
       env: 'MAILER_API_KEY'
+    },
+    use_tls: {
+      doc: `Using TLS`,
+      format: Boolean,
+      default: 'empty',
+      arg: 'mailer_use_tls',
+      env: 'MAILER_USE_TLS'
+    },
+    port: {
+      doc: `Mail Port`,
+      format: Number,
+      default: `587`,
+      arg: 'mailer_port'
     },
     host: {
       doc: `Mailgun host`,
@@ -100,11 +113,25 @@ const config = convict({
       env: 'MAILER_HOST'
     },
     contact: {
-      doc: `Email adress`,
+      doc: `Email address`,
       format: 'email',
-      default: 'doryan.chaigneau@epsi.fr',
+      default: undefined,
       arg: 'mailer_contact',
       env: 'MAILER_CONTACT'
+    },
+    user: {
+      doc: `Email Address to smtp login`,
+      format: 'email',
+      default: 'doryan.chaigneau@epsi.fr',
+      arg: 'mailer_user',
+      env: 'MAILER_USER'
+    },
+    passwd: {
+      doc: `Email Password to smtp login`,
+      format: String,
+      default: 'XXXXXX',
+      arg: 'mailer_passwd',
+      env: 'MAILER_PASSWD'
     }
   },
   cookie: {
